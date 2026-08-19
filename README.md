@@ -17,7 +17,7 @@
 
 ## 五種型式與 CTA 同步狀態
 
-`lunas_astral_code_master_playbook.md` 的 Part 5 與 Part 6 是五種型式 CTA 與完整正文範本的唯一作業來源。Part 5 說明 CTA 組件與行動順序；Part 6 提供可直接套用的 Hook、正文、Hashtags、CTA、視覺分鏡描述與 48 小時量測欄位。
+`lunas_astral_code_master_playbook.md` 的 Part 5、Part 6 與 Part 7 是五種型式的唯一作業來源。Part 5 說明 CTA 組件與行動順序；Part 6 僅提供 Hook、正文、Hashtags、CTA 的文字輸出排版範本；Part 7 才提供可直接交付製作的完整正文加視覺分鏡描述、視覺規範與 48 小時量測欄位。
 
 | 型式 | 內容格式 | CTA 結構基準 | Part 6 範本 |
 |---|---|---|---|
