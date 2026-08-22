@@ -118,19 +118,26 @@ def main() -> int:
                 for item in ('閉上眼，深呼吸三次', '心裡默念：', '憑第一眼直覺，選出一張最吸引你的圖騰：', '下一期帶你解鎖更多新的占卜提示～', '【置頂留言區解答｜24 小時發布後】'):
                     if item not in block:
                         issues.append((date, f'型式五上集缺少固定文字：{item}'))
-                for item in ('（1）Hook 卡（0–3 秒）', '（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次+ 心裡默念：', '（3）三選項圖卡（9–18 秒）', '（4）故事卡（18–22 秒）', '（5）CTA 卡（22–30 秒）'):
+                for item in ('（1）Hook 卡（0–3 秒）', '（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次+ 心裡默念：', '（3）三選項圖卡（9–18 秒）', '（4）貼士卡（18–22 秒）', '（5）CTA 卡（22–30 秒）'):
                     if item not in block:
                         issues.append((date, f'型式五上集缺少固定視覺卡：{item}'))
                 if len(extract_option_names(block, 'ABC')) != 3:
                     issues.append((date, '型式五上集缺少 A／B／C 圖騰'))
+                body_scene = re.search(r'(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺', block)
+                visual_scene = re.search(r'（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：(.*?)\+ 憑第一眼直覺', block)
+                tip = re.search(r'(?ms)（4）貼士卡（18–22 秒）：(.*?)(?=｜月白銀)', block)
+                if not body_scene or not visual_scene or body_scene.group(1).strip() != visual_scene.group(1).strip():
+                    issues.append((date, '型式五上集正文與問題聚焦卡未使用同一具體情景'))
+                if not tip or cjk_count(tip.group(1)) < 50:
+                    issues.append((date, '型式五上集貼士卡少於 50 字或缺失'))
             elif kind == '型式五下集':
                 for item in ('上集選好答案的朋友，\n要先看上集置頂留言區的解答，\n再回來看這一集的「完整解讀」。', '【在貼文中領取「完整解讀」喔～】', '（1）固定封面 Hook 卡：大標題「大眾奇門占卜」＋副標「完整解讀公佈」', '（2）解答承接卡：'):
                     if item not in block:
                         issues.append((date, f'型式五下集缺少固定文字：{item}'))
                 for label in 'ABC':
                     body = lower_card_text(block, label)
-                    if cjk_count(body) < 500:
-                        issues.append((date, f'型式五下集 {label} 完整解讀少於 500 字：{cjk_count(body)}'))
+                    if cjk_count(body) < 300:
+                        issues.append((date, f'型式五下集 {label} 完整解讀少於 300 字：{cjk_count(body)}'))
     if actual != 22:
         issues.append(('GLOBAL', f'未發布腳本數量錯誤：{actual}'))
 

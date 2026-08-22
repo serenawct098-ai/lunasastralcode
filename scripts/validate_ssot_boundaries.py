@@ -8,6 +8,11 @@ FILES = [
     ROOT / 'scripts/60day_scripts_W4-W9_20260817-20260925.md',
     ROOT / 'scripts/60day_scripts_W7-W9_20260905-20260926.md',
 ]
+LOWER_REFERENCES = {
+    'A': {'terms': ['乾六宮', '西北', '天心星', '開門', '未時', '大吉'], 'checks': [('data/XingMen_WuXing_ShengKe.json', 'XMWX_L014'), ('data/QMDJ_ShangJuan_Consolidated.json', 'QMDJ_Auto_00328')]},
+    'B': {'terms': ['坎一宮', '正北', '天蓬星', '休門', '申時', '大凶', '大吉'], 'checks': [('data/XingMen_WuXing_ShengKe.json', 'XMWX_L015'), ('data/QMDJ_ShangJuan_Consolidated.json', 'QMDJ_Auto_00329')]},
+    'C': {'terms': ['艮八宮', '東北', '天任星', '生門', '酉時', '大吉'], 'checks': [('data/XingMen_WuXing_ShengKe.json', 'XMWX_L013'), ('data/QMDJ_ShangJuan_Consolidated.json', 'QMDJ_Auto_00330')]},
+}
 
 issues = []
 posts = 0
@@ -30,11 +35,24 @@ for path in FILES:
                 elif line_id not in source.read_text(encoding='utf-8'):
                     issues.append((date, f'無法反向定位 SSOT 行號：{line_id}'))
         if '型式五上集' in header or '型式五下集' in header:
-            required = '不能替你安門、定星、判方位、時間或吉凶'
-            if '型式五上集' in header and required not in block:
+            no_personal_reading = re.search(r'(?:不會(?:、?也不能)?|不能|不)替你安門、定星(?:，或|、)判方位、時間(?:或|、)吉凶', block)
+            if '型式五上集' in header and not no_personal_reading:
                 issues.append((date, '型式五上集缺少無起局資料不代判邊界'))
-            if '型式五下集' in header and '不替你安門、定星、判方位、時間或吉凶' not in block:
-                issues.append((date, '型式五下集完整卡缺少無起局資料不代判邊界'))
+            if '型式五下集' in header:
+                if '不替你安門、定星、判方位、時間或吉凶' not in block:
+                    issues.append((date, '型式五下集完整卡缺少無起局資料不代判邊界'))
+                for label, spec in LOWER_REFERENCES.items():
+                    card = re.search(rf'(?ms)（[345]）{label} 選項完整解讀卡.*?：(.*?)(?=｜暖米白底)', block)
+                    if not card:
+                        issues.append((date, f'型式五下集缺少 {label} 完整解讀卡'))
+                        continue
+                    missing = [term for term in spec['terms'] if term not in card.group(1)]
+                    if missing:
+                        issues.append((date, f'型式五下集 {label} 缺少公開奇門對照：{missing}'))
+                    for relpath, line_id in spec['checks']:
+                        source = SSOT / relpath
+                        if not source.is_file() or line_id not in source.read_text(encoding='utf-8'):
+                            issues.append((date, f'型式五下集 {label} 無法反向定位 SSOT：{relpath} / {line_id}'))
 
 print({'posts_checked': posts, 'ssot_commit': 'ac8f093f76a6dbcf459eca0075a33828aa47ef7e', 'issues': issues})
 if issues:

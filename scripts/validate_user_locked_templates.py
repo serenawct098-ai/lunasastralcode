@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PLAYBOOK = ROOT / 'lunas_astral_code_master_playbook.md'
-STANDARD_SHA256 = '1163b7e2c8a787bd486f438cfa096a995a30413f57c2a527ba36430fe3fa1f35'
+STANDARD_SHA256 = '24f580e2e98c6eebf0a4886df31ff5e5f2be62c15463d23bac5616f2517a85a3'  # 使用者最新 Playbook 授權基線
 STANDARD_START = '## 【五大型式文案排版輸出標準規範】'
 GUIDE_TITLE = '**「IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫」**：'
 
