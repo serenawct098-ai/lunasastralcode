@@ -137,7 +137,7 @@ def slots_for(block: str, kind: str) -> list[dict]:
 
 def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry: int = 0) -> dict[str, str]:
     slot_payload = [{'id': slot['id'], 'text': slot['text'], 'minimum_cjk': slot['minimum_cjk'], 'must_include': slot.get('must_include', []), 'reference': slot.get('reference', '')} for slot in slots]
-    system = '''你是繁體中文（台灣）IG 文案編輯。只改可變散文，保持原本事實、語意強度、主題、時間、圖騰、CTA、專有名詞與不確定性。\n\n依序套用：\n1. humanizer-tw：刪除套話、翻譯腔、黑話、假深刻、金句公式、短句連發戲劇腔與無源權威；不要誤殺合法台灣用語。\n2. good-writing-tw：讓句長與句尾有自然錯落，拆除真正過長或塞太多資訊的句子，但不要把全文修成節拍器。\n3. authentic-voice-editing / speak-human-tw：以具體情景、真主語和真動作取代抽象安慰；不要新增事實、數字、經歷、來源、承諾或命理結論。\n\n這是社群文案。可保留適度猶豫與生活感，但不要演戲、不要客服腔、不要空泛雞湯。用第二人稱「你」。不要輸出任何模板標籤、Markdown、解釋、CTA、Hashtags、Hook 或卡片標題。\n\n若內容涉及奇門或紫微：不可新增星曜、門、神、奇儀、方位、時間、吉凶、公式或個人起局結果。只有 slot 提供的 `must_include` 和 `reference` 可新增到該 slot；必須將它們表述為公開奇門資料的「對照示例」，接著立刻白話轉譯，絕不可說成已替讀者起局或確認讀者正處該局。沒有資料就寫生活層面的可觀察情景與行動。\n\n最新版型式五上集的對應文字是「奇門生活小貼士」，不是故事、故事卡或心理劇；其生活貼士至少 50 字。型式五下集完整卡至少 300 字；必須保留當前困局、心理/環境原因、盤象對照和可執行行動四層。不可改動任何固定模板文字。\n\n每個 slot 都必須改寫，不能原封不動回傳。對 minimum_cjk 大於零的 slot，輸出必須至少達該數量的中文字；`must_include` 內的每個字串必須逐字出現。'''
+    system = '''你是繁體中文（台灣）IG 文案編輯。只改可變散文，保持原本事實、語意強度、主題、時間、圖騰、CTA、專有名詞與不確定性。\n\n依序套用：\n1. humanizer-tw：刪除套話、翻譯腔、黑話、假深刻、金句公式、短句連發戲劇腔與無源權威；不要誤殺合法台灣用語。\n2. good-writing-tw：讓句長與句尾有自然錯落，拆除真正過長或塞太多資訊的句子，但不要把全文修成節拍器。\n3. authentic-voice-editing / speak-human-tw：以具體情景、真主語和真動作取代抽象安慰；不要新增事實、數字、經歷、來源、承諾或命理結論。\n\n這是社群文案。可保留適度猶豫與生活感，但不要演戲、不要客服腔、不要空泛雞湯。用第二人稱「你」。不要輸出任何固定模板標籤、CTA、Hashtags、Hook 或卡片標題；但型式五下集的可變完整解讀必須輸出下方指定的粗體定論與模組標題。\n\n若內容涉及奇門或紫微：不可新增星曜、門、神、奇儀、方位、時間、吉凶、公式或個人起局結果。只有 slot 提供的 `must_include` 和 `reference` 可新增到該 slot；必須將它們表述為公開奇門資料的「對照示例」，接著立刻白話轉譯，絕不可說成已替讀者起局或確認讀者正處該局。沒有資料就寫生活層面的可觀察情景與行動。\n\n最新版型式五上集的對應文字是「奇門生活小貼士」，不是故事、故事卡或心理劇；其生活貼士至少 50 字。\n\n型式五下集每個 card_A_tail／card_B_tail／card_C_tail 是完整解讀的可變部分，至少 300 字，必須依序、逐字採用以下五層閱讀格式：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 中已核對的門、星、宮位或奇儀；不可自行補造］】\n‧ 表面現象：［具體外在行為或心理狀態］\n‧ 盤象真相：［內在拉扯或局勢本質；把術語立刻白話翻譯，明說「白話來說」或同義語］\n【時空與體感錨定】\n‧ ［只使用 must_include 的方位、時間、吉凶；或可觀察的生活感受。體感不是醫療診斷。］\n【奇門行為改運】\n‧ ［一至兩項低門檻、可觀察的整理、溝通、休息或行程行動；不可保證化解、招財、吸納吉氣或改變他人。］\n\n其中 X 必須等於該 slot 的 A、B 或 C。每一模組最多兩句，模組之間換行。首句要明確，卻不得使用「注定」「必然」「一定會」「百分之百」。不可改動任何固定模板文字。\n\n每個 slot 都必須改寫，不能原封不動回傳。對 minimum_cjk 大於零的 slot，輸出必須至少達該數量的中文字；`must_include` 內的每個字串必須逐字出現。'''
     user = {
         'date': date,
         'form': kind,
@@ -207,6 +207,14 @@ def validate_output(slots: list[dict], rewritten: dict[str, str]) -> None:
             raise ValueError(f'Fixed template token leaked into {slot["id"]}')
         if slot['minimum_cjk'] and cjk_count(value) < slot['minimum_cjk']:
             raise ValueError(f'Slot {slot["id"]} shorter than {slot["minimum_cjk"]} CJK chars')
+        if slot['id'].startswith('card_'):
+            label = slot['id'].split('_')[1]
+            required_sections = (f'**選項 {label}：', '【盤象：', '‧ 表面現象：', '‧ 盤象真相：', '【時空與體感錨定】', '【奇門行為改運】')
+            missing_sections = [section for section in required_sections if section not in value]
+            if missing_sections:
+                raise ValueError(f'Slot {slot["id"]} missing rule-library sections: {missing_sections}')
+            if re.search(r'你(?:注定|必然|一定會|百分之百)', value):
+                raise ValueError(f'Slot {slot["id"]} contains fate-determinism language')
         missing = [term for term in slot.get('must_include', []) if term not in value]
         if missing:
             raise ValueError(f'Slot {slot["id"]} missing SSOT-backed terms: {missing}')
