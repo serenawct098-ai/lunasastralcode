@@ -93,7 +93,21 @@ def slots_for(block: str, kind: str) -> list[dict]:
         scene = body.split('\n長按螢幕 +「留言」領取你的「專屬能量提示」')[0]
         slots: list[dict] = []
         add_slot(slots, 'scene', scene)
-        slots.extend(answer_slots(block, 'ABCDEF'))
+        reference_map = {
+            'A': {'terms': ['乾六宮', '西北', '天心星', '開門', '大吉'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L014'},
+            'B': {'terms': ['坎一宮', '正北', '天蓬星', '休門', '大凶', '大吉'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L015'},
+            'C': {'terms': ['艮八宮', '東北', '天任星', '生門', '大吉'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L013'},
+            'D': {'terms': ['兌七宮', '正西', '天柱星', '驚門', '小凶'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L014'},
+            'E': {'terms': ['離九宮', '正南', '天英星', '景門', '中平'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L012'},
+            'F': {'terms': ['震三宮', '正東', '天沖星', '傷門', '凶'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L011'},
+        }
+        for slot in answer_slots(block, 'ABCDEF'):
+            label = slot['id'].split('_', 1)[1]
+            slot['minimum_cjk'] = 100
+            slot['must_include'] = reference_map[label]['terms']
+            slot['reference'] = reference_map[label]['source']
+            slot['rule_library_type1'] = True
+            slots.append(slot)
         return slots
     if kind == '型式二':
         lines = [x.strip() for x in body.splitlines() if x.strip()]
@@ -137,7 +151,7 @@ def slots_for(block: str, kind: str) -> list[dict]:
 
 def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry: int = 0) -> dict[str, str]:
     slot_payload = [{'id': slot['id'], 'text': slot['text'], 'minimum_cjk': slot['minimum_cjk'], 'must_include': slot.get('must_include', []), 'reference': slot.get('reference', '')} for slot in slots]
-    system = '''你是繁體中文（台灣）IG 文案編輯。只改可變散文，保持原本事實、語意強度、主題、時間、圖騰、CTA、專有名詞與不確定性。\n\n依序套用：\n1. humanizer-tw：刪除套話、翻譯腔、黑話、假深刻、金句公式、短句連發戲劇腔與無源權威；不要誤殺合法台灣用語。\n2. good-writing-tw：讓句長與句尾有自然錯落，拆除真正過長或塞太多資訊的句子，但不要把全文修成節拍器。\n3. authentic-voice-editing / speak-human-tw：以具體情景、真主語和真動作取代抽象安慰；不要新增事實、數字、經歷、來源、承諾或命理結論。\n\n這是社群文案。可保留適度猶豫與生活感，但不要演戲、不要客服腔、不要空泛雞湯。用第二人稱「你」。不要輸出任何固定模板標籤、CTA、Hashtags、Hook 或卡片標題；但型式五下集的可變完整解讀必須輸出下方指定的粗體定論與模組標題。\n\n若內容涉及奇門或紫微：不可新增星曜、門、神、奇儀、方位、時間、吉凶、公式或個人起局結果。只有 slot 提供的 `must_include` 和 `reference` 可新增到該 slot；必須將它們表述為公開奇門資料的「對照示例」，接著立刻白話轉譯，絕不可說成已替讀者起局或確認讀者正處該局。沒有資料就寫生活層面的可觀察情景與行動。\n\n最新版型式五上集的對應文字是「奇門生活小貼士」，不是故事、故事卡或心理劇；其生活貼士至少 50 字。\n\n型式五下集每個 card_A_tail／card_B_tail／card_C_tail 是完整解讀的可變部分，至少 300 字，必須依序、逐字採用以下五層閱讀格式：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 中已核對的門、星、宮位或奇儀；不可自行補造］】\n‧ 表面現象：［具體外在行為或心理狀態］\n‧ 盤象真相：［內在拉扯或局勢本質；把術語立刻白話翻譯，明說「白話來說」或同義語］\n【時空與體感錨定】\n‧ ［只使用 must_include 的方位、時間、吉凶；或可觀察的生活感受。體感不是醫療診斷。］\n【奇門行為改運】\n‧ ［一至兩項低門檻、可觀察的整理、溝通、休息或行程行動；不可保證化解、招財、吸納吉氣或改變他人。］\n\n其中 X 必須等於該 slot 的 A、B 或 C。每一模組最多兩句，模組之間換行。首句要明確，卻不得使用「注定」「必然」「一定會」「百分之百」。不可改動任何固定模板文字。\n\n每個 slot 都必須改寫，不能原封不動回傳。對 minimum_cjk 大於零的 slot，輸出必須至少達該數量的中文字；`must_include` 內的每個字串必須逐字出現。'''
+    system = '''你是繁體中文（台灣）IG 文案編輯。只改可變散文，保持原本事實、語意強度、主題、時間、圖騰、CTA、專有名詞與不確定性。\n\n依序套用：\n1. humanizer-tw：刪除套話、翻譯腔、黑話、假深刻、金句公式、短句連發戲劇腔與無源權威；不要誤殺合法台灣用語。\n2. good-writing-tw：讓句長與句尾有自然錯落，拆除真正過長或塞太多資訊的句子，但不要把全文修成節拍器。\n3. authentic-voice-editing / speak-human-tw：以具體情景、真主語和真動作取代抽象安慰；不要新增事實、數字、經歷、來源、承諾或命理結論。\n\n這是社群文案。可保留適度猶豫與生活感，但不要演戲、不要客服腔、不要空泛雞湯。用第二人稱「你」。不要輸出任何固定模板標籤、CTA、Hashtags、Hook 或卡片標題；但型式五下集的可變完整解讀必須輸出下方指定的粗體定論與模組標題。\n\n若內容涉及奇門或紫微：不可新增星曜、門、神、奇儀、方位、時間、吉凶、公式或個人起局結果。只有 slot 提供的 `must_include` 和 `reference` 可新增到該 slot；必須將它們表述為公開奇門資料的「對照示例」，接著立刻白話轉譯，絕不可說成已替讀者起局或確認讀者正處該局。沒有資料就寫生活層面的可觀察情景與行動。\n\n型式一的 A–F 置頂解答也適用最新版五層輸出邏輯。每個 answer_A 至 answer_F 約 100 至 150 個中文字，必須依序使用：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 已核對的門、星、宮位或奇儀］】\n‧ 表面現象：［具體外在行為］\n‧ 盤象真相：［內在拉扯；立刻以「白話來說」或同義語降維］\n【時空與體感錨定】\n‧ ［已核對的方位／吉凶或可觀察的生活時段、生活感受］\n【奇門行為改運】\n‧ ［一項低門檻、可觀察的整理、溝通、休息或行程行動；不得承諾結果。］\nX 必須等於 A 至 F 對應選項。這些標題是置頂解答的可變內容，不是型式一固定模板。不可使用「注定」「必然」「一定會」「百分之百」。\n\n最新版型式五上集的對應文字是「奇門生活小貼士」，不是故事、故事卡或心理劇；其生活貼士至少 50 字。\n\n型式五下集每個 card_A_tail／card_B_tail／card_C_tail 是完整解讀的可變部分，至少 300 字，必須依序、逐字採用以下五層閱讀格式：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 中已核對的門、星、宮位或奇儀；不可自行補造］】\n‧ 表面現象：［具體外在行為或心理狀態］\n‧ 盤象真相：［內在拉扯或局勢本質；把術語立刻白話翻譯，明說「白話來說」或同義語］\n【時空與體感錨定】\n‧ ［只使用 must_include 的方位、時間、吉凶；或可觀察的生活感受。體感不是醫療診斷。］\n【奇門行為改運】\n‧ ［一至兩項低門檻、可觀察的整理、溝通、休息或行程行動；不可保證化解、招財、吸納吉氣或改變他人。］\n\n其中 X 必須等於該 slot 的 A、B 或 C。每一模組最多兩句，模組之間換行。首句要明確，卻不得使用「注定」「必然」「一定會」「百分之百」。不可改動任何固定模板文字。\n\n每個 slot 都必須改寫，不能原封不動回傳。對 minimum_cjk 大於零的 slot，輸出必須至少達該數量的中文字；`must_include` 內的每個字串必須逐字出現。'''
     user = {
         'date': date,
         'form': kind,
@@ -207,7 +221,7 @@ def validate_output(slots: list[dict], rewritten: dict[str, str]) -> None:
             raise ValueError(f'Fixed template token leaked into {slot["id"]}')
         if slot['minimum_cjk'] and cjk_count(value) < slot['minimum_cjk']:
             raise ValueError(f'Slot {slot["id"]} shorter than {slot["minimum_cjk"]} CJK chars')
-        if slot['id'].startswith('card_'):
+        if slot['id'].startswith('card_') or slot.get('rule_library_type1'):
             label = slot['id'].split('_')[1]
             required_sections = (f'**選項 {label}：', '【盤象：', '‧ 表面現象：', '‧ 盤象真相：', '【時空與體感錨定】', '【奇門行為改運】')
             missing_sections = [section for section in required_sections if section not in value]
