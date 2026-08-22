@@ -58,7 +58,7 @@ for path in FILES:
                     if not source.is_file() or line_id not in source.read_text(encoding='utf-8'):
                         issues.append((date, f'型式一 {label} 無法反向定位 SSOT：{relpath} / {line_id}'))
         if '型式五上集' in header or '型式五下集' in header:
-            no_personal_reading = re.search(r'(?:不會(?:、?也不能)?|不能|不)替你安門、定星(?:，或|、)判方位、時間(?:或|、)吉凶', block)
+            no_personal_reading = re.search(r'(?:不會(?:、?也不能)?|不能|不)替你安門、定星[^\n]{0,24}(?:也不(?:會)?|也)?判(?:定)?方位、時間[^\n]{0,12}吉凶', block)
             if '型式五上集' in header and not no_personal_reading:
                 issues.append((date, '型式五上集缺少無起局資料不代判邊界'))
             if '型式五下集' in header:

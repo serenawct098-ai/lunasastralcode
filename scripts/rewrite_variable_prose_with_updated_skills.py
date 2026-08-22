@@ -23,7 +23,7 @@ FILES = [
     ROOT / 'scripts/60day_scripts_W4-W9_20260817-20260925.md',
     ROOT / 'scripts/60day_scripts_W7-W9_20260905-20260926.md',
 ]
-MODEL = 'gpt-5'
+MODEL = 'claude-sonnet-4-6'
 
 
 def split_blocks(text: str):
@@ -151,13 +151,15 @@ def slots_for(block: str, kind: str) -> list[dict]:
 
 def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry: int = 0) -> dict[str, str]:
     slot_payload = [{'id': slot['id'], 'text': slot['text'], 'minimum_cjk': slot['minimum_cjk'], 'must_include': slot.get('must_include', []), 'reference': slot.get('reference', '')} for slot in slots]
-    system = '''你是繁體中文（台灣）IG 文案編輯。只改可變散文，保持原本事實、語意強度、主題、時間、圖騰、CTA、專有名詞與不確定性。\n\n依序套用：\n1. humanizer-tw：刪除套話、翻譯腔、黑話、假深刻、金句公式、短句連發戲劇腔與無源權威；不要誤殺合法台灣用語。\n2. good-writing-tw：讓句長與句尾有自然錯落，拆除真正過長或塞太多資訊的句子，但不要把全文修成節拍器。\n3. authentic-voice-editing / speak-human-tw：以具體情景、真主語和真動作取代抽象安慰；不要新增事實、數字、經歷、來源、承諾或命理結論。\n\n這是社群文案。可保留適度猶豫與生活感，但不要演戲、不要客服腔、不要空泛雞湯。用第二人稱「你」。不要輸出任何固定模板標籤、CTA、Hashtags、Hook 或卡片標題；但型式五下集的可變完整解讀必須輸出下方指定的粗體定論與模組標題。\n\n若內容涉及奇門或紫微：不可新增星曜、門、神、奇儀、方位、時間、吉凶、公式或個人起局結果。只有 slot 提供的 `must_include` 和 `reference` 可新增到該 slot；必須將它們表述為公開奇門資料的「對照示例」，接著立刻白話轉譯，絕不可說成已替讀者起局或確認讀者正處該局。沒有資料就寫生活層面的可觀察情景與行動。\n\n型式一的 A–F 置頂解答也適用最新版五層輸出邏輯。每個 answer_A 至 answer_F 約 100 至 150 個中文字，必須依序使用：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 已核對的門、星、宮位或奇儀］】\n‧ 表面現象：［具體外在行為］\n‧ 盤象真相：［內在拉扯；立刻以「白話來說」或同義語降維］\n【時空與體感錨定】\n‧ ［已核對的方位／吉凶或可觀察的生活時段、生活感受］\n【奇門行為改運】\n‧ ［一項低門檻、可觀察的整理、溝通、休息或行程行動；不得承諾結果。］\nX 必須等於 A 至 F 對應選項。這些標題是置頂解答的可變內容，不是型式一固定模板。不可使用「注定」「必然」「一定會」「百分之百」。\n\n最新版型式五上集的對應文字是「奇門生活小貼士」，不是故事、故事卡或心理劇；其生活貼士至少 50 字。\n\n型式五下集每個 card_A_tail／card_B_tail／card_C_tail 是完整解讀的可變部分，至少 300 字，必須依序、逐字採用以下五層閱讀格式：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 中已核對的門、星、宮位或奇儀；不可自行補造］】\n‧ 表面現象：［具體外在行為或心理狀態］\n‧ 盤象真相：［內在拉扯或局勢本質；把術語立刻白話翻譯，明說「白話來說」或同義語］\n【時空與體感錨定】\n‧ ［只使用 must_include 的方位、時間、吉凶；或可觀察的生活感受。體感不是醫療診斷。］\n【奇門行為改運】\n‧ ［一至兩項低門檻、可觀察的整理、溝通、休息或行程行動；不可保證化解、招財、吸納吉氣或改變他人。］\n\n其中 X 必須等於該 slot 的 A、B 或 C。每一模組最多兩句，模組之間換行。首句要明確，卻不得使用「注定」「必然」「一定會」「百分之百」。不可改動任何固定模板文字。\n\n每個 slot 都必須改寫，不能原封不動回傳。對 minimum_cjk 大於零的 slot，輸出必須至少達該數量的中文字；`must_include` 內的每個字串必須逐字出現。'''
+    system = '''你是繁體中文（台灣）IG 文案編輯。只改可變散文，保持原本事實、語意強度、主題、時間、圖騰、CTA、專有名詞與不確定性。\n\n依序套用：\n1. humanizer-tw：刪除套話、翻譯腔、黑話、假深刻、金句公式、短句連發戲劇腔與無源權威；不要誤殺合法台灣用語。\n2. good-writing-tw：讓句長與句尾有自然錯落，拆除真正過長或塞太多資訊的句子，但不要把全文修成節拍器。\n3. authentic-voice-editing / speak-human-tw：以可辨識的心理狀態、能量狀態和真實張力取代抽象安慰；不要新增事實、數字、經歷、來源、承諾或命理結論。\n\n這是社群文案。可保留適度猶豫與生活感，但不要演戲、不要客服腔、不要空泛雞湯。用第二人稱「你」。\n\n描述克制與白描邊界：禁止細寫微觀動作、道具和背景（例如躺在床上看天花板滑手機、咖啡放涼、手拿杯子發呆、在捷運等車時修改訊息、反覆打開對話框）。把這類畫面升維為「表面在運作，心智已抽離」等心理或能量狀態。每一個 slot 最多只保留一至兩個時空／體感對頻點；不可堆疊環境背景。若 `must_include` 已含一個方位與一個時段，這兩項已用盡配額，禁止再新增任何早晚、深夜、肩頸、睡眠、呼吸、胸口、腳步、手部或其他體感／時間／方位文字。\n\n不要輸出任何固定模板標籤、CTA、Hashtags、Hook 或卡片標題；但型式五下集的可變完整解讀必須輸出下方指定的粗體定論與模組標題。\n\n若內容涉及奇門或紫微：不可新增星曜、門、神、奇儀、方位、時間、吉凶、公式或個人起局結果。只有 slot 提供的 `must_include` 和 `reference` 可新增到該 slot；必須將它們表述為公開奇門資料的「對照示例」，接著立刻白話轉譯，絕不可說成已替讀者起局或確認讀者正處該局。沒有資料就寫生活層面的可觀察情景與行動。
+
+五大型式共同適用的資訊邏輯：每一篇可變正文都要先提出該篇的核心狀態或可執行結論；再呈現讀者表面看見的狀況和底下的心理／能量拉扯；接著只留一至兩個時空或體感對頻點；最後給一項低門檻、可觀察、無結果保證的行動。型式一與型式五可以使用指定的模組標題；型式二、三、四不得自行新增模組標題或奇門術語，應把同一邏輯自然寫進其既有變數欄位。\n\n型式一的 A–F 置頂解答也適用最新版五層輸出邏輯。每個 answer_A 至 answer_F 約 100 至 150 個中文字，必須依序使用：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 已核對的門、星、宮位或奇儀］】\n‧ 表面現象：［具體外在行為］\n‧ 盤象真相：［內在拉扯；立刻以「白話來說」或同義語降維］\n【時空與體感錨定】\n‧ ［已核對的方位／吉凶或可觀察的生活時段、生活感受］\n【奇門行為改運】\n‧ ［一項低門檻、可觀察的整理、溝通、休息或行程行動；不得承諾結果。］\nX 必須等於 A 至 F 對應選項。這些標題是置頂解答的可變內容，不是型式一固定模板。不可使用「注定」「必然」「一定會」「百分之百」。\n\n最新版型式五上集的對應文字是「奇門生活小貼士」，不是故事、故事卡或心理劇；其生活貼士至少 50 字。\n\n型式五下集每個 card_A_tail／card_B_tail／card_C_tail 是完整解讀的可變部分，至少 300 字，必須依序、逐字採用以下五層閱讀格式：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 中已核對的門、星、宮位或奇儀；不可自行補造］】\n‧ 表面現象：［具體外在行為或心理狀態］\n‧ 盤象真相：［內在拉扯或局勢本質；把術語立刻白話翻譯，明說「白話來說」或同義語］\n【時空與體感錨定】\n‧ ［只使用 must_include 的方位、時間、吉凶；或可觀察的生活感受。體感不是醫療診斷。］\n【奇門行為改運】\n‧ ［一至兩項低門檻、可觀察的整理、溝通、休息或行程行動；不可保證化解、招財、吸納吉氣或改變他人。］\n\n其中 X 必須等於該 slot 的 A、B 或 C。每一模組最多兩句，模組之間換行。首句要明確，卻不得使用「注定」「必然」「一定會」「百分之百」。不可改動任何固定模板文字。\n\n每個 slot 都必須改寫，不能原封不動回傳。對 minimum_cjk 大於零的 slot，輸出必須至少達該數量的中文字；`must_include` 內的每個字串必須逐字出現。'''
     user = {
         'date': date,
         'form': kind,
         'header_context': header,
         'slots': slot_payload,
-        'task': '逐一改寫所有 slot。輸出 JSON，rewrites 內必須剛好有每個 id 一次。' + (' 上一稿有欄位原封不動複製或未納入指定術語；本次每個欄位必須在不改變事實下改變句法與用字，並逐一包含 must_include。' if retry else ''),
+        'task': '逐一改寫所有 slot。輸出 JSON，rewrites 內必須剛好有每個 id 一次。' + (' 上一稿有欄位原封不動複製、未納入指定術語，或超過時空／體感錨定上限；本次每個欄位必須在不改變事實下改變句法與用字，逐一包含 must_include，且不得出現額外錨定。' if retry else ''),
     }
     schema = {
         'type': 'object',
@@ -221,6 +223,12 @@ def validate_output(slots: list[dict], rewritten: dict[str, str]) -> None:
             raise ValueError(f'Fixed template token leaked into {slot["id"]}')
         if slot['minimum_cjk'] and cjk_count(value) < slot['minimum_cjk']:
             raise ValueError(f'Slot {slot["id"]} shorter than {slot["minimum_cjk"]} CJK chars')
+        micro_scenes = ('躺在床上看著天花板', '咖啡放到涼了', '手拿著咖啡杯', '手拿杯子', '坐在辦公室看著螢幕')
+        if any(scene in value for scene in micro_scenes):
+            raise ValueError(f'Slot {slot["id"]} contains prohibited micro-scene description')
+        anchors = r'西北|正北|正東|正西|正南|東北|早上|下午|晚上|深夜|肩頸|睡眠|辰時|巳時|午時|未時|申時|酉時'
+        if len(set(re.findall(anchors, value))) > 2:
+            raise ValueError(f'Slot {slot["id"]} contains more than two temporal or sensory anchors')
         if slot['id'].startswith('card_') or slot.get('rule_library_type1'):
             label = slot['id'].split('_')[1]
             required_sections = (f'**選項 {label}：', '【盤象：', '‧ 表面現象：', '‧ 盤象真相：', '【時空與體感錨定】', '【奇門行為改運】')
@@ -248,9 +256,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--forms', default='', help='Comma-separated forms to rewrite; empty means all forms.')
+    parser.add_argument('--dates', default='', help='Comma-separated ISO dates to rewrite; empty means all unpublished dates.')
     parser.add_argument('--audit', type=Path, default=Path('/home/ubuntu/updated_writing_skill_rewrite_audit.json'))
     args = parser.parse_args()
     allowed_forms = {item.strip() for item in args.forms.split(',') if item.strip()}
+    allowed_dates = {item.strip() for item in args.dates.split(',') if item.strip()}
     audit = []
     pending: list[tuple[Path, str, str, str, list[dict]]] = []
     for path in FILES:
@@ -258,15 +268,17 @@ def main() -> int:
         for date, header, block in split_blocks(source):
             if date < '2026-08-20':
                 continue
+            if allowed_dates and date not in allowed_dates:
+                continue
             kind = form(header)
             if allowed_forms and kind not in allowed_forms:
                 continue
             slots = slots_for(block, kind)
             pending.append((path, date, header, block, slots))
-    if not allowed_forms and len(pending) != 22:
+    if not allowed_forms and not allowed_dates and len(pending) != 22:
         raise ValueError(f'Expected 22 unpublished scripts, got {len(pending)}')
-    if allowed_forms and not pending:
-        raise ValueError(f'No scripts found for forms: {sorted(allowed_forms)}')
+    if (allowed_forms or allowed_dates) and not pending:
+        raise ValueError(f'No scripts found for forms/dates: {sorted(allowed_forms)} / {sorted(allowed_dates)}')
     if args.dry_run:
         summary = [{'date': date, 'form': form(header), 'slots': [slot['id'] for slot in slots]} for _, date, header, _, slots in pending]
         args.audit.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

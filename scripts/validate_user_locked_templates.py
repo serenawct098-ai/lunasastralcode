@@ -11,7 +11,7 @@ PLAYBOOK = ROOT / 'lunas_astral_code_master_playbook.md'
 STANDARD_START = '## 【五大型式文案排版輸出標準規範】'
 GUIDE_TITLE = '# IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫'
 STANDARD_SHA256 = '3b233427c76c6750ccf256729453addf76f6adfb0d743c3446e60e4e7970a589'
-GUIDE_SHA256 = '969fabb23d6707eba13572ae1d784c94e9f8aceaf984bffb1ed23f1baafb2fc3'
+GUIDE_SHA256 = 'fc941b9971f745d4f66c3aa7baa60cf9381644d8b674ce88730e74c1717f9f09'
 
 
 def sections(playbook: str) -> tuple[str, str, str]:

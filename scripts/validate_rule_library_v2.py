@@ -56,6 +56,12 @@ def check_five_layers(date: str, label: str, text: str, minimum: int, scope: str
             issues.append((date, f'{scope} {label} 缺少 {name}'))
     if re.search(r'你(?:注定|一定會|必然|百分之百)', text):
         issues.append((date, f'{scope} {label} 含命定論'))
+    micro_scenes = ('躺在床上看著天花板', '咖啡放到涼了', '手拿著咖啡杯', '手拿杯子', '坐在辦公室看著螢幕')
+    if any(scene in text for scene in micro_scenes):
+        issues.append((date, f'{scope} {label} 含過度微觀場景描寫'))
+    anchor_pattern = r'西北|正北|正東|正西|正南|東北|早上|下午|晚上|深夜|肩頸|睡眠|辰時|巳時|午時|未時|申時|酉時'
+    if len(set(re.findall(anchor_pattern, text))) > 2:
+        issues.append((date, f'{scope} {label} 時空／體感錨定超過兩項'))
     if '【盤象：' in text and not re.search(r'白話|換成日常|意思是|也就是說', text):
         issues.append((date, f'{scope} {label} 術語後缺少明示白話降維'))
 
