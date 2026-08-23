@@ -14,6 +14,7 @@ import os
 import re
 import sys
 import time
+import subprocess
 from pathlib import Path
 
 import requests
@@ -252,13 +253,7 @@ def apply_slots(block: str, slots: list[dict], rewritten: dict[str, str]) -> str
     return changed
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--dry-run', action='store_true')
-    parser.add_argument('--forms', default='', help='Comma-separated forms to rewrite; empty means all forms.')
-    parser.add_argument('--dates', default='', help='Comma-separated ISO dates to rewrite; empty means all unpublished dates.')
-    parser.add_argument('--audit', type=Path, default=Path('/home/ubuntu/updated_writing_skill_rewrite_audit.json'))
-    args = parser.parse_args()
+def rewrite(args) -> int:
     allowed_forms = {item.strip() for item in args.forms.split(',') if item.strip()}
     allowed_dates = {item.strip() for item in args.dates.split(',') if item.strip()}
     audit = []
@@ -315,6 +310,208 @@ def main() -> int:
     args.audit.write_text(json.dumps(audit, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     print(json.dumps({'posts': len(audit), 'model': MODEL, 'audit': str(args.audit)}, ensure_ascii=False))
     return 0
+
+
+# ── Unified governance: Playbook contract, structure, SSOT and style ─────────
+STANDARD_START = '## 【五大型式文案排版輸出標準規範】'
+GUIDE_TITLE = '# IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫'
+STANDARD_SHA256 = '3b233427c76c6750ccf256729453addf76f6adfb0d743c3446e60e4e7970a589'
+GUIDE_SHA256 = 'fc941b9971f745d4f66c3aa7baa60cf9381644d8b674ce88730e74c1717f9f09'
+PLAYBOOK = ROOT / 'lunas_astral_code_master_playbook.md'
+SSOT = Path('/home/ubuntu/ziwei_qimen')
+PUBLISHED = {'2026-08-17', '2026-08-18'}
+PENDING = '【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares'
+RULE_SCOPE = {
+    '型式一': {'mutable': ('scene', 'answer_A–F'), 'fixed': ('A–F 抽籤', '留言 CTA', '閃爍視覺')},
+    '型式二': {'mutable': ('scene', 'reflection', 'action'), 'fixed': ('追蹤 CTA', '五張卡')},
+    '型式三': {'mutable': ('explain',), 'fixed': ('SSOT 引文', '收藏 CTA', '五張卡')},
+    '型式四': {'mutable': ('scene', 'check', 'action'), 'fixed': ('分享 CTA', '五張卡')},
+    '型式五上集': {'mutable': ('scene', 'tip', 'answer_A–C'), 'fixed': ('A–C 圖騰', '留言 CTA', '五張卡')},
+    '型式五下集': {'mutable': ('card_A–C'), 'fixed': ('上集承接', '圖騰', '收藏／追蹤／DM CTA', '六張卡')},
+}
+CTA = {
+    '型式一': '下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】',
+    '型式二': '點擊「追蹤」隨時陪伴在你身邊～',
+    '型式三': '點擊「收藏」打開命盤隨時上手\n下一期繼續拆解一個排盤小知識',
+    '型式四': '點擊「分享」給朋友一起確認吧～',
+    '型式五上集': '「留言」A / B / C 明天置頂留言區公佈解答 ✨\n想看後續「完整解讀」留意下一集',
+    '型式五下集': '喜歡這期解讀指引的朋友\n歡迎「收藏 + 追蹤」持續領取你的解讀提示吧～\n\n若想針對個人問題進行深入解析 📩\n歡迎直接 DM 預約一對一的專屬命盤諮詢 🌙',
+}
+LOWER_REFS = {
+    'A': {'terms': ('乾六宮', '西北', '天心星', '開門', '未時', '大吉'), 'sources': (('data/XingMen_WuXing_ShengKe.json', 'XMWX_L014'), ('data/QMDJ_ShangJuan_Consolidated.json', 'QMDJ_Auto_00328'))},
+    'B': {'terms': ('坎一宮', '正北', '天蓬星', '休門', '申時', '大凶', '大吉'), 'sources': (('data/XingMen_WuXing_ShengKe.json', 'XMWX_L015'), ('data/QMDJ_ShangJuan_Consolidated.json', 'QMDJ_Auto_00329'))},
+    'C': {'terms': ('艮八宮', '東北', '天任星', '生門', '酉時', '大吉'), 'sources': (('data/XingMen_WuXing_ShengKe.json', 'XMWX_L013'), ('data/QMDJ_ShangJuan_Consolidated.json', 'QMDJ_Auto_00330'))},
+}
+TYPE1_REFS = {
+    'A': ('乾六宮', '西北', '天心星', '開門', '大吉'),
+    'B': ('坎一宮', '正北', '天蓬星', '休門', '大凶', '大吉'),
+    'C': ('艮八宮', '東北', '天任星', '生門', '大吉'),
+    'D': ('兌七宮', '正西', '天柱星', '驚門', '小凶'),
+    'E': ('離九宮', '正南', '天英星', '景門', '中平'),
+    'F': ('震三宮', '正東', '天沖星', '傷門', '凶'),
+}
+MICRO_SCENES = {
+    '月台與訊息鏡頭': r'捷運(?:月台|車廂)[^\n]{0,120}(?:手機|對話框|訊息)',
+    '咖啡放涼鏡頭': r'咖啡[^\n]{0,80}(?:涼掉|放涼)',
+    '訊息反覆操作': r'(?:對話框|訊息)[^\n]{0,100}(?:打開|刪掉|改字|滑開)',
+    '廚房動作鏡頭': r'(?:外套|菜|貓|流理台|鍋)[^\n]{0,120}(?:掛上|提在手裡|蹭過|冒小泡)',
+}
+ANCHORS = r'西北|正北|正東|正西|正南|東北|早上|下午|晚上|深夜|肩頸|睡眠|辰時|巳時|午時|未時|申時|酉時'
+RETIRED = ('視覺規範核對清單', '【每張固定版面】', '視覺設定：', '上集主題 +', '三個圖騰並排，提醒讀者回到原選項')
+
+
+def cjk(text: str) -> int:
+    return len(re.findall(r'[\u3400-\u9fff]', text))
+
+
+def post_blocks():
+    for path in FILES:
+        text = path.read_text(encoding='utf-8')
+        starts = list(re.finditer(r'(?m)^## (2026-\d{2}-\d{2}).*$', text))
+        for i, marker in enumerate(starts):
+            end = starts[i + 1].start() if i + 1 < len(starts) else len(text)
+            yield path, marker.group(1), marker.group(0), text[marker.start():end]
+
+
+def playbook_contract_issues() -> list[str]:
+    text = PLAYBOOK.read_text(encoding='utf-8')
+    start, guide = text.find(STANDARD_START), text.find(GUIDE_TITLE)
+    issues: list[str] = []
+    if start < 0 or guide <= start:
+        return ['找不到五大型式固定規範或規則庫。']
+    standard, rule_library = text[start:guide], text[guide:]
+    if hashlib.sha256(standard.encode()).hexdigest() != STANDARD_SHA256:
+        issues.append('五大型式固定規範雜湊與使用者鎖定基線不符。')
+    if hashlib.sha256(rule_library.encode()).hexdigest() != GUIDE_SHA256:
+        issues.append('規則庫雜湊與使用者鎖定基線不符。')
+    if text.count(STANDARD_START) != 1 or text.count(GUIDE_TITLE) != 1:
+        issues.append('固定規範或規則庫標題必須且只能出現一次。')
+    return issues
+
+
+def lower_card(block: str, label: str) -> str:
+    m = re.search(rf'（[345]）{label} 選項完整解讀卡.*?：(.*?)(?=\n\n（[3456]）|\n（6）|\Z)', block, re.S)
+    return m.group(1) if m else ''
+
+
+def pinned_answer(block: str, label: str, labels: str) -> str:
+    anchor = block.find('【置頂留言區解答｜')
+    if anchor < 0:
+        return ''
+    region = block[anchor:]
+    m = re.search(rf'(?ms)^{label}：(.*?)(?=\n\n[{'|'.join(labels)}]：|\Z)', region)
+    return m.group(1) if m else ''
+
+
+def five_layer_issues(date: str, text: str, label: str) -> list[str]:
+    required = (f'**選項 {label}：', '【盤象：', '‧ 表面現象：', '‧ 盤象真相：', '【時空與體感錨定】', '【奇門行為改運】')
+    issues = [f'{date} {label} 缺少五層模組：{item}' for item in required if item not in text]
+    if re.search(r'你(?:注定|必然|一定會|百分之百)', text):
+        issues.append(f'{date} {label} 使用命定論。')
+    if '白話來說' not in text and '簡單說' not in text:
+        issues.append(f'{date} {label} 缺少術語白話轉譯。')
+    if len(set(re.findall(ANCHORS, text))) > 2:
+        issues.append(f'{date} {label} 時空／體感錨定超過兩項。')
+    return issues
+
+
+def script_issues() -> list[str]:
+    issues: list[str] = []
+    posts: dict[str, tuple[str, str]] = {}
+    count = 0
+    for path, date, header, block in post_blocks():
+        if date in PUBLISHED:
+            continue
+        if date < '2026-08-20':
+            continue
+        count += 1
+        kind = form(header)
+        posts[date] = (kind, block)
+        if PENDING not in block:
+            issues.append(f'{date} 缺少 48 小時待記錄欄位。')
+        if any(token in block for token in RETIRED):
+            issues.append(f'{date} 留有已廢止模板文字。')
+        tags = re.search(r'(?m)^Hashtags：(.+)$', block)
+        if not tags or len(re.findall(r'#[\w\u3400-\u9fff]+', tags.group(1))) != 5 or '#Lunasastralcode' not in tags.group(1):
+            issues.append(f'{date} Hashtags 結構錯誤。')
+        cta = re.search(r'(?ms)^(?:固定 ?)?CTA：\s*(.*?)(?=\n————————————|\n視覺分鏡描述|\n【待記錄】|\Z)', block)
+        if not cta or cta.group(1).strip() != CTA[kind]:
+            issues.append(f'{date} CTA 與固定模板不符。')
+        for name, pattern in MICRO_SCENES.items():
+            if re.search(pattern, block):
+                issues.append(f'{date} 有過度微觀描繪：{name}。')
+        if kind == '型式一':
+            if len(re.findall(r'(?m)^🔮 [A-F]\. ', block)) != 6:
+                issues.append(f'{date} 缺少 A–F 圖騰。')
+            for label, terms in TYPE1_REFS.items():
+                answer = pinned_answer(block, label, 'ABCDEF')
+                issues.extend(f'{date} 型式一 {label} 缺少公開奇門對照：{term}。' for term in terms if term not in answer)
+                issues.extend(five_layer_issues(date, answer, label))
+        elif kind == '型式五上集':
+            if len(re.findall(r'(?m)^🔮 [A-C]\. ', block)) != 3:
+                issues.append(f'{date} 缺少 A／B／C 圖騰。')
+            body_scene = re.search(r'(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺', block)
+            visual_scene = re.search(r'（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：(.*?)\+ 憑第一眼直覺', block)
+            if not body_scene or not visual_scene or body_scene.group(1).strip() != visual_scene.group(1).strip():
+                issues.append(f'{date} 問題聚焦卡與正文情景不一致。')
+            if '（4）貼士卡（18–22 秒）' not in block:
+                issues.append(f'{date} 缺少貼士卡。')
+        elif kind == '型式五下集':
+            for label, spec in LOWER_REFS.items():
+                card = lower_card(block, label)
+                if cjk(card) < 300:
+                    issues.append(f'{date} {label} 完整解讀少於 300 字。')
+                issues.extend(f'{date} {label} 缺少公開奇門對照：{term}。' for term in spec['terms'] if term not in card)
+                issues.extend(five_layer_issues(date, card, label))
+                for relpath, line_id in spec['sources']:
+                    source = SSOT / relpath
+                    if not source.is_file() or line_id not in source.read_text(encoding='utf-8'):
+                        issues.append(f'{date} {label} 無法反向定位 SSOT：{relpath} / {line_id}。')
+        elif kind == '型式三':
+            for relpath, line_id in re.findall(r'`(data/[^`]+)`，`([^`]+)`', block):
+                source = SSOT / relpath
+                if not source.is_file() or line_id not in source.read_text(encoding='utf-8'):
+                    issues.append(f'{date} 無法反向定位 SSOT：{relpath} / {line_id}。')
+    if count != 22:
+        issues.append(f'未發布腳本數量錯誤：{count}。')
+    upper = sorted(d for d, (kind, _) in posts.items() if kind == '型式五上集')
+    lower = sorted(d for d, (kind, _) in posts.items() if kind == '型式五下集')
+    for up, down in zip(upper[:5], lower):
+        utopic = re.search(r'Hook：\s*【大眾奇門占卜｜(.+?)】', posts[up][1])
+        normalized_lower = re.sub(r'\s+', '', posts[down][1])
+        if not utopic or re.sub(r'\s+', '', utopic.group(1)) not in normalized_lower:
+            issues.append(f'{down} 未承接 {up} 的窄題。')
+    return issues
+
+
+def audit() -> int:
+    issues = playbook_contract_issues() + script_issues()
+    result = {'posts_checked': 22, 'issues': issues, 'pass': not issues}
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 1 if issues else 0
+
+
+def inventory() -> int:
+    print(json.dumps({'root': str(ROOT), 'tool': str(Path(__file__).relative_to(ROOT)), 'rule_scope': RULE_SCOPE, 'scripts': [str(p.relative_to(ROOT)) for p in FILES]}, ensure_ascii=False, indent=2))
+    return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description='Luna scripts unified governance tool')
+    sub = parser.add_subparsers(dest='command', required=True)
+    sub.add_parser('audit', help='Validate Playbook contract, scripts, SSOT and cross-post structure.')
+    sub.add_parser('inventory', help='Show fixed/mutable mapping and managed script files.')
+    rewrite_parser = sub.add_parser('rewrite', help='Rewrite only registered mutable prose slots.')
+    rewrite_parser.add_argument('--dry-run', action='store_true')
+    rewrite_parser.add_argument('--forms', default='', help='Comma-separated forms; empty means all forms.')
+    rewrite_parser.add_argument('--dates', default='', help='Comma-separated ISO dates; empty means all unpublished dates.')
+    rewrite_parser.add_argument('--audit', type=Path, default=ROOT / 'governance/rewrite_audit.json')
+    args = parser.parse_args()
+    if args.command == 'audit':
+        return audit()
+    if args.command == 'inventory':
+        return inventory()
+    return rewrite(args)
 
 
 if __name__ == '__main__':
