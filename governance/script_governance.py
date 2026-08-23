@@ -142,6 +142,7 @@ def slots_for(block: str, kind: str) -> list[dict]:
             raise ValueError('Missing Type 5 upper story')
         slots = []
         add_slot(slots, 'scene', match.group(1))
+        slots[-1]['requires_short_window'] = True
         add_slot(slots, 'story', story.group(1), minimum_cjk=50)
         slots.extend(answer_slots(block, 'ABC'))
         return slots
@@ -152,9 +153,9 @@ def slots_for(block: str, kind: str) -> list[dict]:
 
 def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry: int = 0) -> dict[str, str]:
     slot_payload = [{'id': slot['id'], 'text': slot['text'], 'minimum_cjk': slot['minimum_cjk'], 'must_include': slot.get('must_include', []), 'reference': slot.get('reference', '')} for slot in slots]
-    system = '''你是繁體中文（台灣）IG 文案編輯。只改可變散文，保持原本事實、語意強度、主題、時間、圖騰、CTA、專有名詞與不確定性。\n\n依序套用：\n1. humanizer-tw：刪除套話、翻譯腔、黑話、假深刻、金句公式、短句連發戲劇腔與無源權威；不要誤殺合法台灣用語。\n2. good-writing-tw：讓句長與句尾有自然錯落，拆除真正過長或塞太多資訊的句子，但不要把全文修成節拍器。\n3. authentic-voice-editing / speak-human-tw：以可辨識的心理狀態、能量狀態和真實張力取代抽象安慰；不要新增事實、數字、經歷、來源、承諾或命理結論。\n\n這是社群文案。可保留適度猶豫與生活感，但不要演戲、不要客服腔、不要空泛雞湯。用第二人稱「你」。\n\n描述克制與白描邊界：禁止細寫微觀動作、道具和背景（例如躺在床上看天花板滑手機、咖啡放涼、手拿杯子發呆、在捷運等車時修改訊息、反覆打開對話框）。把這類畫面升維為「表面在運作，心智已抽離」等心理或能量狀態。每一個 slot 最多只保留一至兩個時空／體感對頻點；不可堆疊環境背景。若 `must_include` 已含一個方位與一個時段，這兩項已用盡配額，禁止再新增任何早晚、深夜、肩頸、睡眠、呼吸、胸口、腳步、手部或其他體感／時間／方位文字。\n\n不要輸出任何固定模板標籤、CTA、Hashtags、Hook 或卡片標題；但型式五下集的可變完整解讀必須輸出下方指定的粗體定論與模組標題。\n\n若內容涉及奇門或紫微：不可新增星曜、門、神、奇儀、方位、時間、吉凶、公式或個人起局結果。只有 slot 提供的 `must_include` 和 `reference` 可新增到該 slot；必須將它們表述為公開奇門資料的「對照示例」，接著立刻白話轉譯，絕不可說成已替讀者起局或確認讀者正處該局。沒有資料就寫生活層面的可觀察情景與行動。
+    system = '''你是繁體中文（台灣）IG 文案編輯。只改可變散文，保持原本事實、語意強度、主題、時間、圖騰、CTA、專有名詞與不確定性。\n\n依序套用：\n1. humanizer-tw：刪除套話、翻譯腔、黑話、假深刻、金句公式、短句連發戲劇腔與無源權威；不要誤殺合法台灣用語。\n2. good-writing-tw：讓句長與句尾有自然錯落，拆除真正過長或塞太多資訊的句子，但不要把全文修成節拍器。\n3. authentic-voice-editing / speak-human-tw：以可辨識的心理狀態、能量狀態和真實張力取代抽象安慰；不要新增事實、數字、經歷、來源、承諾或命理結論。\n\n這是社群文案。以冷靜、權威、透徹的「玄學破局」語氣寫作：定論明確，但不恐嚇、不命定。全文統一使用第二人稱「你」。可保留適度留白，但不要演戲、不要客服腔、不要空泛雞湯。\n\n描述克制與白描邊界：禁止細寫微觀動作、道具和背景（例如躺在床上看天花板滑手機、咖啡放涼、手拿杯子發呆、在捷運等車時修改訊息、反覆打開對話框）。把這類畫面升維為「表面在運作，心智已抽離」等心理或能量狀態。每一個 slot 最多只保留一至兩個時空／體感對頻點；不可堆疊環境背景。即使規則庫舉例「深夜刷手機」，也要改寫成夜間注意力反覆被抽走等狀態，不輸出操作鏡頭。若 `must_include` 已含一個方位與一個時段，這兩項已用盡配額，禁止再新增任何早晚、深夜、肩頸、睡眠、呼吸、胸口、腳步、手部或其他體感／時間／方位文字。\n\n不要輸出任何固定模板標籤、CTA、Hashtags、Hook 或卡片標題；但型式五下集的可變完整解讀必須輸出下方指定的粗體定論與模組標題。\n\n若內容涉及奇門或紫微：不可新增星曜、門、神、奇儀、方位、時間、吉凶、公式或個人起局結果。只有 slot 提供的 `must_include` 和 `reference` 可新增到該 slot；必須將它們表述為公開奇門資料的「對照示例」，接著立刻白話轉譯，絕不可說成已替讀者起局或確認讀者正處該局。沒有資料就寫生活層面的可觀察情景與行動。
 
-五大型式共同適用的資訊邏輯：每一篇可變正文都要先提出該篇的核心狀態或可執行結論；再呈現讀者表面看見的狀況和底下的心理／能量拉扯；接著只留一至兩個時空或體感對頻點；最後給一項低門檻、可觀察、無結果保證的行動。型式一與型式五可以使用指定的模組標題；型式二、三、四不得自行新增模組標題或奇門術語，應把同一邏輯自然寫進其既有變數欄位。\n\n型式一的 A–F 置頂解答也適用最新版五層輸出邏輯。每個 answer_A 至 answer_F 約 100 至 150 個中文字，必須依序使用：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 已核對的門、星、宮位或奇儀］】\n‧ 表面現象：［具體外在行為］\n‧ 盤象真相：［內在拉扯；立刻以「白話來說」或同義語降維］\n【時空與體感錨定】\n‧ ［已核對的方位／吉凶或可觀察的生活時段、生活感受］\n【奇門行為改運】\n‧ ［一項低門檻、可觀察的整理、溝通、休息或行程行動；不得承諾結果。］\nX 必須等於 A 至 F 對應選項。這些標題是置頂解答的可變內容，不是型式一固定模板。不可使用「注定」「必然」「一定會」「百分之百」。\n\n最新版型式五上集的對應文字是「奇門生活小貼士」，不是故事、故事卡或心理劇；其生活貼士至少 50 字。\n\n型式五下集每個 card_A_tail／card_B_tail／card_C_tail 是完整解讀的可變部分，至少 300 字，必須依序、逐字採用以下五層閱讀格式：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 中已核對的門、星、宮位或奇儀；不可自行補造］】\n‧ 表面現象：［具體外在行為或心理狀態］\n‧ 盤象真相：［內在拉扯或局勢本質；把術語立刻白話翻譯，明說「白話來說」或同義語］\n【時空與體感錨定】\n‧ ［只使用 must_include 的方位、時間、吉凶；或可觀察的生活感受。體感不是醫療診斷。］\n【奇門行為改運】\n‧ ［一至兩項低門檻、可觀察的整理、溝通、休息或行程行動；不可保證化解、招財、吸納吉氣或改變他人。］\n\n其中 X 必須等於該 slot 的 A、B 或 C。每一模組最多兩句，模組之間換行。首句要明確，卻不得使用「注定」「必然」「一定會」「百分之百」。不可改動任何固定模板文字。\n\n每個 slot 都必須改寫，不能原封不動回傳。對 minimum_cjk 大於零的 slot，輸出必須至少達該數量的中文字；`must_include` 內的每個字串必須逐字出現。'''
+五大型式共同適用的資訊邏輯：每一篇可變正文都要先提出該篇的核心狀態或可執行結論；再呈現讀者表面看見的狀況和底下的心理／能量拉扯；接著只留一至兩個時空或體感對頻點；最後給一項低門檻、可觀察、無結果保證的行動。型式一與型式五可以使用指定的模組標題；型式二、三、四不得自行新增模組標題或奇門術語，應把同一邏輯自然寫進其既有變數欄位。\n\n型式一的 A–F 置頂解答也適用最新版五層輸出邏輯。每個 answer_A 至 answer_F 約 100 至 150 個中文字，必須依序使用：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 已核對的門、星、宮位或奇儀］】\n‧ 表面現象：［具體外在行為］\n‧ 盤象真相：［內在拉扯；立刻以「白話來說」或同義語降維］\n【時空與體感錨定】\n‧ ［已核對的方位／吉凶或可觀察的生活時段、生活感受］\n【奇門行為改運】\n‧ ［一項低門檻、可觀察的整理、溝通、休息或行程行動；不得承諾結果。］\nX 必須等於 A 至 F 對應選項。這些標題是置頂解答的可變內容，不是型式一固定模板。不可使用「注定」「必然」「一定會」「百分之百」。\n\n最新版型式五上集的對應文字是「奇門生活小貼士」，不是故事、故事卡或心理劇；其問題聚焦與 Hook 必須是具體關係／工作／金錢情境加短時間窗，生活貼士至少 50 字。\n\n型式五下集每個 card_A_tail／card_B_tail／card_C_tail 是完整解讀的可變部分，至少 300 字，必須依序、逐字採用以下五層閱讀格式：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 中已核對的門、星、宮位或奇儀；不可自行補造］】\n‧ 表面現象：［具體外在行為或心理狀態］\n‧ 盤象真相：［內在拉扯或局勢本質；把術語立刻白話翻譯，明說「白話來說」或同義語］\n【時空與體感錨定】\n‧ ［只使用 must_include 的方位、時間、吉凶；或可觀察的生活感受。體感不是醫療診斷。］\n【奇門行為改運】\n‧ ［一至兩項低門檻、可觀察的整理、溝通、休息或行程行動；不可保證化解、招財、吸納吉氣或改變他人。］\n\n其中 X 必須等於該 slot 的 A、B 或 C。每一模組最多兩句，模組之間換行。首句要明確，卻不得使用「注定」「必然」「一定會」「百分之百」。不可改動任何固定模板文字。\n\n每個 slot 都必須改寫，不能原封不動回傳。對 minimum_cjk 大於零的 slot，輸出必須至少達該數量的中文字；`must_include` 內的每個字串必須逐字出現。'''
     user = {
         'date': date,
         'form': kind,
@@ -250,6 +251,24 @@ def apply_slots(block: str, slots: list[dict], rewritten: dict[str, str]) -> str
         if old not in changed:
             raise ValueError(f'Cannot apply slot {slot["id"]}; original text is absent')
         changed = changed.replace(old, new)
+    # 型式五上集的正文與第 2 張問題聚焦卡必須逐字使用同一個情景變數。
+    if any(slot.get('requires_short_window') for slot in slots):
+        scene = re.search(r'(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺', changed)
+        if not scene:
+            raise ValueError('Missing rewritten Type 5 upper scene')
+        scene_text = scene.group(1).strip()
+        if not re.search(r'(?:近|接下來|未來).{0,8}(?:一個月|一週|兩週|七天|30天)|本週|近期', scene_text):
+            scene_text = '接下來一個月，' + scene_text
+            changed = changed[:scene.start(1)] + scene_text + changed[scene.end(1):]
+            scene = re.search(r'(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺', changed)
+        changed, count = re.subn(
+            r'(（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：)(?s:.*?)(\+ 憑第一眼直覺)',
+            lambda m: m.group(1) + scene_text + m.group(2),
+            changed,
+            count=1,
+        )
+        if count != 1:
+            raise ValueError('Cannot synchronize Type 5 upper visual scene')
     return changed
 
 
@@ -315,8 +334,8 @@ def rewrite(args) -> int:
 # ── Unified governance: Playbook contract, structure, SSOT and style ─────────
 STANDARD_START = '## 【五大型式文案排版輸出標準規範】'
 GUIDE_TITLE = '# IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫'
-STANDARD_SHA256 = '3b233427c76c6750ccf256729453addf76f6adfb0d743c3446e60e4e7970a589'
-GUIDE_SHA256 = 'fc941b9971f745d4f66c3aa7baa60cf9381644d8b674ce88730e74c1717f9f09'
+STANDARD_SHA256 = 'fecec633611e00cd81ac13dcc1baaa3f28b3c06117f926319b358a09bcbbe957'
+GUIDE_SHA256 = 'ad78104d4391b44463f84f6e340c1959d885eb4b685e4f62ace5357b6271eb3c'
 PLAYBOOK = ROOT / 'lunas_astral_code_master_playbook.md'
 SSOT = Path('/home/ubuntu/ziwei_qimen')
 PUBLISHED = {'2026-08-17', '2026-08-18'}
@@ -454,6 +473,8 @@ def script_issues() -> list[str]:
             visual_scene = re.search(r'（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：(.*?)\+ 憑第一眼直覺', block)
             if not body_scene or not visual_scene or body_scene.group(1).strip() != visual_scene.group(1).strip():
                 issues.append(f'{date} 問題聚焦卡與正文情景不一致。')
+            elif not re.search(r'(?:近|接下來|未來).{0,8}(?:一個月|一週|兩週|七天|30天)|本週|近期', body_scene.group(1)):
+                issues.append(f'{date} 問題聚焦卡缺少短時間窗。')
             if '（4）貼士卡（18–22 秒）' not in block:
                 issues.append(f'{date} 缺少貼士卡。')
         elif kind == '型式五下集':
