@@ -36,9 +36,9 @@ PUBLISHED = {"2026-08-17", "2026-08-18"}
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
 GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
-STANDARD_SHA256 = "4592a2ae69ab2616cd53825159db5a67f2799736b1b5ac36fa0541bb052972fb"
-GUIDE_SHA256 = "a2dc0e5727061eb65ef71863acba0eb21d4502eca240a333920b8f743c268e7d"
-PLAYBOOK_SHA256 = "b63da795054ce4931659a0def639074d5c210b3a9fc95b7b0eeb62e887ab3c47"
+STANDARD_SHA256 = "a5abdb4fa1e799478ee6ec3d1985592d8ce1868723d77ba75a4439587b9f0756"
+GUIDE_SHA256 = "a866819e9dbba396ab19ca74ab70e22347055a220f0688bf2abe2c468a976844"
+PLAYBOOK_SHA256 = "3d7dffdd926acc037907fd46ce0fffd58a0f964808985e49e496c48afb20d616"
 DYNAMIC_RULES_SHA256 = "debc63551ca63fdd527eab0e04ed1562f0c2f9581d0704709d5b99470d227897"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
@@ -63,6 +63,8 @@ MICRO_SCENES = {
     "廚房動作鏡頭": r"(?:外套|菜|貓|流理台|鍋)[^\n]{0,120}(?:掛上|提在手裡|蹭過|冒小泡)",
 }
 ANCHOR_PATTERN = r"西北|正北|正東|正西|正南|東北|東南|西南|中央|子時|丑時|寅時|卯時|辰時|巳時|午時|未時|申時|酉時|戌時|亥時|早上|下午|晚上|深夜|肩頸|睡眠"
+PRECISE_ANCHOR_PATTERN = r"(?:早上|下午|晚上)\s*\d{1,2}\s*(?:[–—\-至到])\s*\d{1,2}\s*(?:點|時)|\d+\s*(?:步|分鐘|天)"
+SOFTENERS = ("可能", "似乎", "正處於", "未必", "隱約", "看似", "有些", "進退兩難", "心有不甘", "若有若無")
 # Clockwise geographic ring, derived directly from each palace's direction.
 CLOCKWISE_PALACE_RING = (1, 8, 3, 4, 9, 2, 7, 6)
 
@@ -167,7 +169,7 @@ def answer_slots(block: str, labels: str) -> list[dict]:
         match = re.search(rf"(?ms)^{label}：(.*?)(?=\n\n[{'|'.join(labels)}]：|\Z)", region)
         if not match:
             raise ValueError(f"Missing pinned answer {label}")
-        slots.append({"id": f"answer_{label}", "text": match.group(1).strip(), "minimum_cjk": 100})
+        slots.append({"id": f"answer_{label}", "text": match.group(1).strip(), "minimum_cjk": 35, "maximum_cjk": 50, "short_dynamic": True})
     return slots
 
 
@@ -212,8 +214,8 @@ def slots_for(block: str, kind: str) -> list[dict]:
         if not scene or not tip:
             raise ValueError("Type 5 upper scene or tip missing")
         slots = [
-            {"id": "scene", "text": scene.group(1).strip(), "minimum_cjk": 0, "short_window": True},
-            {"id": "tip", "text": tip.group(1).strip(), "minimum_cjk": 50},
+            {"id": "scene", "text": scene.group(1).strip(), "minimum_cjk": 1, "maximum_cjk": 15, "short_window": True},
+            {"id": "tip", "text": tip.group(1).strip(), "minimum_cjk": 1, "maximum_cjk": 50},
         ]
         slots.extend(answer_slots(block, "ABC"))
         return slots
@@ -379,7 +381,8 @@ def add_dynamic_requirements(slots: list[dict], date: str, kind: str, assignment
         slot["label"] = label
         slot["combo"] = combo
         slot["must_include"] = combo_terms(combo)
-        slot["five_layer"] = True
+        slot["five_layer"] = kind == "型式五下集"
+        slot["short_dynamic"] = kind in {"型式一", "型式五上集"}
 
 
 def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]) -> dict[str, str]:
@@ -404,25 +407,29 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
     payload_slots = []
     for slot in slots:
         item = {key: slot[key] for key in ("id", "text", "minimum_cjk")}
+        if slot.get("maximum_cjk") is not None:
+            item["maximum_cjk"] = slot["maximum_cjk"]
         if slot.get("must_include"):
             item["must_include"] = slot["must_include"]
             item["combo"] = slot["combo"]
+            item["five_layer"] = bool(slot.get("five_layer"))
+            item["short_dynamic"] = bool(slot.get("short_dynamic"))
         payload_slots.append(item)
     system = """你是繁體中文（台灣）IG 文案主筆。只能重寫給定的可變欄位，不得輸出或改動 Hook、Hashtags、CTA、卡片標題、視覺模板、圖騰、日期、型式、色碼與任何固定文字。
 
 用冷靜、權威、透徹的「玄學破局」語氣，全文使用第二人稱「你」。先說核心狀態或可行結論，再寫表面狀態與內在拉扯，最後給低門檻、可觀察且不保證結果的行動。避免心理治癒腔、客服腔、命定論、假深刻、空泛雞湯、術語堆砌、無源歸因、微觀動作與道具鏡頭。不得寫免責、邊界澄清、個人起局說明、資料不足或公開資料等句子。
 
-只要 slot 有 must_include，就必須逐字包含每一項術語。這些是動態盤象已推導結果，不得新增任何其他星、門、神、奇儀、方位、時辰、吉凶、公式或個人結論。每個此類 slot 必須使用下列五層格式，並以換行分隔：
+只要 slot 有 must_include，就必須逐字包含每一項術語。這些是動態盤象已推導結果，不得新增任何其他星、門、神、奇儀、方位、時辰、吉凶、公式或個人結論。只在 slot 標記 five_layer 時，才使用下列五層格式，並以換行分隔：
 **選項 X：一句明確但非命定的主軸結論**
 【盤象：星｜門｜神｜奇儀】
-‧ 表面現象：外在狀態或心理狀態。
+‧ 表面現象：以概括語句描繪外在或心理狀態。
 ‧ 盤象真相：內在拉扯；必須立刻說「白話來說」或同義白話轉譯。
-【時空與體感錨定】
-‧ 只使用已給定的方向、時辰與吉凶，不新增其他時空或體感細節。
+【時空與感官錨定】
+‧ 只使用已給定的方向、時辰與吉凶；只寫一般錨定，不得寫數字步數、精確時段或身體體感。
 【奇門行為改運】
 ‧ 一至兩項低門檻行動；不得承諾改變他人、化解、招財、吸納吉氣或結果。
 
-型式一與型式五上集置頂解答至少 100 個中文字。型式五下集完整解讀至少 300 個中文字，且每個模組最多兩句。型式二、三、四維持原有欄位數，不得新增模組標題或命理術語。所有 slot 均需實質重組句法、節奏與狀態描寫，不能原文照抄或只換同義詞。"""
+型式一與型式五上集置頂解答需約 50 個中文字，範圍 35–50。型式五上集問題聚焦需含「近期」、「本週」、「接下來」或「未來」之一，且 15 字內；貼士 50 字內。型式五下集完整解讀至少 300 個中文字，且每個模組最多兩句。型式二、三、四維持原有欄位數，不得新增模組標題或命理術語。每個可變欄位維持第二人稱「你」，採概括、模糊與投射留白寫法，至少包含「可能、似乎、正處於、未必、隱約、看似、有些、進退兩難、心有不甘、若有若無」之一；不得使用精準時段、步數、分鐘、天數或體感狀態。所有 slot 均需實質重組句法、節奏與狀態描寫，不能原文照抄或只換同義詞。"""
     user = {
         "date": date,
         "form": kind,
@@ -457,13 +464,15 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
 
 
 def five_layer_issues(date: str, text: str, label: str, combo: dict, lower: bool) -> list[str]:
-    required = (f"**選項 {label}：", "【盤象：", "‧ 表面現象：", "‧ 盤象真相：", "【時空與體感錨定】", "【奇門行為改運】")
+    required = (f"**選項 {label}：", "【盤象：", "‧ 表面現象：", "‧ 盤象真相：", "【時空與感官錨定】", "【奇門行為改運】")
     issues = [f"{date} {label} 缺少五層模組：{value}" for value in required if value not in text]
     issues.extend(f"{date} {label} 缺少動態盤象值：{term}" for term in combo_terms(combo) if term not in text)
-    if cjk_count(text) < (300 if lower else 100):
+    if cjk_count(text) < 300:
         issues.append(f"{date} {label} 文字長度不足。")
     if "白話來說" not in text and "簡單說" not in text:
         issues.append(f"{date} {label} 缺少術語白話轉譯。")
+    if "你" not in text:
+        issues.append(f"{date} {label} 未維持第二人稱。")
     if re.search(r"你(?:注定|必然|一定會|百分之百)", text):
         issues.append(f"{date} {label} 使用命定論。")
     anchors = set(re.findall(ANCHOR_PATTERN, text))
@@ -472,6 +481,24 @@ def five_layer_issues(date: str, text: str, label: str, combo: dict, lower: bool
         issues.append(f"{date} {label} 使用了未獲授權的時空或體感錨定：{sorted(anchors - allowed)}。")
     if len(anchors) > 2:
         issues.append(f"{date} {label} 時空／體感錨定超過兩項。")
+    if re.search(PRECISE_ANCHOR_PATTERN, text):
+        issues.append(f"{date} {label} 使用精準風格錨定。")
+    if not any(word in text for word in SOFTENERS):
+        issues.append(f"{date} {label} 缺少模糊化投射留白語氣。")
+    return issues
+
+
+def short_dynamic_issues(date: str, text: str, label: str, combo: dict) -> list[str]:
+    issues = []
+    issues.extend(f"{date} {label} 缺少動態盤象值：{term}" for term in combo_terms(combo) if term not in text)
+    if not 35 <= cjk_count(text) <= 50:
+        issues.append(f"{date} {label} 短解答未落在 35–50 字。")
+    if "你" not in text:
+        issues.append(f"{date} {label} 未維持第二人稱。")
+    if re.search(PRECISE_ANCHOR_PATTERN, text):
+        issues.append(f"{date} {label} 使用精準風格錨定。")
+    if not any(word in text for word in SOFTENERS):
+        issues.append(f"{date} {label} 缺少模糊化投射留白語氣。")
     return issues
 
 
@@ -484,13 +511,24 @@ def validate_rewrites(slots: list[dict], rewrites: dict[str, str]) -> None:
         if not value or value == slot["text"]:
             raise ValueError(f"未實質重寫欄位：{slot['id']}")
         if slot["minimum_cjk"] and cjk_count(value) < slot["minimum_cjk"]:
-            raise ValueError(f"欄位字數不足：{slot['id']}")
-        if any(token in value for token in RETIRED_DECLARATIONS):
-            raise ValueError(f"欄位含已刪除聲明：{slot['id']}")
+            raise ValueError(f"欄位字數不足：{slot['id']}（{cjk_count(value)} 字，內容：{value[:160]!r}）")
+        if slot.get("maximum_cjk") is not None and cjk_count(value) > slot["maximum_cjk"]:
+            raise ValueError(f"欄位超過字數上限：{slot['id']}（{cjk_count(value)} 字，內容：{value[:160]!r}）")
+        if slot.get("short_window") and not re.search(r"近|接下來|未來|本週|近期", value):
+            raise ValueError(f"欄位缺少短時間窗：{slot['id']}")
+        if re.search(PRECISE_ANCHOR_PATTERN, value):
+            raise ValueError(f"欄位含精準風格錨定：{slot['id']}")
+        retired = next((token for token in RETIRED_DECLARATIONS if token in value), None)
+        if retired:
+            raise ValueError(f"欄位含已刪除聲明：{slot['id']}（命中：{retired!r}；內容：{value[:180]!r}）")
         if any(re.search(pattern, value) for pattern in MICRO_SCENES.values()):
             raise ValueError(f"欄位含過度微觀描繪：{slot['id']}")
         if slot.get("five_layer"):
             issues = five_layer_issues("重寫輸出", value, slot["label"], slot["combo"], slot["id"].startswith("card_"))
+            if issues:
+                raise ValueError(" | ".join(issues) + f"；輸出開頭：{value[:180]!r}")
+        elif slot.get("short_dynamic") and slot.get("combo"):
+            issues = short_dynamic_issues("重寫輸出", value, slot["label"], slot["combo"])
             if issues:
                 raise ValueError(" | ".join(issues) + f"；輸出開頭：{value[:180]!r}")
 
@@ -504,9 +542,10 @@ def apply_slots(block: str, slots: list[dict], rewrites: dict[str, str]) -> str:
     scene_slot = next((slot for slot in slots if slot.get("short_window")), None)
     if scene_slot:
         scene = rewrites[scene_slot["id"]]
-        if not re.search(r"(?:近|接下來|未來).{0,8}(?:一個月|一週|兩週|七天|30 天|30天)|本週|近期", scene):
-            scene = "接下來一個月，" + scene
-            changed = changed.replace(rewrites[scene_slot["id"]], scene, 1)
+        if cjk_count(scene) > 15:
+            raise ValueError("型式五上集問題聚焦超過 15 字。")
+        if not re.search(r"近|接下來|未來|本週|近期", scene):
+            raise ValueError("型式五上集問題聚焦缺少短時間窗。")
         changed, count = re.subn(
             r"(（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：)(?s:.*?)(\+ 憑第一眼直覺)",
             lambda match: match.group(1) + scene + match.group(2), changed, count=1,
@@ -585,6 +624,21 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
                         issues.append(f"{date} 正文欄位 {slot['id']} 未同步至視覺卡。")
         except ValueError as exc:
             issues.append(f"{date} 欄位解析失敗：{exc}")
+    try:
+        for slot in slots_for(block, kind):
+            value = slot["text"]
+            if slot.get("maximum_cjk") is not None and cjk_count(value) > slot["maximum_cjk"]:
+                issues.append(f"{date} {slot['id']} 超過 {slot['maximum_cjk']} 字。")
+            if re.search(PRECISE_ANCHOR_PATTERN, value):
+                issues.append(f"{date} {slot['id']} 使用精準風格錨定。")
+    except ValueError as exc:
+        issues.append(f"{date} 新版欄位稽核失敗：{exc}")
+    body_for_voice = section(block, "正文：\n", "\n\nHashtags：")
+    if kind != "型式五下集":
+        if "你" not in body_for_voice:
+            issues.append(f"{date} 正文未維持第二人稱對話感。")
+        if not any(word in body_for_voice for word in SOFTENERS):
+            issues.append(f"{date} 正文缺少模糊化投射留白語氣。")
     if kind == "型式一":
         if len(re.findall(r"(?m)^🔮 [A-F]\. ", block)) != 6:
             issues.append(f"{date} 缺少 A–F 圖騰。")
@@ -592,7 +646,7 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
         if cjk_count(scene) < 30:
             issues.append(f"{date} 型式一情節少於 30 字。")
         for label in "ABCDEF":
-            issues.extend(five_layer_issues(date, pinned_answer(block, label, "ABCDEF"), label, assignments[date][label], False))
+            issues.extend(short_dynamic_issues(date, pinned_answer(block, label, "ABCDEF"), label, assignments[date][label]))
     if kind == "型式五上集":
         if len(re.findall(r"(?m)^🔮 [A-C]\. ", block)) != 3:
             issues.append(f"{date} 缺少 A／B／C 圖騰。")
@@ -600,10 +654,10 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
         visual_scene = re.search(r"(?s)（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：(.*?)\+ 憑第一眼直覺", block)
         if not body_scene or not visual_scene or body_scene.group(1).strip() != visual_scene.group(1).strip():
             issues.append(f"{date} 正文與視覺問題聚焦情景不一致。")
-        elif not re.search(r"(?:近|接下來|未來).{0,8}(?:一個月|一週|兩週|七天|30 天|30天)|本週|近期", body_scene.group(1)):
+        elif not re.search(r"近|接下來|未來|本週|近期", body_scene.group(1)):
             issues.append(f"{date} 缺少短時間窗。")
         for label in "ABC":
-            issues.extend(five_layer_issues(date, pinned_answer(block, label, "ABC"), label, assignments[date][label], False))
+            issues.extend(short_dynamic_issues(date, pinned_answer(block, label, "ABC"), label, assignments[date][label]))
     if kind == "型式五下集":
         for label in "ABC":
             issues.extend(five_layer_issues(date, lower_card(block, label), label, assignments[date][label], True))
@@ -686,9 +740,9 @@ def write_rule_map() -> None:
             },
         },
         "forms": {
-            "型式一": {"dynamic_options": "A–F", "option_format": "五層盤象解答，每項至少 100 字"},
-            "型式五上集": {"dynamic_options": "A–C", "option_format": "五層置頂解答，每項至少 100 字"},
-            "型式五下集": {"pairing": "承接上集同題、同圖騰、同五元組", "option_format": "五層完整解讀，每卡至少 300 字"},
+            "型式一": {"dynamic_options": "A–F", "option_format": "約 50 字動態盤象短解答（35–50 字）"},
+            "型式五上集": {"dynamic_options": "A–C", "option_format": "問題聚焦 15 字內、貼士 50 字內、約 50 字短解答（35–50 字）"},
+            "型式五下集": {"pairing": "承接上集同題、同圖騰、同五元組", "option_format": "五層完整解讀，每卡至少 300 字；使用感官錨定與概括描繪"},
             "型式三四": {"data_boundary": "涉及命理資料必須先查 SSOT；不得套用動態盤象。"},
         },
         "acceptance": [
@@ -696,6 +750,7 @@ def write_rule_map() -> None:
             "五大型式固定模板、CTA、Hashtags、日期、型式、媒介、卡數、色碼與已發布內容不變。",
             "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
             "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
+            "保留第二人稱；型式一／五短解答 35–50 字、型式五問題聚焦 15 字內、貼士 50 字內，且可變解讀使用概括與投射留白。",
         ],
     }
     RULE_MAP_FILE.write_text(json.dumps(rule_map, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -1,6 +1,6 @@
 {
   "playbook_source": "lunas_astral_code_master_playbook.md",
-  "playbook_sha256": "b63da795054ce4931659a0def639074d5c210b3a9fc95b7b0eeb62e887ab3c47",
+  "playbook_sha256": "3d7dffdd926acc037907fd46ce0fffd58a0f964808985e49e496c48afb20d616",
   "fixed_template_policy": "Only [ ] or ［］ variables may change. Fixed wording, punctuation, CTA, cards, media, seconds, colors, visual structure and order are immutable.",
   "dynamic_panxiang": {
     "source": "governance/dynamic_panxiang_rules.json",
@@ -46,15 +46,15 @@
   "forms": {
     "型式一": {
       "dynamic_options": "A–F",
-      "option_format": "五層盤象解答，每項至少 100 字"
+      "option_format": "約 50 字動態盤象短解答（35–50 字）"
     },
     "型式五上集": {
       "dynamic_options": "A–C",
-      "option_format": "五層置頂解答，每項至少 100 字"
+      "option_format": "問題聚焦 15 字內、貼士 50 字內、約 50 字短解答（35–50 字）"
     },
     "型式五下集": {
       "pairing": "承接上集同題、同圖騰、同五元組",
-      "option_format": "五層完整解讀，每卡至少 300 字"
+      "option_format": "五層完整解讀，每卡至少 300 字；使用感官錨定與概括描繪"
     },
     "型式三四": {
       "data_boundary": "涉及命理資料必須先查 SSOT；不得套用動態盤象。"
@@ -64,6 +64,7 @@
     "22 篇未發布腳本的每個註冊可變欄位在重寫前後均有不同 SHA-256。",
     "五大型式固定模板、CTA、Hashtags、日期、型式、媒介、卡數、色碼與已發布內容不變。",
     "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
-    "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。"
+    "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
+    "保留第二人稱；型式一／五短解答 35–50 字、型式五問題聚焦 15 字內、貼士 50 字內，且可變解讀使用概括與投射留白。"
   ]
 }
