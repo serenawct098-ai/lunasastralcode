@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Rewrite only variable prose in the 22 unpublished scripts.
+"""Luna's Astral Code unified script governance.
 
-Fixed Playbook literals, CTAs, headings, cards, citations, hashtags, topics,
-totems and publishing metadata are treated as immutable.  The rewriter applies
-the updated Traditional-Chinese writing skills only to named prose slots.
+This tool accepts the current Master Playbook as the contract.  It protects
+fixed template literals, derives dynamic type-1/type-5 panxiang combinations
+from the user-approved A1+B1 rule set, rewrites only registered variable prose,
+and audits all unpublished posts before release.
 """
 from __future__ import annotations
 
@@ -11,543 +12,774 @@ import argparse
 import hashlib
 import json
 import os
+import random
 import re
 import sys
 import time
-import subprocess
+from copy import deepcopy
 from pathlib import Path
 
 import requests
 
 ROOT = Path(__file__).resolve().parents[1]
-FILES = [
-    ROOT / 'scripts/60day_scripts_W4-W9_20260817-20260925.md',
-    ROOT / 'scripts/60day_scripts_W7-W9_20260905-20260926.md',
-]
-MODEL = 'claude-sonnet-4-6'
+PLAYBOOK = ROOT / "lunas_astral_code_master_playbook.md"
+RULES_FILE = ROOT / "governance/dynamic_panxiang_rules.json"
+REGISTRY_FILE = ROOT / "governance/panxiang_dedup_registry.json"
+RULE_MAP_FILE = ROOT / "governance/latest_playbook_rule_map.json"
+AUDIT_FILE = ROOT / "governance/rewrite_audit.json"
+FILES = (
+    ROOT / "scripts/60day_scripts_W4-W9_20260817-20260925.md",
+    ROOT / "scripts/60day_scripts_W7-W9_20260905-20260926.md",
+)
+MODEL = "claude-sonnet-4-6"
+PUBLISHED = {"2026-08-17", "2026-08-18"}
+PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
+STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
+GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
+STANDARD_SHA256 = "4592a2ae69ab2616cd53825159db5a67f2799736b1b5ac36fa0541bb052972fb"
+GUIDE_SHA256 = "a2dc0e5727061eb65ef71863acba0eb21d4502eca240a333920b8f743c268e7d"
+PLAYBOOK_SHA256 = "b63da795054ce4931659a0def639074d5c210b3a9fc95b7b0eeb62e887ab3c47"
+DYNAMIC_RULES_SHA256 = "debc63551ca63fdd527eab0e04ed1562f0c2f9581d0704709d5b99470d227897"
+CTA = {
+    "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
+    "型式二": "點擊「追蹤」隨時陪伴在你身邊～",
+    "型式三": "點擊「收藏」打開命盤隨時上手\n下一期繼續拆解一個排盤小知識",
+    "型式四": "點擊「分享」給朋友一起確認吧～",
+    "型式五上集": "「留言」A / B / C 明天置頂留言區公佈解答 ✨\n想看後續「完整解讀」留意下一集",
+    "型式五下集": "喜歡這期解讀指引的朋友\n歡迎「收藏 + 追蹤」持續領取你的解讀提示吧～\n\n若想針對個人問題進行深入解析 📩\n歡迎直接 DM 預約一對一的專屬命盤諮詢 🌙",
+}
+RETIRED_DECLARATIONS = (
+    "不是替你排出的個人命盤", "沒有你的個人起局資料", "沒有個人起局資料",
+    "不替你安門", "不會替你安門", "也不判方位", "不判斷方位",
+    "公開奇門資料中的對照示例", "公開奇門資料可對照的示例", "並非替你個人起局後得出的結論",
+    "已驗證資料：", "未核實的", "這篇不談未核實", "這篇只看",
+    "本篇只教讀取盤面標示。", "本篇只做定位與記錄，不輸出個人關係判定。", "本篇只做盤面讀取與記錄。",
+)
+RETIRED_TEXT = ("視覺規範核對清單", "【每張固定版面】", "視覺設定：", "上集主題 +", "三個圖騰並排，提醒讀者回到原選項")
+MICRO_SCENES = {
+    "月台與訊息鏡頭": r"捷運(?:月台|車廂)[^\n]{0,120}(?:手機|對話框|訊息)",
+    "咖啡放涼鏡頭": r"咖啡[^\n]{0,80}(?:涼掉|放涼)",
+    "訊息反覆操作": r"(?:對話框|訊息)[^\n]{0,100}(?:打開|刪掉|改字|滑開)",
+    "廚房動作鏡頭": r"(?:外套|菜|貓|流理台|鍋)[^\n]{0,120}(?:掛上|提在手裡|蹭過|冒小泡)",
+}
+ANCHOR_PATTERN = r"西北|正北|正東|正西|正南|東北|東南|西南|中央|子時|丑時|寅時|卯時|辰時|巳時|午時|未時|申時|酉時|戌時|亥時|早上|下午|晚上|深夜|肩頸|睡眠"
+# Clockwise geographic ring, derived directly from each palace's direction.
+CLOCKWISE_PALACE_RING = (1, 8, 3, 4, 9, 2, 7, 6)
 
 
-def split_blocks(text: str):
-    starts = list(re.finditer(r'(?m)^## (2026-\d{2}-\d{2}).*$', text))
-    for i, match in enumerate(starts):
-        end = starts[i + 1].start() if i + 1 < len(starts) else len(text)
-        yield match.group(1), match.group(0), text[match.start():end]
+def sha(text: str) -> str:
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def cjk_count(text: str) -> int:
+    return len(re.findall(r"[\u3400-\u9fff]", text))
+
+
+def load_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def form(header: str) -> str:
-    return next(x for x in ('型式五下集', '型式五上集', '型式一', '型式二', '型式三', '型式四') if x in header)
+    return next(item for item in ("型式五下集", "型式五上集", "型式一", "型式二", "型式三", "型式四") if item in header)
+
+
+def split_blocks(text: str):
+    matches = list(re.finditer(r"(?m)^## (2026-\d{2}-\d{2}).*$", text))
+    for index, marker in enumerate(matches):
+        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
+        yield marker.group(1), marker.group(0), text[marker.start():end]
+
+
+def unpublished_blocks():
+    for path in FILES:
+        text = path.read_text(encoding="utf-8")
+        for date, header, block in split_blocks(text):
+            if date >= "2026-08-20" and date not in PUBLISHED:
+                yield path, date, header, block
 
 
 def section(block: str, start: str, end: str) -> str:
-    match = re.search(re.escape(start) + r'(.*?)' + re.escape(end), block, re.S)
+    match = re.search(re.escape(start) + r"(.*?)" + re.escape(end), block, re.S)
     if not match:
-        raise ValueError(f'Cannot locate section {start!r}')
+        raise ValueError(f"Cannot locate section {start!r}")
     return match.group(1)
 
 
-def add_slot(slots: list[dict], slot_id: str, text: str, *, minimum_cjk: int = 0, must_include: list[str] | None = None, reference: str = '') -> None:
-    text = text.strip()
-    if not text:
-        raise ValueError(f'Empty variable slot: {slot_id}')
-    slots.append({'id': slot_id, 'text': text, 'minimum_cjk': minimum_cjk, 'must_include': must_include or [], 'reference': reference})
+def normalize_block(block: str) -> str:
+    """Synchronize only changed fixed typography for an unpublished block."""
+    changed = block
+    for color in ("#0D0D2B", "#F5F5DC", "#B4918F", "#E8E8F0", "#1A1A3A"):
+        changed = changed.replace(f"`{color}`", color)
+    changed = changed.replace("#B4918F圖騰線稿", "#B4918F 圖騰線稿")
+    changed = changed.replace("暖米白底#F5F5DC", "暖米白底 #F5F5DC")
+    changed = changed.replace("深海軍藍#0D0D2B", "深海軍藍 #0D0D2B")
+    changed = changed.replace("霧玫瑰金#B4918F", "霧玫瑰金 #B4918F")
+    changed = changed.replace("約 2–3 幀", "約 23 幀")
+    changed = changed.replace("將這 AF 6 張圖騰", "將這 A–F 6 張圖騰")
+    changed = changed.replace("固定CTA：", "固定 CTA：")
+    changed = changed.replace("視覺分鏡描述（Reels，20 張，4:5，20 秒，底部固定標籤）：", "視覺分鏡描述（Reels，4:5，20 秒，底部固定標籤）：")
+    changed = changed.replace("【主體閃爍序列（6張 中央圖騰，0.08 秒/張 無縫硬切循環）】 6 組圖騰：", "【主體閃爍序列（6 張中央圖騰，0.08 秒/張，無縫硬切循環）】6 組圖騰：")
+    changed = changed.replace("暖米白  #F5F5DC", "暖米白 #F5F5DC")
+    changed = changed.replace("* 大標題：", "- 大標題：")
+    changed = changed.replace("* 副標題：", "- 副標題：")
+    changed = changed.replace("* 小 CTA：", "- 小 CTA：")
+    changed = changed.replace("* 小 CTA 2：", "- 小 CTA 2：")
+    changed = changed.replace("* A：", "- A：").replace("* B：", "- B：").replace("* C：", "- C：").replace("* D：", "- D：").replace("* E：", "- E：").replace("* F：", "- F：")
+    changed = changed.replace("* 將這 A–F 6 張圖騰", "- 將這 A–F 6 張圖騰")
+    changed = changed.replace("* 6 張圖片連續循環閃爍播放 15 秒。", "- 6 張圖片連續循環閃爍播放 15 秒。")
+    changed = changed.replace("的速度進行切換\n- 6 張圖片", "的速度進行切換。\n- 6 張圖片")
+    changed = re.sub(r"\n已驗證資料：[^\n]+\n", "\n", changed)
+    changed = re.sub(r"\+ 已驗證資料：.*?(?=｜(?:深海軍藍|月白銀))", "", changed, flags=re.S)
+    changed = changed.replace("本篇只教讀取盤面標示。", "")
+    changed = changed.replace("本篇只做定位與記錄，不輸出個人關係判定。", "")
+    changed = changed.replace("本篇只做盤面讀取與記錄。", "")
+    return changed
+
+
+def synchronize_fixed_typography() -> dict:
+    changed_files = []
+    for path in FILES:
+        source = path.read_text(encoding="utf-8")
+        rebuilt = source
+        for date, _, block in list(split_blocks(source)):
+            if date < "2026-08-20" or date in PUBLISHED:
+                continue
+            normalized = normalize_block(block)
+            if normalized != block:
+                if rebuilt.count(block) != 1:
+                    raise ValueError(f"Ambiguous fixed-template migration for {date}")
+                rebuilt = rebuilt.replace(block, normalized, 1)
+        if rebuilt != source:
+            path.write_text(rebuilt, encoding="utf-8")
+            changed_files.append(str(path.relative_to(ROOT)))
+    return {"changed_files": changed_files}
 
 
 def answer_slots(block: str, labels: str) -> list[dict]:
-    anchor = '【置頂留言區解答｜'
-    start = block.index(anchor)
-    region = block[start: block.index('————————————', start)]
-    slots: list[dict] = []
+    anchor = "【置頂留言區解答｜"
+    start = block.find(anchor)
+    if start < 0:
+        raise ValueError("Pinned-answer section absent")
+    end = block.find("————————————", start)
+    region = block[start:end if end >= 0 else len(block)]
+    slots = []
     for label in labels:
-        match = re.search(rf'(?ms)^{label}：(.*?)(?=\n\n[{'|'.join(labels)}]：|\Z)', region)
+        match = re.search(rf"(?ms)^{label}：(.*?)(?=\n\n[{'|'.join(labels)}]：|\Z)", region)
         if not match:
-            raise ValueError(f'Missing pinned answer {label}')
-        add_slot(slots, f'answer_{label}', match.group(1))
+            raise ValueError(f"Missing pinned answer {label}")
+        slots.append({"id": f"answer_{label}", "text": match.group(1).strip(), "minimum_cjk": 100})
     return slots
 
 
-def card_tail_slots(block: str) -> list[dict]:
-    reference_map = {
-        'A': {'terms': ['乾六宮', '西北', '天心星', '開門', '未時', '大吉'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L014；data/QMDJ_ShangJuan_Consolidated.json / QMDJ_Auto_00328'},
-        'B': {'terms': ['坎一宮', '正北', '天蓬星', '休門', '申時', '大凶', '大吉'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L015；data/QMDJ_ShangJuan_Consolidated.json / QMDJ_Auto_00329'},
-        'C': {'terms': ['艮八宮', '東北', '天任星', '生門', '酉時', '大吉'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L013；data/QMDJ_ShangJuan_Consolidated.json / QMDJ_Auto_00330'},
-    }
-    slots: list[dict] = []
-    for index, label in enumerate('ABC', 3):
+def lower_cards(block: str) -> list[dict]:
+    slots = []
+    for number, label in zip((3, 4, 5), "ABC"):
         match = re.search(
-            rf'(?ms)^（{index}）{label} 選項完整解讀卡（[^）]+）：(.*?)(?=｜暖米白底`#F5F5DC`、深海軍藍`#0D0D2B`（文字）、霧玫瑰金`#B4918F`（邊框 \+ 圖騰線稿）。)',
+            rf"(?ms)^（{number}）{label} 選項完整解讀卡（[^）]+）：(.*?)(?=｜暖米白底 #F5F5DC、深海軍藍 #0D0D2B（文字）、霧玫瑰金 #B4918F（邊框 \+ 圖騰線稿）。)",
             block,
         )
         if not match:
-            raise ValueError(f'Missing Type 5 lower card {label}')
-        # 最新 Playbook 已刪除免責／邊界澄清；完整卡內容全屬可變欄位並依 SSOT 重寫。
-        ref = reference_map[label]
-        add_slot(slots, f'card_{label}_tail', match.group(1).strip(), minimum_cjk=300, must_include=ref['terms'], reference=ref['source'])
+            raise ValueError(f"Missing latest-template lower card {label}")
+        slots.append({"id": f"card_{label}", "text": match.group(1).strip(), "minimum_cjk": 300})
     return slots
 
 
 def slots_for(block: str, kind: str) -> list[dict]:
-    body = section(block, '正文：\n', '\n\nHashtags：')
-    if kind == '型式一':
-        scene = body.split('\n長按螢幕 +「留言」領取你的「專屬能量提示」')[0]
-        slots: list[dict] = []
-        add_slot(slots, 'scene', scene)
-        reference_map = {
-            'A': {'terms': ['乾六宮', '西北', '天心星', '開門', '大吉'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L014'},
-            'B': {'terms': ['坎一宮', '正北', '天蓬星', '休門', '大凶', '大吉'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L015'},
-            'C': {'terms': ['艮八宮', '東北', '天任星', '生門', '大吉'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L013'},
-            'D': {'terms': ['兌七宮', '正西', '天柱星', '驚門', '小凶'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L014'},
-            'E': {'terms': ['離九宮', '正南', '天英星', '景門', '中平'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L012'},
-            'F': {'terms': ['震三宮', '正東', '天沖星', '傷門', '凶'], 'source': 'data/XingMen_WuXing_ShengKe.json / XMWX_L011'},
-        }
-        for slot in answer_slots(block, 'ABCDEF'):
-            label = slot['id'].split('_', 1)[1]
-            slot['minimum_cjk'] = 100
-            slot['must_include'] = reference_map[label]['terms']
-            slot['reference'] = reference_map[label]['source']
-            slot['rule_library_type1'] = True
-            slots.append(slot)
+    body = section(block, "正文：\n", "\n\nHashtags：")
+    if kind == "型式一":
+        scene = body.split("\n長按螢幕 +「留言」領取你的「專屬能量提示」")[0].strip()
+        slots = [{"id": "scene", "text": scene, "minimum_cjk": 30}]
+        slots.extend(answer_slots(block, "ABCDEF"))
         return slots
-    if kind == '型式二':
-        lines = [x.strip() for x in body.splitlines() if x.strip()]
+    if kind == "型式二":
+        lines = [line.strip() for line in body.splitlines() if line.strip()]
         if len(lines) != 3:
-            raise ValueError(f'Type 2 body must contain three variable lines, got {len(lines)}')
-        slots = []
-        for slot_id, line in zip(('scene', 'reflection', 'action'), lines):
-            add_slot(slots, slot_id, line)
-        return slots
-    if kind == '型式三':
-        lines = [x.strip() for x in body.splitlines() if x.strip()]
+            raise ValueError(f"Type 2 needs three variable body lines, got {len(lines)}")
+        return [{"id": name, "text": value, "minimum_cjk": 0} for name, value in zip(("scene", "reflection", "action"), lines)]
+    if kind == "型式三":
+        lines = [line.strip() for line in body.splitlines() if line.strip()]
         if len(lines) < 3:
-            raise ValueError('Type 3 body is incomplete')
-        slots = []
-        add_slot(slots, 'explain', lines[1])
+            raise ValueError("Type 3 body incomplete")
+        return [{"id": "explain", "text": lines[1], "minimum_cjk": 50}]
+    if kind == "型式四":
+        lines = [line.strip() for line in body.splitlines() if line.strip()]
+        if len(lines) != 3:
+            raise ValueError(f"Type 4 needs three body lines, got {len(lines)}")
+        return [{"id": name, "text": value, "minimum_cjk": 0} for name, value in zip(("scene", "check", "action"), lines)]
+    if kind == "型式五上集":
+        scene = re.search(r"(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺", body)
+        tip = re.search(r"(?ms)^🔮 C\. .*?\n\n(.*?)\n下一期帶你解鎖更多新的占卜提示～", body)
+        if not scene or not tip:
+            raise ValueError("Type 5 upper scene or tip missing")
+        slots = [
+            {"id": "scene", "text": scene.group(1).strip(), "minimum_cjk": 0, "short_window": True},
+            {"id": "tip", "text": tip.group(1).strip(), "minimum_cjk": 50},
+        ]
+        slots.extend(answer_slots(block, "ABC"))
         return slots
-    if kind == '型式四':
-        lines = [x.strip() for x in body.splitlines() if x.strip()]
-        if len(lines) != 4:
-            raise ValueError(f'Type 4 body must contain four lines, got {len(lines)}')
-        slots = []
-        for slot_id, line in zip(('scene', 'check', 'action'), (lines[0], lines[1], lines[3])):
-            add_slot(slots, slot_id, line)
-        return slots
-    if kind == '型式五上集':
-        match = re.search(r'(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺', body)
-        if not match:
-            raise ValueError('Missing Type 5 upper scene')
-        story = re.search(r'(?ms)^🔮 C\. .*?\n\n(.*?)\n下一期帶你解鎖更多新的占卜提示～', body)
-        if not story:
-            raise ValueError('Missing Type 5 upper story')
-        slots = []
-        add_slot(slots, 'scene', match.group(1))
-        slots[-1]['requires_short_window'] = True
-        add_slot(slots, 'story', story.group(1), minimum_cjk=50)
-        slots.extend(answer_slots(block, 'ABC'))
-        return slots
-    if kind == '型式五下集':
-        return card_tail_slots(block)
+    if kind == "型式五下集":
+        return lower_cards(block)
     raise ValueError(kind)
 
 
-def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry: int = 0) -> dict[str, str]:
-    slot_payload = [{'id': slot['id'], 'text': slot['text'], 'minimum_cjk': slot['minimum_cjk'], 'must_include': slot.get('must_include', []), 'reference': slot.get('reference', '')} for slot in slots]
-    system = '''你是繁體中文（台灣）IG 文案編輯。只改可變散文，保持原本事實、語意強度、主題、時間、圖騰、CTA、專有名詞與不確定性。\n\n依序套用：\n1. humanizer-tw：刪除套話、翻譯腔、黑話、假深刻、金句公式、短句連發戲劇腔與無源權威；不要誤殺合法台灣用語。\n2. good-writing-tw：讓句長與句尾有自然錯落，拆除真正過長或塞太多資訊的句子，但不要把全文修成節拍器。\n3. authentic-voice-editing / speak-human-tw：以可辨識的心理狀態、能量狀態和真實張力取代抽象安慰；不要新增事實、數字、經歷、來源、承諾或命理結論。\n\n這是社群文案。以冷靜、權威、透徹的「玄學破局」語氣寫作：定論明確，但不恐嚇、不命定。全文統一使用第二人稱「你」。可保留適度留白，但不要演戲、不要客服腔、不要空泛雞湯。\n\n描述克制與白描邊界：禁止細寫微觀動作、道具和背景（例如躺在床上看天花板滑手機、咖啡放涼、手拿杯子發呆、在捷運等車時修改訊息、反覆打開對話框）。把這類畫面升維為「表面在運作，心智已抽離」等心理或能量狀態。每一個 slot 最多只保留一至兩個時空／體感對頻點；不可堆疊環境背景。即使規則庫舉例「深夜刷手機」，也要改寫成夜間注意力反覆被抽走等狀態，不輸出操作鏡頭。若 `must_include` 已含一個方位與一個時段，這兩項已用盡配額，禁止再新增任何早晚、深夜、肩頸、睡眠、呼吸、胸口、腳步、手部或其他體感／時間／方位文字。\n\n不要輸出任何固定模板標籤、CTA、Hashtags、Hook 或卡片標題；但型式五下集的可變完整解讀必須輸出下方指定的粗體定論與模組標題。\n\n若內容涉及奇門或紫微：不可新增星曜、門、神、奇儀、方位、時間、吉凶、公式或個人起局結果。只有 slot 提供的 `must_include` 和 `reference` 可新增到該 slot；必須將術語立刻白話轉譯，不把公開資料寫成讀者已發生的個人起局結果。沒有資料就寫生活層面的可觀察情景與行動。不要加入免責、聲明、邊界澄清、個人起局說明或資料不足等句子。
+def load_rules() -> dict:
+    if sha(RULES_FILE.read_text(encoding="utf-8")) != DYNAMIC_RULES_SHA256:
+        raise ValueError("動態盤象規則來源雜湊不符；須重新確認版本。")
+    return load_json(RULES_FILE)
 
-五大型式共同適用的資訊邏輯：每一篇可變正文都要先提出該篇的核心狀態或可執行結論；再呈現讀者表面看見的狀況和底下的心理／能量拉扯；接著只留一至兩個時空或體感對頻點；最後給一項低門檻、可觀察、無結果保證的行動。型式一與型式五可以使用指定的模組標題；型式二、三、四不得自行新增模組標題或奇門術語，應把同一邏輯自然寫進其既有變數欄位。\n\n型式一的 A–F 置頂解答也適用最新版五層輸出邏輯。每個 answer_A 至 answer_F 約 100 至 150 個中文字，必須依序使用：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 已核對的門、星、宮位或奇儀］】\n‧ 表面現象：［具體外在行為］\n‧ 盤象真相：［內在拉扯；立刻以「白話來說」或同義語降維］\n【時空與體感錨定】\n‧ ［已核對的方位／吉凶或可觀察的生活時段、生活感受］\n【奇門行為改運】\n‧ ［一項低門檻、可觀察的整理、溝通、休息或行程行動；不得承諾結果。］\nX 必須等於 A 至 F 對應選項。這些標題是置頂解答的可變內容，不是型式一固定模板。不可使用「注定」「必然」「一定會」「百分之百」。\n\n最新版型式五上集的對應文字是「奇門生活小貼士」，不是故事、故事卡或心理劇；其問題聚焦與 Hook 必須是具體關係／工作／金錢情境加短時間窗，生活貼士至少 50 字。\n\n型式五下集每個 card_A_tail／card_B_tail／card_C_tail 是完整解讀的可變部分，至少 300 字，必須依序、逐字採用以下五層閱讀格式：\n**選項 X：［一句明確但非命定的主軸結論］**\n【盤象：［只使用 must_include 中已核對的門、星、宮位或奇儀；不可自行補造］】\n‧ 表面現象：［具體外在行為或心理狀態］\n‧ 盤象真相：［內在拉扯或局勢本質；把術語立刻白話翻譯，明說「白話來說」或同義語］\n【時空與體感錨定】\n‧ ［只使用 must_include 的方位、時間、吉凶；或可觀察的生活感受。］\n【奇門行為改運】\n‧ ［一至兩項低門檻、可觀察的整理、溝通、休息或行程行動；不可保證化解、招財、吸納吉氣或改變他人。］\n\n其中 X 必須等於該 slot 的 A、B 或 C。每一模組最多兩句，模組之間換行。首句要明確，卻不得使用「注定」「必然」「一定會」「百分之百」。不可改動任何固定模板文字。\n\n每個 slot 都必須改寫，不能原封不動回傳。對 minimum_cjk 大於零的 slot，輸出必須至少達該數量的中文字；`must_include` 內的每個字串必須逐字出現。'''
+
+def normalize_star_category(category: str) -> str:
+    if category.startswith("吉星"):
+        return "吉星"
+    if category.startswith("中平星"):
+        return "中平星"
+    return "凶星"
+
+
+def qi_category(qi: str) -> str:
+    return "三奇" if qi in ("乙", "丙", "丁") else "六儀"
+
+
+def spirit_placement(rules: dict, value_star: str, dun: str = "陰遁") -> dict[int, str]:
+    star = rules["nine_stars_九星"][value_star]
+    start_palace = 2 if star["palace"] == 5 else star["palace"]  # A1
+    start_index = CLOCKWISE_PALACE_RING.index(start_palace)
+    step = 1 if dun == "陽遁" else -1
+    placement = {}
+    for offset, spirit in enumerate(rules["eight_spirits_八神"]["sequence_order"]):
+        palace = CLOCKWISE_PALACE_RING[(start_index + step * offset) % len(CLOCKWISE_PALACE_RING)]
+        placement[palace] = spirit
+    return placement
+
+
+def auspice(rules: dict, star: str, door: str, spirit: str, qi: str) -> tuple[int, str]:
+    matrix = rules["auspice_judgment_matrix_吉凶判斷矩陣"]
+    score = (
+        matrix["star_category_weight"][normalize_star_category(rules["nine_stars_九星"][star]["category"])]
+        + matrix["door_category_weight"][rules["eight_doors_八門"][door]["category"]]
+        + matrix["spirit_category_weight"][rules["eight_spirits_八神"]["category"][spirit]]
+        + matrix["qi_yi_category_weight"][qi_category(qi)]
+    )
+    if score >= 4:
+        label = "大吉"
+    elif score >= 1:
+        label = "中吉"
+    elif score == 0:
+        label = "平（吉凶參半）"
+    elif score >= -3:
+        label = "中凶"
+    else:
+        label = "大凶"
+    return score, label
+
+
+def combo_key(combo: dict) -> str:
+    return "|".join((combo["star"], combo["door"], combo["spirit"], combo["qi"], combo["hour"]))
+
+
+def derive_combo(rules: dict, star: str, door: str, qi: str, hour: str) -> dict:
+    """Recompute every downstream field from the immutable five-tuple under the current rule schema."""
+    door_data = rules["eight_doors_八門"][door]
+    placement = spirit_placement(rules, star, "陰遁")
+    spirit = placement[door_data["palace"]]  # B1
+    score, label = auspice(rules, star, door, spirit, qi)
+    combo = {
+        "star": star, "door": door, "spirit": spirit, "qi": qi, "hour": hour,
+        "dun": "陰遁", "value_star": star,
+        "value_star_palace": 2 if rules["nine_stars_九星"][star]["palace"] == 5 else rules["nine_stars_九星"][star]["palace"],
+        "door_palace": door_data["palace_name"], "direction": door_data["direction"],
+        "spirit_placement": {str(key): value for key, value in placement.items()},
+        "score": score, "auspice": label,
+    }
+    combo["key"] = combo_key(combo)
+    return combo
+
+
+def generate_combo(rules: dict, occupied: set[str], used_stars: set[str], used_doors: set[str]) -> dict:
+    rng = random.SystemRandom()
+    stars = [item for item in rules["nine_stars_九星"] if item not in used_stars]
+    doors = [item for item in rules["eight_doors_八門"] if item not in used_doors]
+    qi_values = list(rules["three_qi_six_yi_三奇六儀"]["三奇"]) + list(rules["three_qi_six_yi_三奇六儀"]["六儀"])
+    hours = rules["time_derivation_rule_時間推導規則"]["shi_chen_十二時辰"]
+    for _ in range(500):
+        star, door, qi, hour = rng.choice(stars), rng.choice(doors), rng.choice(qi_values), rng.choice(hours)
+        combo = derive_combo(rules, star, door, qi, hour)
+        if combo["key"] not in occupied:
+            return combo
+    raise RuntimeError("500 次抽樣後仍無可用盤象組合。")
+
+
+def pair_map(posts: list[tuple[Path, str, str, str]]) -> dict[str, str]:
+    uppers = sorted(date for _, date, header, _ in posts if form(header) == "型式五上集")
+    lowers = sorted(date for _, date, header, _ in posts if form(header) == "型式五下集")
+    return {lower: upper for upper, lower in zip(uppers, lowers)}
+
+
+def dynamic_assignments(posts: list[tuple[Path, str, str, str]], registry: dict, rules: dict, persist: bool) -> dict[str, dict[str, dict]]:
+    assignments = deepcopy(registry.get("assignments", {}))
+    # v1.1 correction safety: preserve the five-tuple, but always recompute all derived fields.
+    for date, values in assignments.items():
+        for label, combo in list(values.items()):
+            values[label] = derive_combo(rules, combo["star"], combo["door"], combo["qi"], combo["hour"])
+    occupied = {item.get("five_tuple") for item in registry.get("recent_posts", []) if item.get("five_tuple")}
+    for values in assignments.values():
+        for combo in values.values():
+            occupied.add(combo["key"])
+    pairs = pair_map(posts)
+    for _, date, header, _ in posts:
+        kind = form(header)
+        if kind not in {"型式一", "型式五上集"}:
+            continue
+        labels = "ABCDEF" if kind == "型式一" else "ABC"
+        current = assignments.setdefault(date, {})
+        used_stars = {combo["star"] for combo in current.values()}
+        used_doors = {combo["door"] for combo in current.values()}
+        for label in labels:
+            if label not in current:
+                combo = generate_combo(rules, occupied, used_stars, used_doors)
+                current[label] = combo
+                occupied.add(combo["key"])
+                used_stars.add(combo["star"])
+                used_doors.add(combo["door"])
+    for lower, upper in pairs.items():
+        assignments[lower] = deepcopy(assignments[upper])
+    if persist:
+        records = []
+        for _, date, header, _ in posts:
+            kind = form(header)
+            if kind not in {"型式一", "型式五上集"}:
+                continue
+            for label, combo in sorted(assignments[date].items()):
+                records.append({"date": date, "form": kind, "option": label, "five_tuple": combo["key"], "combo": combo})
+        registry["assignments"] = assignments
+        registry["recent_posts"] = records[-90:]
+        registry["schema_source_sha256"] = DYNAMIC_RULES_SHA256
+        registry["decision_log"] = {
+            "value_star_rule": "九星抽樣值直接視為值符星",
+            "tianqin_start_rule": "天禽星抽中為值符星時，以寄坤二宮作八神起點",
+            "spirit_selection_rule": "取門的固有宮位所落八神為卡面神值與吉凶計分神",
+            "dun_direction_rule": "本輪 22 篇日期使用陰遁逆時針",
+        }
+        REGISTRY_FILE.write_text(json.dumps(registry, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return assignments
+
+
+def combo_terms(combo: dict) -> list[str]:
+    return [combo["star"], combo["door"], combo["spirit"], combo["qi"], f'{combo["hour"]}時', combo["direction"], combo["auspice"]]
+
+
+def add_dynamic_requirements(slots: list[dict], date: str, kind: str, assignments: dict[str, dict[str, dict]]):
+    if kind not in {"型式一", "型式五上集", "型式五下集"}:
+        return
+    for slot in slots:
+        label = slot["id"].rsplit("_", 1)[-1]
+        if label not in "ABCDEF":
+            continue
+        combo = assignments[date][label]
+        slot["label"] = label
+        slot["combo"] = combo
+        slot["must_include"] = combo_terms(combo)
+        slot["five_layer"] = True
+
+
+def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]) -> dict[str, str]:
+    """Canonicalize only the required variable first-line emphasis for dynamic options."""
+    for slot in slots:
+        if not slot.get("five_layer"):
+            continue
+        label = slot["label"]
+        lines = rewrites[slot["id"]].splitlines()
+        if not lines:
+            continue
+        first = lines[0].strip()
+        match = re.match(rf"^\*\*選項 {label}(?:\*\*)?[：:](.*?)(?:\*\*)?$|^選項 {label}[：:](.*)$", first)
+        if match:
+            conclusion = (match.group(1) if match.group(1) is not None else match.group(2)).strip()
+            lines[0] = f"**選項 {label}：{conclusion}**"
+            rewrites[slot["id"]] = "\n".join(lines).strip()
+    return rewrites
+
+
+def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry: bool = False) -> dict[str, str]:
+    payload_slots = []
+    for slot in slots:
+        item = {key: slot[key] for key in ("id", "text", "minimum_cjk")}
+        if slot.get("must_include"):
+            item["must_include"] = slot["must_include"]
+            item["combo"] = slot["combo"]
+        payload_slots.append(item)
+    system = """你是繁體中文（台灣）IG 文案主筆。只能重寫給定的可變欄位，不得輸出或改動 Hook、Hashtags、CTA、卡片標題、視覺模板、圖騰、日期、型式、色碼與任何固定文字。
+
+用冷靜、權威、透徹的「玄學破局」語氣，全文使用第二人稱「你」。先說核心狀態或可行結論，再寫表面狀態與內在拉扯，最後給低門檻、可觀察且不保證結果的行動。避免心理治癒腔、客服腔、命定論、假深刻、空泛雞湯、術語堆砌、無源歸因、微觀動作與道具鏡頭。不得寫免責、邊界澄清、個人起局說明、資料不足或公開資料等句子。
+
+只要 slot 有 must_include，就必須逐字包含每一項術語。這些是動態盤象已推導結果，不得新增任何其他星、門、神、奇儀、方位、時辰、吉凶、公式或個人結論。每個此類 slot 必須使用下列五層格式，並以換行分隔：
+**選項 X：一句明確但非命定的主軸結論**
+【盤象：星｜門｜神｜奇儀】
+‧ 表面現象：外在狀態或心理狀態。
+‧ 盤象真相：內在拉扯；必須立刻說「白話來說」或同義白話轉譯。
+【時空與體感錨定】
+‧ 只使用已給定的方向、時辰與吉凶，不新增其他時空或體感細節。
+【奇門行為改運】
+‧ 一至兩項低門檻行動；不得承諾改變他人、化解、招財、吸納吉氣或結果。
+
+型式一與型式五上集置頂解答至少 100 個中文字。型式五下集完整解讀至少 300 個中文字，且每個模組最多兩句。型式二、三、四維持原有欄位數，不得新增模組標題或命理術語。所有 slot 均需實質重組句法、節奏與狀態描寫，不能原文照抄或只換同義詞。"""
     user = {
-        'date': date,
-        'form': kind,
-        'header_context': header,
-        'slots': slot_payload,
-        'task': '逐一重寫所有 slot。輸出 JSON，rewrites 內必須剛好有每個 id 一次。本輪為全量重作：每個欄位必須實質重組句法、節奏與狀態描寫，不得只替換同義詞；但不得改變主題、圖騰、時間、CTA、固定模板或可核對命理事實。' + (' 上一稿有欄位原封不動複製、未納入指定術語，或超過時空／體感錨定上限；本次每個欄位必須在不改變事實下改變句法與用字，逐一包含 must_include，且不得出現額外錨定。' if retry else ''),
+        "date": date,
+        "form": kind,
+        "header_context": header,
+        "slots": payload_slots,
+        "task": "逐一重寫全部 slot。輸出 JSON，rewrites 必須恰好各含一次 id。" + (" 上次輸出未通過，請特別確認每個動態術語與五層格式都存在。" if retry else ""),
     }
     schema = {
-        'type': 'object',
-        'properties': {
-            'rewrites': {
-                'type': 'array',
-                'items': {
-                    'type': 'object',
-                    'properties': {'id': {'type': 'string'}, 'text': {'type': 'string'}},
-                    'required': ['id', 'text'],
-                    'additionalProperties': False,
-                },
-            },
-        },
-        'required': ['rewrites'],
-        'additionalProperties': False,
+        "type": "object",
+        "properties": {"rewrites": {"type": "array", "items": {"type": "object", "properties": {"id": {"type": "string"}, "text": {"type": "string"}}, "required": ["id", "text"], "additionalProperties": False}}},
+        "required": ["rewrites"], "additionalProperties": False,
     }
-    payload = {
-        'model': MODEL,
-        'messages': [
-            {'role': 'system', 'content': system},
-            {'role': 'user', 'content': json.dumps(user, ensure_ascii=False)},
-        ],
-        'max_completion_tokens': 16000,
-        'response_format': {'type': 'json_schema', 'json_schema': {'name': 'script_slot_rewrites', 'strict': True, 'schema': schema}},
+    request = {
+        "model": MODEL,
+        "messages": [{"role": "system", "content": system}, {"role": "user", "content": json.dumps(user, ensure_ascii=False)}],
+        "max_tokens": 16000,
+        "response_format": {"type": "json_schema", "json_schema": {"name": "slot_rewrites", "strict": True, "schema": schema}},
+        "thinking": {"type": "enabled", "budget_tokens": 2048},
     }
-    last_error = ''
+    errors = []
     for attempt in range(3):
-        response = requests.post(
-            os.environ['OPENAI_API_BASE'].rstrip('/') + '/chat/completions',
-            headers={'Authorization': f"Bearer {os.environ['OPENAI_API_KEY']}", 'Content-Type': 'application/json'},
-            json=payload,
-            timeout=240,
-        )
+        response = requests.post(os.environ["OPENAI_API_BASE"].rstrip("/") + "/chat/completions", headers={"Authorization": f"Bearer {os.environ['OPENAI_API_KEY']}", "Content-Type": "application/json"}, json=request, timeout=300)
         try:
             response.raise_for_status()
-            body = response.json()
-            content = body['choices'][0]['message']['content']
-            return {item['id']: item['text'].strip() for item in json.loads(content)['rewrites']}
-        except (requests.RequestException, KeyError, ValueError, TypeError) as exc:
-            last_error = f'{exc}; response={response.text[:500]}'
-            if attempt < 2:
-                time.sleep(5 * (attempt + 1))
-    raise RuntimeError(f'Model rewrite request failed after retries: {last_error}')
+            content = response.json()["choices"][0]["message"]["content"]
+            rewrites = {item["id"]: item["text"].strip() for item in json.loads(content)["rewrites"]}
+            return normalize_dynamic_option_heading(slots, rewrites)
+        except (requests.RequestException, KeyError, TypeError, ValueError) as exc:
+            errors.append(str(exc))
+            time.sleep(4 * (attempt + 1))
+    raise RuntimeError("模型重寫請求失敗：" + " | ".join(errors))
 
 
-def cjk_count(text: str) -> int:
-    return len(re.findall(r'[\u3400-\u9fff]', text))
+def five_layer_issues(date: str, text: str, label: str, combo: dict, lower: bool) -> list[str]:
+    required = (f"**選項 {label}：", "【盤象：", "‧ 表面現象：", "‧ 盤象真相：", "【時空與體感錨定】", "【奇門行為改運】")
+    issues = [f"{date} {label} 缺少五層模組：{value}" for value in required if value not in text]
+    issues.extend(f"{date} {label} 缺少動態盤象值：{term}" for term in combo_terms(combo) if term not in text)
+    if cjk_count(text) < (300 if lower else 100):
+        issues.append(f"{date} {label} 文字長度不足。")
+    if "白話來說" not in text and "簡單說" not in text:
+        issues.append(f"{date} {label} 缺少術語白話轉譯。")
+    if re.search(r"你(?:注定|必然|一定會|百分之百)", text):
+        issues.append(f"{date} {label} 使用命定論。")
+    anchors = set(re.findall(ANCHOR_PATTERN, text))
+    allowed = {combo["direction"], f'{combo["hour"]}時'}
+    if any(anchor not in allowed for anchor in anchors):
+        issues.append(f"{date} {label} 使用了未獲授權的時空或體感錨定：{sorted(anchors - allowed)}。")
+    if len(anchors) > 2:
+        issues.append(f"{date} {label} 時空／體感錨定超過兩項。")
+    return issues
 
 
-def validate_output(slots: list[dict], rewritten: dict[str, str]) -> None:
-    expected = {slot['id'] for slot in slots}
-    if set(rewritten) != expected:
-        raise ValueError(f'Rewrite IDs differ: expected {expected}, got {set(rewritten)}')
-    forbidden = ('Hook：', 'Hashtags：', '固定CTA', '固定 CTA', '視覺分鏡描述', '【待記錄】')
+def validate_rewrites(slots: list[dict], rewrites: dict[str, str]) -> None:
+    expected = {slot["id"] for slot in slots}
+    if set(rewrites) != expected:
+        raise ValueError(f"輸出欄位不符：應為 {expected}，實際為 {set(rewrites)}")
     for slot in slots:
-        value = rewritten[slot['id']].strip()
-        if not value or value == slot['text']:
-            raise ValueError(f'Slot not rewritten: {slot["id"]}')
-        if any(token in value for token in forbidden):
-            raise ValueError(f'Fixed template token leaked into {slot["id"]}')
+        value = rewrites[slot["id"]].strip()
+        if not value or value == slot["text"]:
+            raise ValueError(f"未實質重寫欄位：{slot['id']}")
+        if slot["minimum_cjk"] and cjk_count(value) < slot["minimum_cjk"]:
+            raise ValueError(f"欄位字數不足：{slot['id']}")
         if any(token in value for token in RETIRED_DECLARATIONS):
-            raise ValueError(f'Slot {slot["id"]} contains removed disclaimer or boundary clarification')
-        if slot['minimum_cjk'] and cjk_count(value) < slot['minimum_cjk']:
-            raise ValueError(f'Slot {slot["id"]} shorter than {slot["minimum_cjk"]} CJK chars')
-        micro_scenes = ('躺在床上看著天花板', '咖啡放到涼了', '手拿著咖啡杯', '手拿杯子', '坐在辦公室看著螢幕')
-        if any(scene in value for scene in micro_scenes):
-            raise ValueError(f'Slot {slot["id"]} contains prohibited micro-scene description')
-        anchors = r'西北|正北|正東|正西|正南|東北|早上|下午|晚上|深夜|肩頸|睡眠|辰時|巳時|午時|未時|申時|酉時'
-        if len(set(re.findall(anchors, value))) > 2:
-            raise ValueError(f'Slot {slot["id"]} contains more than two temporal or sensory anchors')
-        if slot['id'].startswith('card_') or slot.get('rule_library_type1'):
-            label = slot['id'].split('_')[1]
-            required_sections = (f'**選項 {label}：', '【盤象：', '‧ 表面現象：', '‧ 盤象真相：', '【時空與體感錨定】', '【奇門行為改運】')
-            missing_sections = [section for section in required_sections if section not in value]
-            if missing_sections:
-                raise ValueError(f'Slot {slot["id"]} missing rule-library sections: {missing_sections}')
-            if re.search(r'你(?:注定|必然|一定會|百分之百)', value):
-                raise ValueError(f'Slot {slot["id"]} contains fate-determinism language')
-        missing = [term for term in slot.get('must_include', []) if term not in value]
-        if missing:
-            raise ValueError(f'Slot {slot["id"]} missing SSOT-backed terms: {missing}')
+            raise ValueError(f"欄位含已刪除聲明：{slot['id']}")
+        if any(re.search(pattern, value) for pattern in MICRO_SCENES.values()):
+            raise ValueError(f"欄位含過度微觀描繪：{slot['id']}")
+        if slot.get("five_layer"):
+            issues = five_layer_issues("重寫輸出", value, slot["label"], slot["combo"], slot["id"].startswith("card_"))
+            if issues:
+                raise ValueError(" | ".join(issues) + f"；輸出開頭：{value[:180]!r}")
 
 
-def apply_slots(block: str, slots: list[dict], rewritten: dict[str, str]) -> str:
+def apply_slots(block: str, slots: list[dict], rewrites: dict[str, str]) -> str:
     changed = block
-    for slot in sorted(slots, key=lambda item: len(item['text']), reverse=True):
-        old, new = slot['text'], rewritten[slot['id']]
-        if old not in changed:
-            raise ValueError(f'Cannot apply slot {slot["id"]}; original text is absent')
-        changed = changed.replace(old, new)
-    # 型式五上集的正文與第 2 張問題聚焦卡必須逐字使用同一個情景變數。
-    if any(slot.get('requires_short_window') for slot in slots):
-        scene = re.search(r'(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺', changed)
-        if not scene:
-            raise ValueError('Missing rewritten Type 5 upper scene')
-        scene_text = scene.group(1).strip()
-        if not re.search(r'(?:近|接下來|未來).{0,8}(?:一個月|一週|兩週|七天|30天)|本週|近期', scene_text):
-            scene_text = '接下來一個月，' + scene_text
-            changed = changed[:scene.start(1)] + scene_text + changed[scene.end(1):]
-            scene = re.search(r'(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺', changed)
+    for slot in sorted(slots, key=lambda item: len(item["text"]), reverse=True):
+        if slot["text"] not in changed:
+            raise ValueError(f"原欄位消失，無法套用：{slot['id']}")
+        changed = changed.replace(slot["text"], rewrites[slot["id"]])
+    scene_slot = next((slot for slot in slots if slot.get("short_window")), None)
+    if scene_slot:
+        scene = rewrites[scene_slot["id"]]
+        if not re.search(r"(?:近|接下來|未來).{0,8}(?:一個月|一週|兩週|七天|30 天|30天)|本週|近期", scene):
+            scene = "接下來一個月，" + scene
+            changed = changed.replace(rewrites[scene_slot["id"]], scene, 1)
         changed, count = re.subn(
-            r'(（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：)(?s:.*?)(\+ 憑第一眼直覺)',
-            lambda m: m.group(1) + scene_text + m.group(2),
-            changed,
-            count=1,
+            r"(（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：)(?s:.*?)(\+ 憑第一眼直覺)",
+            lambda match: match.group(1) + scene + match.group(2), changed, count=1,
         )
         if count != 1:
-            raise ValueError('Cannot synchronize Type 5 upper visual scene')
+            raise ValueError("型式五上集視覺問題聚焦卡無法同步")
     return changed
 
 
-def rewrite(args) -> int:
-    allowed_forms = {item.strip() for item in args.forms.split(',') if item.strip()}
-    allowed_dates = {item.strip() for item in args.dates.split(',') if item.strip()}
-    audit = []
-    pending: list[tuple[Path, str, str, str, list[dict]]] = []
-    for path in FILES:
-        source = path.read_text(encoding='utf-8')
-        for date, header, block in split_blocks(source):
-            if date < '2026-08-20':
-                continue
-            if allowed_dates and date not in allowed_dates:
-                continue
-            kind = form(header)
-            if allowed_forms and kind not in allowed_forms:
-                continue
-            slots = slots_for(block, kind)
-            pending.append((path, date, header, block, slots))
-    if not allowed_forms and not allowed_dates and len(pending) != 22:
-        raise ValueError(f'Expected 22 unpublished scripts, got {len(pending)}')
-    if (allowed_forms or allowed_dates) and not pending:
-        raise ValueError(f'No scripts found for forms/dates: {sorted(allowed_forms)} / {sorted(allowed_dates)}')
-    if args.dry_run:
-        summary = [{'date': date, 'form': form(header), 'slots': [slot['id'] for slot in slots]} for _, date, header, _, slots in pending]
-        args.audit.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-        print(json.dumps({'posts': len(summary), 'dry_run': True, 'audit': str(args.audit)}, ensure_ascii=False))
-        return 0
-    by_file: dict[Path, list[tuple[str, str]]] = {path: [] for path in FILES}
-    for path, date, header, block, slots in pending:
-        last_error: Exception | None = None
-        for retry in range(3):
-            rewritten = request_rewrite(date, form(header), header, slots, retry)
-            try:
-                validate_output(slots, rewritten)
-                break
-            except ValueError as exc:
-                last_error = exc
-        else:
-            raise last_error if last_error else RuntimeError('Unexpected rewrite validation failure')
-        revised = apply_slots(block, slots, rewritten)
-        by_file[path].append((block, revised))
-        audit.append({
-            'date': date,
-            'form': form(header),
-            'changed_slots': [slot['id'] for slot in slots],
-            'slot_sha256': [
-                {
-                    'id': slot['id'],
-                    'before': hashlib.sha256(slot['text'].encode()).hexdigest(),
-                    'after': hashlib.sha256(rewritten[slot['id']].encode()).hexdigest(),
-                }
-                for slot in slots
-            ],
-            'before_sha256': hashlib.sha256(block.encode()).hexdigest(),
-            'after_sha256': hashlib.sha256(revised.encode()).hexdigest(),
-        })
-    for path, replacements in by_file.items():
-        text = path.read_text(encoding='utf-8')
-        for old, new in replacements:
-            if text.count(old) != 1:
-                raise ValueError(f'Ambiguous post replacement in {path.name}')
-            text = text.replace(old, new, 1)
-        path.write_text(text, encoding='utf-8')
-    args.audit.write_text(json.dumps(audit, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-    print(json.dumps({'posts': len(audit), 'model': MODEL, 'audit': str(args.audit)}, ensure_ascii=False))
-    return 0
-
-
-# ── Unified governance: Playbook contract, structure, SSOT and style ─────────
-STANDARD_START = '## 【五大型式文案排版輸出標準規範】'
-GUIDE_TITLE = '# IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫'
-STANDARD_SHA256 = 'fecec633611e00cd81ac13dcc1baaa3f28b3c06117f926319b358a09bcbbe957'
-GUIDE_SHA256 = 'd2a0c75dcb65958e36860bb09a552b93654b4b7d4cef12a8d140637dae77280e'
-PLAYBOOK = ROOT / 'lunas_astral_code_master_playbook.md'
-SSOT = Path('/home/ubuntu/ziwei_qimen')
-PUBLISHED = {'2026-08-17', '2026-08-18'}
-PENDING = '【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares'
-RULE_SCOPE = {
-    '型式一': {'mutable': ('scene', 'answer_A–F'), 'fixed': ('A–F 抽籤', '留言 CTA', '閃爍視覺')},
-    '型式二': {'mutable': ('scene', 'reflection', 'action'), 'fixed': ('追蹤 CTA', '五張卡')},
-    '型式三': {'mutable': ('explain',), 'fixed': ('SSOT 引文', '收藏 CTA', '五張卡')},
-    '型式四': {'mutable': ('scene', 'check', 'action'), 'fixed': ('分享 CTA', '五張卡')},
-    '型式五上集': {'mutable': ('scene', 'tip', 'answer_A–C'), 'fixed': ('A–C 圖騰', '留言 CTA', '五張卡')},
-    '型式五下集': {'mutable': ('card_A–C'), 'fixed': ('上集承接', '圖騰', '收藏／追蹤／DM CTA', '六張卡')},
-}
-CTA = {
-    '型式一': '下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】',
-    '型式二': '點擊「追蹤」隨時陪伴在你身邊～',
-    '型式三': '點擊「收藏」打開命盤隨時上手\n下一期繼續拆解一個排盤小知識',
-    '型式四': '點擊「分享」給朋友一起確認吧～',
-    '型式五上集': '「留言」A / B / C 明天置頂留言區公佈解答 ✨\n想看後續「完整解讀」留意下一集',
-    '型式五下集': '喜歡這期解讀指引的朋友\n歡迎「收藏 + 追蹤」持續領取你的解讀提示吧～\n\n若想針對個人問題進行深入解析 📩\n歡迎直接 DM 預約一對一的專屬命盤諮詢 🌙',
-}
-LOWER_REFS = {
-    'A': {'terms': ('乾六宮', '西北', '天心星', '開門', '未時', '大吉'), 'sources': (('data/XingMen_WuXing_ShengKe.json', 'XMWX_L014'), ('data/QMDJ_ShangJuan_Consolidated.json', 'QMDJ_Auto_00328'))},
-    'B': {'terms': ('坎一宮', '正北', '天蓬星', '休門', '申時', '大凶', '大吉'), 'sources': (('data/XingMen_WuXing_ShengKe.json', 'XMWX_L015'), ('data/QMDJ_ShangJuan_Consolidated.json', 'QMDJ_Auto_00329'))},
-    'C': {'terms': ('艮八宮', '東北', '天任星', '生門', '酉時', '大吉'), 'sources': (('data/XingMen_WuXing_ShengKe.json', 'XMWX_L013'), ('data/QMDJ_ShangJuan_Consolidated.json', 'QMDJ_Auto_00330'))},
-}
-TYPE1_REFS = {
-    'A': ('乾六宮', '西北', '天心星', '開門', '大吉'),
-    'B': ('坎一宮', '正北', '天蓬星', '休門', '大凶', '大吉'),
-    'C': ('艮八宮', '東北', '天任星', '生門', '大吉'),
-    'D': ('兌七宮', '正西', '天柱星', '驚門', '小凶'),
-    'E': ('離九宮', '正南', '天英星', '景門', '中平'),
-    'F': ('震三宮', '正東', '天沖星', '傷門', '凶'),
-}
-MICRO_SCENES = {
-    '月台與訊息鏡頭': r'捷運(?:月台|車廂)[^\n]{0,120}(?:手機|對話框|訊息)',
-    '咖啡放涼鏡頭': r'咖啡[^\n]{0,80}(?:涼掉|放涼)',
-    '訊息反覆操作': r'(?:對話框|訊息)[^\n]{0,100}(?:打開|刪掉|改字|滑開)',
-    '廚房動作鏡頭': r'(?:外套|菜|貓|流理台|鍋)[^\n]{0,120}(?:掛上|提在手裡|蹭過|冒小泡)',
-}
-ANCHORS = r'西北|正北|正東|正西|正南|東北|早上|下午|晚上|深夜|肩頸|睡眠|辰時|巳時|午時|未時|申時|酉時'
-RETIRED = ('視覺規範核對清單', '【每張固定版面】', '視覺設定：', '上集主題 +', '三個圖騰並排，提醒讀者回到原選項')
-RETIRED_DECLARATIONS = (
-    '不是替你排出的個人命盤', '沒有你的個人起局資料', '沒有個人起局資料',
-    '不替你安門', '不會替你安門', '也不判方位', '不判斷方位',
-    '公開奇門資料中的對照示例', '公開奇門資料可對照的示例', '並非替你個人起局後得出的結論',
-)
-
-
-def cjk(text: str) -> int:
-    return len(re.findall(r'[\u3400-\u9fff]', text))
-
-
-def post_blocks():
-    for path in FILES:
-        text = path.read_text(encoding='utf-8')
-        starts = list(re.finditer(r'(?m)^## (2026-\d{2}-\d{2}).*$', text))
-        for i, marker in enumerate(starts):
-            end = starts[i + 1].start() if i + 1 < len(starts) else len(text)
-            yield path, marker.group(1), marker.group(0), text[marker.start():end]
-
-
-def playbook_contract_issues() -> list[str]:
-    text = PLAYBOOK.read_text(encoding='utf-8')
+def current_contract_issues() -> list[str]:
+    text = PLAYBOOK.read_text(encoding="utf-8")
+    issues = []
+    if sha(text) != PLAYBOOK_SHA256:
+        issues.append("完整 Playbook 雜湊與本次鎖定基線不符。")
     start, guide = text.find(STANDARD_START), text.find(GUIDE_TITLE)
-    issues: list[str] = []
     if start < 0 or guide <= start:
-        return ['找不到五大型式固定規範或規則庫。']
-    standard, rule_library = text[start:guide], text[guide:]
-    if hashlib.sha256(standard.encode()).hexdigest() != STANDARD_SHA256:
-        issues.append('五大型式固定規範雜湊與使用者鎖定基線不符。')
-    if hashlib.sha256(rule_library.encode()).hexdigest() != GUIDE_SHA256:
-        issues.append('規則庫雜湊與使用者鎖定基線不符。')
-    if text.count(STANDARD_START) != 1 or text.count(GUIDE_TITLE) != 1:
-        issues.append('固定規範或規則庫標題必須且只能出現一次。')
+        return issues + ["找不到固定模板或規則庫標題。"]
+    if sha(text[start:guide]) != STANDARD_SHA256:
+        issues.append("固定模板合約雜湊不符。")
+    if sha(text[guide:]) != GUIDE_SHA256:
+        issues.append("規則庫合約雜湊不符。")
+    if not RULES_FILE.is_file() or sha(RULES_FILE.read_text(encoding="utf-8")) != DYNAMIC_RULES_SHA256:
+        issues.append("動態盤象規則檔缺失或來源雜湊不符。")
     return issues
-
-
-def lower_card(block: str, label: str) -> str:
-    m = re.search(rf'（[345]）{label} 選項完整解讀卡.*?：(.*?)(?=\n\n（[3456]）|\n（6）|\Z)', block, re.S)
-    return m.group(1) if m else ''
 
 
 def pinned_answer(block: str, label: str, labels: str) -> str:
-    anchor = block.find('【置頂留言區解答｜')
+    anchor = block.find("【置頂留言區解答｜")
     if anchor < 0:
-        return ''
-    region = block[anchor:]
-    m = re.search(rf'(?ms)^{label}：(.*?)(?=\n\n[{'|'.join(labels)}]：|\Z)', region)
-    return m.group(1) if m else ''
+        return ""
+    end = block.find("————————————", anchor)
+    region = block[anchor:end if end >= 0 else len(block)]
+    match = re.search(rf"(?ms)^{label}：(.*?)(?=\n\n[{'|'.join(labels)}]：|\Z)", region)
+    return match.group(1).strip() if match else ""
 
 
-def five_layer_issues(date: str, text: str, label: str) -> list[str]:
-    required = (f'**選項 {label}：', '【盤象：', '‧ 表面現象：', '‧ 盤象真相：', '【時空與體感錨定】', '【奇門行為改運】')
-    issues = [f'{date} {label} 缺少五層模組：{item}' for item in required if item not in text]
-    if re.search(r'你(?:注定|必然|一定會|百分之百)', text):
-        issues.append(f'{date} {label} 使用命定論。')
-    if '白話來說' not in text and '簡單說' not in text:
-        issues.append(f'{date} {label} 缺少術語白話轉譯。')
-    if len(set(re.findall(ANCHORS, text))) > 2:
-        issues.append(f'{date} {label} 時空／體感錨定超過兩項。')
+def lower_card(block: str, label: str) -> str:
+    number = {"A": 3, "B": 4, "C": 5}[label]
+    match = re.search(rf"(?ms)^（{number}）{label} 選項完整解讀卡（[^）]+）：(.*?)(?=｜暖米白底 #F5F5DC、深海軍藍 #0D0D2B（文字）、霧玫瑰金 #B4918F（邊框 \+ 圖騰線稿）。)", block)
+    return match.group(1).strip() if match else ''
+
+
+def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[str, dict]]) -> list[str]:
+    issues = []
+    if PENDING not in block:
+        issues.append(f"{date} 缺少 48 小時待記錄欄位。")
+    if any(token in block for token in RETIRED_DECLARATIONS):
+        issues.append(f"{date} 留有已刪除免責或邊界澄清。")
+    if any(token in block for token in RETIRED_TEXT):
+        issues.append(f"{date} 留有已廢止模板文字。")
+    if "`#" in block:
+        issues.append(f"{date} 色碼仍使用已淘汰反引號格式。")
+    tags = re.search(r"(?m)^Hashtags：(.+)$", block)
+    if not tags or len(re.findall(r"#[\w\u3400-\u9fff]+", tags.group(1))) != 5 or "#Lunasastralcode" not in tags.group(1):
+        issues.append(f"{date} Hashtags 結構錯誤。")
+    cta = re.search(r"(?ms)^固定 CTA：\s*(.*?)(?=\n————————————|\n視覺分鏡描述|\n【待記錄】|\Z)", block)
+    if not cta or cta.group(1).strip() != CTA[kind]:
+        issues.append(f"{date} CTA 與固定模板不符。")
+    for name, pattern in MICRO_SCENES.items():
+        if re.search(pattern, block):
+            issues.append(f"{date} 含過度微觀描繪：{name}。")
+    visual_match = re.search(r"視覺分鏡描述（.*?）：\n(.*?)(?=\n【待記錄】)", block, re.S)
+    if not visual_match:
+        issues.append(f"{date} 缺少視覺分鏡區塊。")
+    else:
+        visual = visual_match.group(1)
+        try:
+            variable_slots = slots_for(block, kind)
+            if kind in {"型式二", "型式三", "型式四"}:
+                for slot in variable_slots:
+                    if slot["text"] not in visual:
+                        issues.append(f"{date} 正文欄位 {slot['id']} 未同步至視覺卡。")
+            elif kind == "型式五上集":
+                for slot in variable_slots:
+                    if slot["id"] in {"scene", "tip"} and slot["text"] not in visual:
+                        issues.append(f"{date} 正文欄位 {slot['id']} 未同步至視覺卡。")
+        except ValueError as exc:
+            issues.append(f"{date} 欄位解析失敗：{exc}")
+    if kind == "型式一":
+        if len(re.findall(r"(?m)^🔮 [A-F]\. ", block)) != 6:
+            issues.append(f"{date} 缺少 A–F 圖騰。")
+        scene = section(block, "正文：\n", "\n\nHashtags：").split("\n長按螢幕")[0]
+        if cjk_count(scene) < 30:
+            issues.append(f"{date} 型式一情節少於 30 字。")
+        for label in "ABCDEF":
+            issues.extend(five_layer_issues(date, pinned_answer(block, label, "ABCDEF"), label, assignments[date][label], False))
+    if kind == "型式五上集":
+        if len(re.findall(r"(?m)^🔮 [A-C]\. ", block)) != 3:
+            issues.append(f"{date} 缺少 A／B／C 圖騰。")
+        body_scene = re.search(r"(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺", block)
+        visual_scene = re.search(r"(?s)（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：(.*?)\+ 憑第一眼直覺", block)
+        if not body_scene or not visual_scene or body_scene.group(1).strip() != visual_scene.group(1).strip():
+            issues.append(f"{date} 正文與視覺問題聚焦情景不一致。")
+        elif not re.search(r"(?:近|接下來|未來).{0,8}(?:一個月|一週|兩週|七天|30 天|30天)|本週|近期", body_scene.group(1)):
+            issues.append(f"{date} 缺少短時間窗。")
+        for label in "ABC":
+            issues.extend(five_layer_issues(date, pinned_answer(block, label, "ABC"), label, assignments[date][label], False))
+    if kind == "型式五下集":
+        for label in "ABC":
+            issues.extend(five_layer_issues(date, lower_card(block, label), label, assignments[date][label], True))
     return issues
 
 
-def script_issues() -> list[str]:
-    issues: list[str] = []
-    posts: dict[str, tuple[str, str]] = {}
-    count = 0
-    for path, date, header, block in post_blocks():
-        if date in PUBLISHED:
-            continue
-        if date < '2026-08-20':
-            continue
-        count += 1
-        kind = form(header)
-        posts[date] = (kind, block)
-        if PENDING not in block:
-            issues.append(f'{date} 缺少 48 小時待記錄欄位。')
-        if any(token in block for token in RETIRED):
-            issues.append(f'{date} 留有已廢止模板文字。')
-        if any(token in block for token in RETIRED_DECLARATIONS):
-            issues.append(f'{date} 留有已刪除的免責或邊界澄清。')
-        tags = re.search(r'(?m)^Hashtags：(.+)$', block)
-        if not tags or len(re.findall(r'#[\w\u3400-\u9fff]+', tags.group(1))) != 5 or '#Lunasastralcode' not in tags.group(1):
-            issues.append(f'{date} Hashtags 結構錯誤。')
-        cta = re.search(r'(?ms)^(?:固定 ?)?CTA：\s*(.*?)(?=\n————————————|\n視覺分鏡描述|\n【待記錄】|\Z)', block)
-        if not cta or cta.group(1).strip() != CTA[kind]:
-            issues.append(f'{date} CTA 與固定模板不符。')
-        for name, pattern in MICRO_SCENES.items():
-            if re.search(pattern, block):
-                issues.append(f'{date} 有過度微觀描繪：{name}。')
-        if kind == '型式一':
-            if len(re.findall(r'(?m)^🔮 [A-F]\. ', block)) != 6:
-                issues.append(f'{date} 缺少 A–F 圖騰。')
-            for label, terms in TYPE1_REFS.items():
-                answer = pinned_answer(block, label, 'ABCDEF')
-                issues.extend(f'{date} 型式一 {label} 缺少公開奇門對照：{term}。' for term in terms if term not in answer)
-                issues.extend(five_layer_issues(date, answer, label))
-        elif kind == '型式五上集':
-            if len(re.findall(r'(?m)^🔮 [A-C]\. ', block)) != 3:
-                issues.append(f'{date} 缺少 A／B／C 圖騰。')
-            body_scene = re.search(r'(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺', block)
-            visual_scene = re.search(r'（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：(.*?)\+ 憑第一眼直覺', block)
-            if not body_scene or not visual_scene or body_scene.group(1).strip() != visual_scene.group(1).strip():
-                issues.append(f'{date} 問題聚焦卡與正文情景不一致。')
-            elif not re.search(r'(?:近|接下來|未來).{0,8}(?:一個月|一週|兩週|七天|30天)|本週|近期', body_scene.group(1)):
-                issues.append(f'{date} 問題聚焦卡缺少短時間窗。')
-            if '（4）貼士卡（18–22 秒）' not in block:
-                issues.append(f'{date} 缺少貼士卡。')
-        elif kind == '型式五下集':
-            for label, spec in LOWER_REFS.items():
-                card = lower_card(block, label)
-                if cjk(card) < 300:
-                    issues.append(f'{date} {label} 完整解讀少於 300 字。')
-                issues.extend(f'{date} {label} 缺少公開奇門對照：{term}。' for term in spec['terms'] if term not in card)
-                issues.extend(five_layer_issues(date, card, label))
-                for relpath, line_id in spec['sources']:
-                    source = SSOT / relpath
-                    if not source.is_file() or line_id not in source.read_text(encoding='utf-8'):
-                        issues.append(f'{date} {label} 無法反向定位 SSOT：{relpath} / {line_id}。')
-        elif kind == '型式三':
-            for relpath, line_id in re.findall(r'`(data/[^`]+)`，`([^`]+)`', block):
-                source = SSOT / relpath
-                if not source.is_file() or line_id not in source.read_text(encoding='utf-8'):
-                    issues.append(f'{date} 無法反向定位 SSOT：{relpath} / {line_id}。')
-    if count != 22:
-        issues.append(f'未發布腳本數量錯誤：{count}。')
-    upper = sorted(d for d, (kind, _) in posts.items() if kind == '型式五上集')
-    lower = sorted(d for d, (kind, _) in posts.items() if kind == '型式五下集')
-    for up, down in zip(upper[:5], lower):
-        utopic = re.search(r'Hook：\s*【大眾奇門占卜｜(.+?)】', posts[up][1])
-        normalized_lower = re.sub(r'\s+', '', posts[down][1])
-        if not utopic or re.sub(r'\s+', '', utopic.group(1)) not in normalized_lower:
-            issues.append(f'{down} 未承接 {up} 的窄題。')
+def cross_post_issues(posts: list[tuple[Path, str, str, str]], assignments: dict[str, dict[str, dict]]) -> list[str]:
+    issues = []
+    by_date = {date: (form(header), block) for _, date, header, block in posts}
+    pairs = pair_map(posts)
+    for lower, upper in pairs.items():
+        _, upper_block = by_date[upper]
+        _, lower_block = by_date[lower]
+        upper_topic = re.search(r"Hook： 【大眾奇門占卜｜(.+?)】", upper_block)
+        if not upper_topic or re.sub(r"\s+", "", upper_topic.group(1)) not in re.sub(r"\s+", "", lower_block):
+            issues.append(f"{lower} 未承接 {upper} 的窄題。")
+        for label in "ABC":
+            upper_totem = re.search(rf"(?m)^🔮 {label}\. (.+)$", upper_block)
+            lower_totem = re.search(rf"{label} 選項完整解讀卡（([^）]+)）", lower_block)
+            if not upper_totem or not lower_totem or upper_totem.group(1).strip() != lower_totem.group(1).strip():
+                issues.append(f"{lower} {label} 圖騰未承接 {upper}。")
+            if assignments.get(lower, {}).get(label, {}).get("key") != assignments.get(upper, {}).get(label, {}).get("key"):
+                issues.append(f"{lower} {label} 動態盤象未承接 {upper}。")
     return issues
 
 
 def audit() -> int:
-    issues = playbook_contract_issues() + script_issues()
-    result = {'posts_checked': 22, 'issues': issues, 'pass': not issues}
-    print(json.dumps(result, ensure_ascii=False, indent=2))
-    return 1 if issues else 0
+    issues = current_contract_issues()
+    posts = list(unpublished_blocks())
+    try:
+        rules, registry = load_rules(), load_json(REGISTRY_FILE)
+        assignments = dynamic_assignments(posts, registry, rules, persist=False)
+        for stored_date, values in registry.get("assignments", {}).items():
+            for stored_label, stored_combo in values.items():
+                derived = derive_combo(rules, stored_combo["star"], stored_combo["door"], stored_combo["qi"], stored_combo["hour"])
+                if stored_combo != derived:
+                    issues.append(f"{stored_date} {stored_label} 去重紀錄衍生欄位未依 v1.1 五元組重算。")
+    except Exception as exc:
+        print(json.dumps({"posts_checked": 22, "pass": False, "issues": issues + [str(exc)]}, ensure_ascii=False, indent=2))
+        return 1
+    if len(posts) != 22:
+        issues.append(f"未發布腳本數量錯誤：{len(posts)}。")
+    primary_keys = []
+    for _, date, header, block in posts:
+        kind = form(header)
+        issues.extend(block_issues(date, kind, block, assignments))
+        if kind in {"型式一", "型式五上集"}:
+            primary_keys.extend(combo["key"] for combo in assignments[date].values())
+    if len(primary_keys) != len(set(primary_keys)):
+        issues.append("型式一／五上集近 30 篇動態盤象五元組重複。")
+    if len(primary_keys) != 36:
+        issues.append(f"動態盤象主選項數量錯誤：{len(primary_keys)}，預期 36。")
+    issues.extend(cross_post_issues(posts, assignments))
+    print(json.dumps({"posts_checked": len(posts), "pass": not issues, "issues": issues}, ensure_ascii=False, indent=2))
+    return 0 if not issues else 1
 
 
-def inventory() -> int:
-    print(json.dumps({'root': str(ROOT), 'tool': str(Path(__file__).relative_to(ROOT)), 'rule_scope': RULE_SCOPE, 'scripts': [str(p.relative_to(ROOT)) for p in FILES]}, ensure_ascii=False, indent=2))
+def write_rule_map() -> None:
+    rule_map = {
+        "playbook_source": "lunas_astral_code_master_playbook.md",
+        "playbook_sha256": PLAYBOOK_SHA256,
+        "fixed_template_policy": "Only [ ] or ［］ variables may change. Fixed wording, punctuation, CTA, cards, media, seconds, colors, visual structure and order are immutable.",
+        "dynamic_panxiang": {
+            "source": "governance/dynamic_panxiang_rules.json",
+            "source_sha256": DYNAMIC_RULES_SHA256,
+            "input": ["九星", "八門", "奇儀", "時辰"],
+            "value_star_rule": "九星抽樣值直接視為值符星；天禽星以寄坤二宮作八神起點。",
+            "spirit_rule": "陰遁逆時針排列八神，取門之固有宮位所落八神為卡面神值與吉凶計分神。",
+            "direction_rule": "門的固有宮位為主方位。",
+            "auspice_rule": "以星、門、神、奇儀 category 權重加總映射大吉／中吉／平／中凶／大凶。",
+            "dedup_rule": "星＋門＋神＋儀＋時辰五元組於近 30 篇內不得重複。",
+        },
+        "ssot_references": {
+            "repository": "https://github.com/serenawct098-ai/ziwei_qimen",
+            "verified_commit": "ac8f093f76a6dbcf459eca0075a33828aa47ef7e",
+            "type3": {
+                "2026-08-20": {"data_file": "data/ZWQS_Juan2_Consolidated.json", "line_id": "ZWQS_Juan2_AnSihua_L002"},
+                "2026-09-03": {"data_file": "engines/diagnosis_router_module_v1.json", "intent": "relationship", "palaces": ["夫妻宮", "交友宮"]},
+                "2026-09-17": {"data_file": "engines/diagnosis_router_module_v1.json", "intent": "career", "palaces": ["官祿宮", "財帛宮"]},
+            },
+        },
+        "forms": {
+            "型式一": {"dynamic_options": "A–F", "option_format": "五層盤象解答，每項至少 100 字"},
+            "型式五上集": {"dynamic_options": "A–C", "option_format": "五層置頂解答，每項至少 100 字"},
+            "型式五下集": {"pairing": "承接上集同題、同圖騰、同五元組", "option_format": "五層完整解讀，每卡至少 300 字"},
+            "型式三四": {"data_boundary": "涉及命理資料必須先查 SSOT；不得套用動態盤象。"},
+        },
+        "acceptance": [
+            "22 篇未發布腳本的每個註冊可變欄位在重寫前後均有不同 SHA-256。",
+            "五大型式固定模板、CTA、Hashtags、日期、型式、媒介、卡數、色碼與已發布內容不變。",
+            "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
+            "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
+        ],
+    }
+    RULE_MAP_FILE.write_text(json.dumps(rule_map, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def sync(args) -> int:
+    if args.dry_run:
+        print(json.dumps({"playbook_contract": {"playbook": PLAYBOOK_SHA256, "standard": STANDARD_SHA256, "guide": GUIDE_SHA256}, "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": len(list(unpublished_blocks()))}, ensure_ascii=False))
+        return 0
+    write_rule_map()
+    result = synchronize_fixed_typography()
+    print(json.dumps({"synced": True, **result}, ensure_ascii=False))
+    return 0
+
+
+def rewrite(args) -> int:
+    if args.dry_run:
+        posts = list(unpublished_blocks())
+        summary = []
+        for _, date, header, block in posts:
+            summary.append({"date": date, "form": form(header), "slots": [slot["id"] for slot in slots_for(normalize_block(block), form(header))]})
+        args.audit.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps({"posts": len(summary), "dry_run": True, "audit": str(args.audit)}, ensure_ascii=False))
+        return 0
+    write_rule_map()
+    synchronize_fixed_typography()
+    posts = list(unpublished_blocks())
+    if len(posts) != 22:
+        raise ValueError(f"Expected 22 unpublished posts, got {len(posts)}")
+    rules, registry = load_rules(), load_json(REGISTRY_FILE)
+    assignments = dynamic_assignments(posts, registry, rules, persist=True)
+    replacements: dict[Path, list[tuple[str, str]]] = {path: [] for path in FILES}
+    audit_rows = []
+    for path, date, header, block in posts:
+        kind = form(header)
+        slots = slots_for(block, kind)
+        add_dynamic_requirements(slots, date, kind, assignments)
+        error = None
+        for retry in (False, True, True):
+            rewrites = request_rewrite(date, kind, header, slots, retry)
+            try:
+                validate_rewrites(slots, rewrites)
+                error = None
+                break
+            except ValueError as exc:
+                error = exc
+        if error:
+            raise error
+        revised = apply_slots(block, slots, rewrites)
+        replacements[path].append((block, revised))
+        audit_rows.append({
+            "date": date, "form": kind, "dynamic_panxiang": {label: assignments[date][label] for label in assignments.get(date, {})},
+            "changed_slots": [slot["id"] for slot in slots],
+            "slot_sha256": [{"id": slot["id"], "before": sha(slot["text"]), "after": sha(rewrites[slot["id"]])} for slot in slots],
+            "before_sha256": sha(block), "after_sha256": sha(revised),
+        })
+    for path, items in replacements.items():
+        text = path.read_text(encoding="utf-8")
+        for old, new in items:
+            if text.count(old) != 1:
+                raise ValueError(f"Ambiguous replacement in {path.name}")
+            text = text.replace(old, new, 1)
+        path.write_text(text, encoding="utf-8")
+    args.audit.write_text(json.dumps({"playbook_sha256": PLAYBOOK_SHA256, "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": audit_rows}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({"posts": len(audit_rows), "model": MODEL, "audit": str(args.audit)}, ensure_ascii=False))
     return 0
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description='Luna scripts unified governance tool')
-    sub = parser.add_subparsers(dest='command', required=True)
-    sub.add_parser('audit', help='Validate Playbook contract, scripts, SSOT and cross-post structure.')
-    sub.add_parser('inventory', help='Show fixed/mutable mapping and managed script files.')
-    rewrite_parser = sub.add_parser('rewrite', help='Rewrite only registered mutable prose slots.')
-    rewrite_parser.add_argument('--dry-run', action='store_true')
-    rewrite_parser.add_argument('--forms', default='', help='Comma-separated forms; empty means all forms.')
-    rewrite_parser.add_argument('--dates', default='', help='Comma-separated ISO dates; empty means all unpublished dates.')
-    rewrite_parser.add_argument('--audit', type=Path, default=ROOT / 'governance/rewrite_audit.json')
+    parser = argparse.ArgumentParser(description="Luna unified Playbook governance")
+    sub = parser.add_subparsers(dest="command", required=True)
+    sync_parser = sub.add_parser("sync", help="Synchronize governance map and latest fixed typography.")
+    sync_parser.add_argument("--dry-run", action="store_true")
+    rewrite_parser = sub.add_parser("rewrite", help="Rewrite registered variable prose for every unpublished post.")
+    rewrite_parser.add_argument("--dry-run", action="store_true")
+    rewrite_parser.add_argument("--audit", type=Path, default=AUDIT_FILE)
+    sub.add_parser("audit", help="Audit Playbook contract, dynamic panxiang and 22 scripts.")
     args = parser.parse_args()
-    if args.command == 'audit':
-        return audit()
-    if args.command == 'inventory':
-        return inventory()
-    return rewrite(args)
+    if args.command == "sync":
+        return sync(args)
+    if args.command == "rewrite":
+        return rewrite(args)
+    return audit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     raise SystemExit(main())
