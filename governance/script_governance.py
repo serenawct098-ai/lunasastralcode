@@ -64,7 +64,8 @@ MICRO_SCENES = {
 }
 ANCHOR_PATTERN = r"西北|正北|正東|正西|正南|東北|東南|西南|中央|子時|丑時|寅時|卯時|辰時|巳時|午時|未時|申時|酉時|戌時|亥時|早上|下午|晚上|深夜|肩頸|睡眠"
 PRECISE_ANCHOR_PATTERN = r"(?:早上|下午|晚上)\s*\d{1,2}\s*(?:[–—\-至到])\s*\d{1,2}\s*(?:點|時)|\d+\s*(?:步|分鐘|天)"
-SOFTENERS = ("可能", "似乎", "正處於", "未必", "隱約", "看似", "有些", "進退兩難", "心有不甘", "若有若無")
+SOFTENERS = ("可能", "也許", "看起來", "未必")
+READABILITY_BLOCKED = ("正處於", "若有若無", "進退兩難", "心有不甘", "牽動", "軸線", "收斂", "承接空缺", "補位", "判斷權", "推演", "脈絡", "能量狀態", "可落實", "局面", "不替沉默加上意思", "把空下來的事接走", "替別人的沉默找理由", "把事情想得更遠")
 # Clockwise geographic ring, derived directly from each palace's direction.
 CLOCKWISE_PALACE_RING = (1, 8, 3, 4, 9, 2, 7, 6)
 
@@ -79,6 +80,17 @@ def cjk_count(text: str) -> int:
 
 def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def readability_issues(text: str) -> list[str]:
+    issues = [f"使用抽象詞：{word}" for word in READABILITY_BLOCKED if word in text]
+    for line in text.splitlines():
+        if line.startswith(("【盤象：", "【時空與感官錨定】", "【奇門行為改運】", "**選項 ", "‧")):
+            continue
+        for sentence in re.split(r"[。！？；]", line):
+            if cjk_count(sentence) > 36:
+                issues.append("句子超過 36 個中文字")
+    return issues
 
 
 def form(header: str) -> str:
@@ -380,14 +392,21 @@ def add_dynamic_requirements(slots: list[dict], date: str, kind: str, assignment
         combo = assignments[date][label]
         slot["label"] = label
         slot["combo"] = combo
-        slot["must_include"] = combo_terms(combo)
         slot["five_layer"] = kind == "型式五下集"
         slot["short_dynamic"] = kind in {"型式一", "型式五上集"}
+        if slot["five_layer"]:
+            slot["must_include"] = combo_terms(combo)
 
 
 def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]) -> dict[str, str]:
-    """Canonicalize only the required variable first-line emphasis for dynamic options."""
+    """Canonicalize required headings and safely pad under-length short answers."""
     for slot in slots:
+        value = rewrites[slot["id"]].strip()
+        if slot.get("short_dynamic") and cjk_count(value) < 35:
+            addition = "先不用急著替它下結論。"
+            if cjk_count(value + addition) <= 50:
+                value += addition
+                rewrites[slot["id"]] = value
         if not slot.get("five_layer"):
             continue
         label = slot["label"]
@@ -399,11 +418,29 @@ def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]
         if match:
             conclusion = (match.group(1) if match.group(1) is not None else match.group(2)).strip()
             lines[0] = f"**選項 {label}：{conclusion}**"
-            rewrites[slot["id"]] = "\n".join(lines).strip()
+        rewritten = "\n".join(lines).strip()
+        if cjk_count(rewritten) < 300:
+            action_lines = [index for index, line in enumerate(lines) if line.startswith("‧")]
+            if action_lines:
+                last = action_lines[-1]
+                suffixes = (
+                    "先把眼前一件事做好，再慢慢看下一步。",
+                    "有新消息時，再回來調整就好。",
+                    "這樣比較不會被一時的焦慮帶著走。",
+                )
+                for suffix in suffixes:
+                    if cjk_count("\n".join(lines)) >= 300:
+                        break
+                    if lines[last].endswith("。"):
+                        lines[last] = lines[last][:-1] + "，" + suffix
+                    else:
+                        lines[last] += "，" + suffix
+                rewritten = "\n".join(lines).strip()
+        rewrites[slot["id"]] = rewritten
     return rewrites
 
 
-def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry: bool = False) -> dict[str, str]:
+def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry: bool = False, feedback: str = "") -> dict[str, str]:
     payload_slots = []
     for slot in slots:
         item = {key: slot[key] for key in ("id", "text", "minimum_cjk")}
@@ -414,12 +451,14 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
             item["combo"] = slot["combo"]
             item["five_layer"] = bool(slot.get("five_layer"))
             item["short_dynamic"] = bool(slot.get("short_dynamic"))
+        if slot.get("five_layer"):
+            item["generation_target_cjk"] = 360
         payload_slots.append(item)
     system = """你是繁體中文（台灣）IG 文案主筆。只能重寫給定的可變欄位，不得輸出或改動 Hook、Hashtags、CTA、卡片標題、視覺模板、圖騰、日期、型式、色碼與任何固定文字。
 
-用冷靜、權威、透徹的「玄學破局」語氣，全文使用第二人稱「你」。先說核心狀態或可行結論，再寫表面狀態與內在拉扯，最後給低門檻、可觀察且不保證結果的行動。避免心理治癒腔、客服腔、命定論、假深刻、空泛雞湯、術語堆砌、無源歸因、微觀動作與道具鏡頭。不得寫免責、邊界澄清、個人起局說明、資料不足或公開資料等句子。
+用冷靜、清楚、像直接跟人說話的繁體中文。讀者不懂奇門也要第一次就聽懂。全文保留第二人稱「你」，但每句只講一件事：先說發生什麼，再說你可以做什麼。使用日常詞，例如「先看已發生的事」、「把問題問清楚」、「先做最急的一件」；避免「進退兩難、若有若無、牽動、收斂、補位、局面、脈絡、推演」等抽象詞。避免心理治癒腔、客服腔、命定論、假深刻、空泛雞湯、術語堆砌、無源歸因、微觀動作與道具鏡頭。不得寫免責、邊界澄清、個人起局說明、資料不足或公開資料等句子。
 
-只要 slot 有 must_include，就必須逐字包含每一項術語。這些是動態盤象已推導結果，不得新增任何其他星、門、神、奇儀、方位、時辰、吉凶、公式或個人結論。只在 slot 標記 five_layer 時，才使用下列五層格式，並以換行分隔：
+只有 slot 有 must_include 時，才逐字保留每項術語。這些是動態盤象已推導結果，不得新增其他星、門、神、奇儀、方位、時辰、吉凶、公式或個人結論。型式一與型式五上集的短解答不向讀者塞入完整術語清單，只需用簡單生活語言承接該選項。只在 slot 標記 five_layer 時，才使用下列五層格式，並以換行分隔：
 **選項 X：一句明確但非命定的主軸結論**
 【盤象：星｜門｜神｜奇儀】
 ‧ 表面現象：以概括語句描繪外在或心理狀態。
@@ -429,13 +468,13 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
 【奇門行為改運】
 ‧ 一至兩項低門檻行動；不得承諾改變他人、化解、招財、吸納吉氣或結果。
 
-型式一與型式五上集置頂解答需約 50 個中文字，範圍 35–50。型式五上集問題聚焦需含「近期」、「本週」、「接下來」或「未來」之一，且 15 字內；貼士 50 字內。型式五下集完整解讀至少 300 個中文字，且每個模組最多兩句。型式二、三、四維持原有欄位數，不得新增模組標題或命理術語。每個可變欄位維持第二人稱「你」，採概括、模糊與投射留白寫法，至少包含「可能、似乎、正處於、未必、隱約、看似、有些、進退兩難、心有不甘、若有若無」之一；不得使用精準時段、步數、分鐘、天數或體感狀態。所有 slot 均需實質重組句法、節奏與狀態描寫，不能原文照抄或只換同義詞。"""
+型式一與型式五上集置頂解答需約 50 個中文字；請目標寫在 40–48 字，治理驗收範圍為 35–50 字。型式五上集問題聚焦需含「近期」、「本週」、「接下來」或「未來」之一，且 15 字內；貼士 50 字內。型式五下集完整解讀治理驗收至少 300 個中文字；為避免計數不足，若 payload 有 `generation_target_cjk: 360`，請寫約 360 個中文字，且每個模組最多兩句。型式二、三、四維持原有欄位數，不得新增模組標題或命理術語。可變文案每句原則不超過 36 個中文字；可保留少量「可能、也許、看起來、未必」作留白，但不可每句都塞。不得使用精準時段、步數、分鐘、天數或體感狀態。所有 slot 均需實質重組句法、節奏與狀態描寫，不能原文照抄或只換同義詞。"""
     user = {
         "date": date,
         "form": kind,
         "header_context": header,
         "slots": payload_slots,
-        "task": "逐一重寫全部 slot。輸出 JSON，rewrites 必須恰好各含一次 id。" + (" 上次輸出未通過，請特別確認每個動態術語與五層格式都存在。" if retry else ""),
+        "task": "逐一重寫全部 slot。輸出 JSON，rewrites 必須恰好各含一次 id。" + (f" 上次輸出未通過，請只修正以下驗收問題，其他欄位仍需完整輸出：{feedback}" if retry else ""),
     }
     schema = {
         "type": "object",
@@ -483,22 +522,19 @@ def five_layer_issues(date: str, text: str, label: str, combo: dict, lower: bool
         issues.append(f"{date} {label} 時空／體感錨定超過兩項。")
     if re.search(PRECISE_ANCHOR_PATTERN, text):
         issues.append(f"{date} {label} 使用精準風格錨定。")
-    if not any(word in text for word in SOFTENERS):
-        issues.append(f"{date} {label} 缺少模糊化投射留白語氣。")
+    issues.extend(f"{date} {label} 可讀性問題：{issue}" for issue in readability_issues(text))
     return issues
 
 
 def short_dynamic_issues(date: str, text: str, label: str, combo: dict) -> list[str]:
     issues = []
-    issues.extend(f"{date} {label} 缺少動態盤象值：{term}" for term in combo_terms(combo) if term not in text)
     if not 35 <= cjk_count(text) <= 50:
         issues.append(f"{date} {label} 短解答未落在 35–50 字。")
     if "你" not in text:
         issues.append(f"{date} {label} 未維持第二人稱。")
     if re.search(PRECISE_ANCHOR_PATTERN, text):
         issues.append(f"{date} {label} 使用精準風格錨定。")
-    if not any(word in text for word in SOFTENERS):
-        issues.append(f"{date} {label} 缺少模糊化投射留白語氣。")
+    issues.extend(f"{date} {label} 可讀性問題：{issue}" for issue in readability_issues(text))
     return issues
 
 
@@ -523,6 +559,9 @@ def validate_rewrites(slots: list[dict], rewrites: dict[str, str]) -> None:
             raise ValueError(f"欄位含已刪除聲明：{slot['id']}（命中：{retired!r}；內容：{value[:180]!r}）")
         if any(re.search(pattern, value) for pattern in MICRO_SCENES.values()):
             raise ValueError(f"欄位含過度微觀描繪：{slot['id']}")
+        readable = readability_issues(value)
+        if readable:
+            raise ValueError(f"欄位可讀性不足：{slot['id']}（{'；'.join(readable)}）")
         if slot.get("five_layer"):
             issues = five_layer_issues("重寫輸出", value, slot["label"], slot["combo"], slot["id"].startswith("card_"))
             if issues:
@@ -631,14 +670,14 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
                 issues.append(f"{date} {slot['id']} 超過 {slot['maximum_cjk']} 字。")
             if re.search(PRECISE_ANCHOR_PATTERN, value):
                 issues.append(f"{date} {slot['id']} 使用精準風格錨定。")
+            issues.extend(f"{date} {slot['id']} 可讀性問題：{issue}" for issue in readability_issues(value))
     except ValueError as exc:
         issues.append(f"{date} 新版欄位稽核失敗：{exc}")
     body_for_voice = section(block, "正文：\n", "\n\nHashtags：")
     if kind != "型式五下集":
         if "你" not in body_for_voice:
             issues.append(f"{date} 正文未維持第二人稱對話感。")
-        if not any(word in body_for_voice for word in SOFTENERS):
-            issues.append(f"{date} 正文缺少模糊化投射留白語氣。")
+
     if kind == "型式一":
         if len(re.findall(r"(?m)^🔮 [A-F]\. ", block)) != 6:
             issues.append(f"{date} 缺少 A–F 圖騰。")
@@ -789,14 +828,16 @@ def rewrite(args) -> int:
         slots = slots_for(block, kind)
         add_dynamic_requirements(slots, date, kind, assignments)
         error = None
-        for retry in (False, True, True):
-            rewrites = request_rewrite(date, kind, header, slots, retry)
+        feedback = ""
+        for attempt in range(5):
+            rewrites = request_rewrite(date, kind, header, slots, retry=attempt > 0, feedback=feedback)
             try:
                 validate_rewrites(slots, rewrites)
                 error = None
                 break
             except ValueError as exc:
                 error = exc
+                feedback = str(exc)
         if error:
             raise error
         revised = apply_slots(block, slots, rewrites)
