@@ -161,7 +161,7 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
         'form': kind,
         'header_context': header,
         'slots': slot_payload,
-        'task': '逐一改寫所有 slot。輸出 JSON，rewrites 內必須剛好有每個 id 一次。' + (' 上一稿有欄位原封不動複製、未納入指定術語，或超過時空／體感錨定上限；本次每個欄位必須在不改變事實下改變句法與用字，逐一包含 must_include，且不得出現額外錨定。' if retry else ''),
+        'task': '逐一重寫所有 slot。輸出 JSON，rewrites 內必須剛好有每個 id 一次。本輪為全量重作：每個欄位必須實質重組句法、節奏與狀態描寫，不得只替換同義詞；但不得改變主題、圖騰、時間、CTA、固定模板或可核對命理事實。' + (' 上一稿有欄位原封不動複製、未納入指定術語，或超過時空／體感錨定上限；本次每個欄位必須在不改變事實下改變句法與用字，逐一包含 must_include，且不得出現額外錨定。' if retry else ''),
     }
     schema = {
         'type': 'object',
@@ -316,6 +316,14 @@ def rewrite(args) -> int:
             'date': date,
             'form': form(header),
             'changed_slots': [slot['id'] for slot in slots],
+            'slot_sha256': [
+                {
+                    'id': slot['id'],
+                    'before': hashlib.sha256(slot['text'].encode()).hexdigest(),
+                    'after': hashlib.sha256(rewritten[slot['id']].encode()).hexdigest(),
+                }
+                for slot in slots
+            ],
             'before_sha256': hashlib.sha256(block.encode()).hexdigest(),
             'after_sha256': hashlib.sha256(revised.encode()).hexdigest(),
         })

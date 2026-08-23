@@ -1,0 +1,52 @@
+{
+  "playbook_source": "lunas_astral_code_master_playbook.md",
+  "fixed_template_policy": "Only text inside variable brackets may change; all other template wording, punctuation, CTA, cards, media and visual structures remain immutable.",
+  "global_variable_rules": {
+    "tone": "冷靜、權威、透徹；斷言明確但不命定，全文使用第二人稱你。",
+    "logic": [
+      "先給核心狀態或可行結論",
+      "有已核對奇門資料時才亮術語並立刻白話翻譯",
+      "表面現象與內在拉扯形成對比",
+      "單一解析只保留一至兩個時空或體感錨定",
+      "最後提供低門檻、無結果保證的行動"
+    ],
+    "restraint": [
+      "不得細寫道具、微觀動作或環境背景",
+      "以心理或能量狀態取代鏡頭式場景",
+      "不得使用命定論、術語堆砌或軟爛安慰"
+    ]
+  },
+  "forms": {
+    "型式一": {
+      "mutable": ["主題生活情節描述", "A-F置頂解答", "視覺變數"],
+      "required_effect": "一個月內具體生活問題；A-F解答以生活狀態、共鳴與小建議承接題目。"
+    },
+    "型式二": {
+      "mutable": ["Hook情境", "50字正文", "三張視覺變數"],
+      "required_effect": "具體事情引發的心理狀態，經情緒拉扯後給建設性語錄。"
+    },
+    "型式三": {
+      "mutable": ["Hook術語", "技巧說明與情境", "已驗證補充資料", "視覺變數"],
+      "required_effect": "可回查的紫微教學，白話說明與可用情境一致。"
+    },
+    "型式四": {
+      "mutable": ["Hook生活場景", "正文", "三張視覺變數"],
+      "required_effect": "日常困擾、可驗證檢查、調整方法與觀察回報。"
+    },
+    "型式五上集": {
+      "mutable": ["窄題", "具體關係工作金錢情境加短時間窗", "奇門生活小貼士", "A-C置頂解答", "視覺變數"],
+      "required_effect": "問題聚焦正文與視覺同一變數；貼士至少50字。"
+    },
+    "型式五下集": {
+      "mutable": ["上集同題", "上集主題", "A-C完整解讀卡", "視覺變數"],
+      "required_effect": "每卡至少300字，承接同一題目和圖騰，依序定論、術語降維、表面/真相、時空體感、行為指引。"
+    }
+  },
+  "acceptance": [
+    "22篇未發布內容的每個已登記可變欄位均要有與重寫前不同的內容雜湊",
+    "固定模板字串、CTA、Hashtags結構、型式、圖騰、已發布日期保持不變",
+    "正文與視覺使用同一組變數",
+    "SSOT資料可反向定位",
+    "治理稽核、發布節奏與卡片級視覺驗收必須全部通過"
+  ]
+}

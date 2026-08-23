@@ -1,5 +1,21 @@
 [
   {
+    "date": "2026-08-20",
+    "form": "型式三",
+    "changed_slots": [
+      "explain"
+    ],
+    "slot_sha256": [
+      {
+        "id": "explain",
+        "before": "921be6161474cc52c490c811fa7172fc15720d76d472f5d73a724617d47970de",
+        "after": "2531394af6e3a924eb3f67f40fcf95b07c6741d847a14e4cf061bd465206fdbc"
+      }
+    ],
+    "before_sha256": "9d73d4caad2bbbb1ed37e25c5c1c1bb4efcfe2c1d6805d68ee58e9f175c0a706",
+    "after_sha256": "ab1fd18b4e1df7df9865df73713c1c3f6e90f4d27a896e04b294640c66c45896"
+  },
+  {
     "date": "2026-08-22",
     "form": "型式五上集",
     "changed_slots": [
@@ -9,8 +25,143 @@
       "answer_B",
       "answer_C"
     ],
-    "before_sha256": "c963ce0b9f2d491ad7ce16ec7d753d7bb4fba8966a95763bb6bd1ce72ebdc512",
-    "after_sha256": "dc68c3ad89ea62290bb6404cf4fdd76dbf6619b0b216fdc7143963cb2b37f35d"
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "b61bc16c74668fc0d1f9997efbdcd4b396f360b71d38aea09b93c7603d7d7ff0",
+        "after": "a500fb3cdfea32cc9b8280e18356ac4ffcd517ad7c247f3c680020f91ab95224"
+      },
+      {
+        "id": "story",
+        "before": "1431dab422029bd0ebcac432abdbd06b1fb9ed79246594bb4a6345563817bd31",
+        "after": "9ff336ef0215fb7788e49d1c87e987b82d38f55c41fdd56e79f2ce4beea1f807"
+      },
+      {
+        "id": "answer_A",
+        "before": "07c4446ba1904bfaf8ed4b137222ee7d4ab249684bc0aca33e5de547197ac03e",
+        "after": "a98c5f3ce83a16a16865d7a21f38f51c6a94f33dab2e2116bb6769f27a70d0bb"
+      },
+      {
+        "id": "answer_B",
+        "before": "afe27285b4e38eecf89c2ea0cdd7b4378171b63d0e912f32de266f235fe1240f",
+        "after": "00c41808ef615ab778ad0f5a5a266eb104d29629f30ef800892db0bc82ffdb9f"
+      },
+      {
+        "id": "answer_C",
+        "before": "2bfb5b746c5417d38956ffa3383c2e0ba4de6f3fc315bb9cbfc422179d1fed6a",
+        "after": "e49534243f05e72ca7561dff3250309eb1dc0ac662bf136eeb217f6d40171209"
+      }
+    ],
+    "before_sha256": "dc68c3ad89ea62290bb6404cf4fdd76dbf6619b0b216fdc7143963cb2b37f35d",
+    "after_sha256": "1c730e21d9fff804a3bd889b04733601017fb142bfb9a7f4e5fb2afe15b95bd2"
+  },
+  {
+    "date": "2026-08-24",
+    "form": "型式五下集",
+    "changed_slots": [
+      "card_A_tail",
+      "card_B_tail",
+      "card_C_tail"
+    ],
+    "slot_sha256": [
+      {
+        "id": "card_A_tail",
+        "before": "3940fe0e1d3cb832ab78ff7b3adcf54611cfeb5a30d1ca517665cd135349db0a",
+        "after": "72ed0cb2ef7fbbb4dc9df6efd69fb00bcd31402998eb6326fc3a1757e84cff82"
+      },
+      {
+        "id": "card_B_tail",
+        "before": "f6764633077d99023a232dc84d3d8b04b3e9991d33f3abb9c77545adf7e581d0",
+        "after": "0c6651864dbdb9f2f1b36065b9d467b12e7f18e9f415eeb6360272ac125c0364"
+      },
+      {
+        "id": "card_C_tail",
+        "before": "14c368f4ceaa305e2973d84c0357b382e9fbd8c304cab1983df329345d477f64",
+        "after": "f7d16bb184ea14b58fc1a96ae254a35800cd6998854c4b7f88d3f8aa46e8675a"
+      }
+    ],
+    "before_sha256": "b6f7b123e70bf5463a5fed00aea21fd19351ba03f88f06a57652ccf598a78611",
+    "after_sha256": "e7d39fdc70c631b508f6c35e9d846415e53713118914d2dafcd80e4d5fa41c76"
+  },
+  {
+    "date": "2026-08-26",
+    "form": "型式一",
+    "changed_slots": [
+      "scene",
+      "answer_A",
+      "answer_B",
+      "answer_C",
+      "answer_D",
+      "answer_E",
+      "answer_F"
+    ],
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "52a38ee43bb885320f1e3d0c8ad6e4fd43888b3dbe42ecbc5e75e88b61292b61",
+        "after": "34cfca58c625d52b625b9bdaae9e7fee29737ffd296d6debe8391a77b866e7fa"
+      },
+      {
+        "id": "answer_A",
+        "before": "3114cacebac989729103de2e434b3295c3032de4846aac6adde38466d26b37f6",
+        "after": "5878bf2771e2a3cdf1d023a364365d5815f6be845157fc5b0dff0399f287617a"
+      },
+      {
+        "id": "answer_B",
+        "before": "37886227de937f60e857472ec9fcd9d19be749f82f832951402ca9b47554fb98",
+        "after": "a3a38cffbcc8e02ca89f4f60537d7a6dc5936d79e4cae02ba0c73f3bc39285e6"
+      },
+      {
+        "id": "answer_C",
+        "before": "a374c65d0fcba8f7faada1d866d27bc261fa7579896bf64a5d6b0890a6c98785",
+        "after": "24b0d3326967ab2397cd702cbe513c6b426878f436898a7cec1d096d11416e4b"
+      },
+      {
+        "id": "answer_D",
+        "before": "efef79be4a986accd90dc34886608da62278e9e9516caa66a7a8eb22f46db6c5",
+        "after": "0bd52458a01d4eab17fcbc898d7f12520b1d22e8aa16b81a8b3fb7e14fa14c64"
+      },
+      {
+        "id": "answer_E",
+        "before": "9e132142b61d640cd2add9e40e8f1decc8b81cd41dbdce81d55f018f34114234",
+        "after": "56fae8fca95f7dd530991f9de8e329d1eadd922ec8ecdf98764c417c0ed54083"
+      },
+      {
+        "id": "answer_F",
+        "before": "0a2daef219008e5fd276ed4b6bea06392928e22e9f453ae658625c70ce3ce87b",
+        "after": "3eb249b9a2c18e2847fdd908d18eb6a5585e7b8b37fa47b82e2e3cd66b0680ae"
+      }
+    ],
+    "before_sha256": "0d5647a9715db3e4881294463f856e5f14322b76c3c6501e439492aac9d12375",
+    "after_sha256": "057411fee6fa4c1ace0f99d90518fee839d4ad53e1bc60a679979b033a6dfdc2"
+  },
+  {
+    "date": "2026-08-27",
+    "form": "型式四",
+    "changed_slots": [
+      "scene",
+      "check",
+      "action"
+    ],
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "25cddb83415f5bcb7b9a7762121e4404d3327bef6300a6623094fb6ff7adcf30",
+        "after": "998b148d131f5d223221cd060c6e18ada550fe961a091480a464282c902613eb"
+      },
+      {
+        "id": "check",
+        "before": "be7871d68936ed295893048e6f6b4072454f3d00bbda87a2fbc7cb546fe9dd2f",
+        "after": "d080fead044cd58a9c7b17cd93bf823359096bed61534bf50f7d500e832c2ba2"
+      },
+      {
+        "id": "action",
+        "before": "9a7e59f0d57f146dac40d8959b36a2df6b5fe3008c58971afafc7128f393e8e6",
+        "after": "ad88a8d9b8f30d8cdc66573aef21ca68191396a8edc2deebf3c286c3ec3896f8"
+      }
+    ],
+    "before_sha256": "f2ff84153d95b1650b20c7f360c590f7afe3005d7d68499f5dd933f5afedd094",
+    "after_sha256": "ca708f1cbc136a3caf76025b25868f514b144b31b41e18e0eeaade286d316cdd"
   },
   {
     "date": "2026-08-29",
@@ -22,8 +173,107 @@
       "answer_B",
       "answer_C"
     ],
-    "before_sha256": "f581640328e290d7667927c553b1660a465b93f0ef380e664bba7ab7eb7d0e84",
-    "after_sha256": "90a876677dd198ebcdebd854301272f2b19aea714d0a61ddf67ae1dfb63db527"
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "f8fb0f6360744c8d0451d6c149d102891a86da6094fdb94858e156d074fc69c8",
+        "after": "63841dbafee1e0ff4111d970ddce7de34a79f6d39bc30584399f952835523066"
+      },
+      {
+        "id": "story",
+        "before": "ceed43e5df02ff39da59ed945898bd8923b4f99579eec60695695ddf07e28983",
+        "after": "892f53052a0c30dc825906a868031d200f1c40873c44f9acc6fb1dc04897b30f"
+      },
+      {
+        "id": "answer_A",
+        "before": "c97227ed263c908f9214f406bf8aed15c0a11b2fa80bcdaed0d55ad4d460193b",
+        "after": "d02fa0174e1a839f8e2999ce3526f654cf98cd3c059deedefdd0a5a8fb479434"
+      },
+      {
+        "id": "answer_B",
+        "before": "d01299d2346948fcfde22fbe8d87890663e35f0fb0031e3ec9187182a4185b63",
+        "after": "35d8a28af6de26b5064052b96b49d658b7b12021d0f473ac2b8af8fb7ef252a6"
+      },
+      {
+        "id": "answer_C",
+        "before": "0f55d0b36ef14cf5cadaac79474a1c57774f9ff38df108244d41ec7480322db2",
+        "after": "b31e6e0e19e854e60682490af2a26b40ae531f79c9985928fea061c52c598739"
+      }
+    ],
+    "before_sha256": "90a876677dd198ebcdebd854301272f2b19aea714d0a61ddf67ae1dfb63db527",
+    "after_sha256": "8fccd726d1a73c88b8c8f88955d347e38fda0fcec21db352386f22249e50f1b8"
+  },
+  {
+    "date": "2026-08-31",
+    "form": "型式五下集",
+    "changed_slots": [
+      "card_A_tail",
+      "card_B_tail",
+      "card_C_tail"
+    ],
+    "slot_sha256": [
+      {
+        "id": "card_A_tail",
+        "before": "15310939937e3dd7a8d61f19381b58feb314c28df13c59bb7e7dbc6713f3c003",
+        "after": "b89cdc815bb57c1d77f4b81443d3704e818dce3111e11be1b013042451a0c69c"
+      },
+      {
+        "id": "card_B_tail",
+        "before": "fdf7be52609bcaa085c232a5944032958eebb49271d2225a3144fe7934fdc72f",
+        "after": "855f83860d2e9bbb44a2c36f03932e43848faf1385ef41682f32200e02647669"
+      },
+      {
+        "id": "card_C_tail",
+        "before": "d7e349e384cdeff2de87bddeda7fb40935651793fdfca8850deec2891341dfef",
+        "after": "cd41acf2158542d7e63a0354324ccb0a3230ba091fe16dc804a97dfb6b95fc11"
+      }
+    ],
+    "before_sha256": "f98aa010267771e31e1e5905e7458527712c11f67f54f469a9c2e3fb75caa0d2",
+    "after_sha256": "4c344d15a31f596cd7f5c13e8aaebc529589cc95f6d8907119ec9b97123ca2fd"
+  },
+  {
+    "date": "2026-09-02",
+    "form": "型式二",
+    "changed_slots": [
+      "scene",
+      "reflection",
+      "action"
+    ],
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "8c8f273c14fcaf21b3a468304c93027d81b22ea14698b724ff5554908ad4b600",
+        "after": "df98eda1b1bbc4a13e2bcc7eda74e3aea9a2e4c7dc49d581510f20e36a1039b8"
+      },
+      {
+        "id": "reflection",
+        "before": "352ee5811c52b10294fb078a7a08093ce556276756ae9d0a5e528417154c278d",
+        "after": "69fd110eeb45d570d778404558f84358922ef22b0da714afe938e4cdf61ace41"
+      },
+      {
+        "id": "action",
+        "before": "d88c7b684048670d571a63a7a838f1a579ecb90343680ce10bfa94aea7b28f11",
+        "after": "5c7985a35b4ca6d88c919107ed549e75795baa3080df6cebac212c15d3c06683"
+      }
+    ],
+    "before_sha256": "6a488408cad0ab2379cf47ecf65f30ebb530d61c021ca3dac65643ba445b08c3",
+    "after_sha256": "d0991712ba142bbf9b909ed26e6283b7447087d5d017acec7da1143c39ccee7e"
+  },
+  {
+    "date": "2026-09-03",
+    "form": "型式三",
+    "changed_slots": [
+      "explain"
+    ],
+    "slot_sha256": [
+      {
+        "id": "explain",
+        "before": "7d91d0c96d08c5f8e45e460c295ac69259cd659a827fb971745edf3138795b53",
+        "after": "0d94da535d258a1ae06956fd934324572f02a261c9ce4fd78dcc4df9adc727ec"
+      }
+    ],
+    "before_sha256": "c367ca6537f0e50aa3870c22f722655f320f6814f37f548390c3d95ed95f1f9f",
+    "after_sha256": "33d01203fb7e70c7682333c75fac4aa3b4ae561033516169490b5a51c0c1a137"
   },
   {
     "date": "2026-09-05",
@@ -35,8 +285,143 @@
       "answer_B",
       "answer_C"
     ],
-    "before_sha256": "52f4cc92319000f7a79458d2ee0263677fd1daf866cc8e2abbfc825d14e6d334",
-    "after_sha256": "a2e627ba0dfb28c2583df21e6af4771a3c26fc17da42cb311a1ceac7500dc771"
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "daec7937a3ca7a2df6db0e17794471ee78946ceafc657369c2613832ce2cceec",
+        "after": "8b1351f4d83cf5ab7929a85142df1352368471011e3debfb7a63c2970f65a063"
+      },
+      {
+        "id": "story",
+        "before": "5da63bf4f9901e74ae2f77c4a2cb1b506dcdc0fc0159d4cc841f2315a68e7466",
+        "after": "dc5524b1e338d7d78b0f9e6643ecea9b3fcf7c129b3532754ca0385373311e3d"
+      },
+      {
+        "id": "answer_A",
+        "before": "7d1e43642aac148bbc5b7e818e184ee518c6ccb0dc929003ce7cc69843897907",
+        "after": "2a1e172b37b949968b21ca2e14b733501030b8d76d793d1609d274ebc79412a1"
+      },
+      {
+        "id": "answer_B",
+        "before": "196d26a935c5a437a4f271b8e895fdba8c7dde21a578da39f3c4c12d937ea6d1",
+        "after": "61603f320aab08e6f1714f17206ff69ace03cb9ceb6cd48204cf19588f9f7ae8"
+      },
+      {
+        "id": "answer_C",
+        "before": "2adc835f51ef1b515019bd867bc28a91a63aa2069f7b1313e86f43b66e8f27d2",
+        "after": "0abde064432716af445f61f80b2e3dc6ecf747b5f01f431a41165dba1d1b3e76"
+      }
+    ],
+    "before_sha256": "a2e627ba0dfb28c2583df21e6af4771a3c26fc17da42cb311a1ceac7500dc771",
+    "after_sha256": "e66bb5c7348962087ee20c660d01c9a486b40626ce562e7d9127db54a998f757"
+  },
+  {
+    "date": "2026-09-07",
+    "form": "型式五下集",
+    "changed_slots": [
+      "card_A_tail",
+      "card_B_tail",
+      "card_C_tail"
+    ],
+    "slot_sha256": [
+      {
+        "id": "card_A_tail",
+        "before": "46b4f36390afd31fc47a6958af7c3ec207a5c0471f64a64fe410c3a5bf5b76d8",
+        "after": "feaf9f1a871b2390b82fd0bc731c01a7761aacb6b11f32ca1db7b709352efb42"
+      },
+      {
+        "id": "card_B_tail",
+        "before": "88c5491e16fc457fbe85fde21ddbcbcf3828b27c5bad7006289465ac3a22f397",
+        "after": "cd82a3d1b417f8ef1684f6bc14dc5e7b62021dc52563ee831f0cfa04b2431145"
+      },
+      {
+        "id": "card_C_tail",
+        "before": "56828b185236250a0913704f67b4cc80d15ce8c8b3b958be5b614d3176238782",
+        "after": "65728b5f5bf2cfa96a9e02ac1b11456dfd8d26c905da40bf726cb4f420c29e18"
+      }
+    ],
+    "before_sha256": "dcc24cd80d4a11a870c2eed6888d594d779540be15f23bc49652c6f4ba87e8b9",
+    "after_sha256": "a61cbe16347a817de1ffaf5272f1c5c172484035942f5a80399806cf7f1a60aa"
+  },
+  {
+    "date": "2026-09-09",
+    "form": "型式一",
+    "changed_slots": [
+      "scene",
+      "answer_A",
+      "answer_B",
+      "answer_C",
+      "answer_D",
+      "answer_E",
+      "answer_F"
+    ],
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "fed21d2330c03538f8bcb84945230d42aced9b280edc04b2ad82a6c641ebca12",
+        "after": "8475c83eb6b18457cf47d781a0f7a9589d3b0619e308f7c9af35bbd6eedf4c1d"
+      },
+      {
+        "id": "answer_A",
+        "before": "2f920b769f5b4d45fe57aab654f676fd9c755a0ffb445e3a9f82a6e8cd6b9f20",
+        "after": "c793bba895f938e42602855c5b0d3bab8b88421b573849952991f4ef0f1c9390"
+      },
+      {
+        "id": "answer_B",
+        "before": "77e072512813172a5389ff15dc98211671a4b016bbac9c064fe169c7769f94bf",
+        "after": "dac1397fe5c9e63d0b54874dd2a2b4a0eddb1dd9c65d41a6715481efec3d599e"
+      },
+      {
+        "id": "answer_C",
+        "before": "3e2c7bc4aeade564fabda894f31ab86f0c6083b1a253631cc18aa0a6221c7cfe",
+        "after": "d2aaf2b6d44828c762bde283b751b7c6f27b42b5834cdc1e2adbf92c67b6b6f7"
+      },
+      {
+        "id": "answer_D",
+        "before": "544142ce902a88dfb94b95f617183e20593d46c18fcf64650571069ae0c725a0",
+        "after": "e5b06c1a83ea07a0d001cb4cbcbb0468a2c0be43c86b37dfec63da433df803eb"
+      },
+      {
+        "id": "answer_E",
+        "before": "0d33887be21afe1268232f8ad14530f5a94a41f2b680e71e8d1cade0f6bfbc1a",
+        "after": "2cee0dab12d62323ccdc17fbe3a0e7d10eebc3c3dbc787f63bcdaa2af43511fa"
+      },
+      {
+        "id": "answer_F",
+        "before": "a9b43ac070582f96efe265b0564b2a8dbc683c92f3d2c58f5280cdef881c7dae",
+        "after": "7da8b799d5d67e85cf5d208b44e42d15ce2fabd5d3d3d9ca286ff01a674c7aff"
+      }
+    ],
+    "before_sha256": "34d14d3fd4bda41431dca847fc1f0aa3ff700d1365f4a0b9243c558bb0dc36b0",
+    "after_sha256": "f5034dd4708bd74bd3e16e1ed5fbed39a1e62d6f435fa3c22415a8599eaedadc"
+  },
+  {
+    "date": "2026-09-10",
+    "form": "型式四",
+    "changed_slots": [
+      "scene",
+      "check",
+      "action"
+    ],
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "7e501786f17a6eb5867608ccf4ec37ed50bbf1df36a21d6c394e27b178ddd3da",
+        "after": "651a247194a6f26d4dc9cf8eb98ed9c74350931c8b2e525b5e94dc794daff5b0"
+      },
+      {
+        "id": "check",
+        "before": "6d593c7ccad58dfd8305ef0572cf0c90c98bcdd35e469b7569827d5c43b1a0ca",
+        "after": "9773e27340c031a2a54fc694e0f5caca05ce9ec76671b25f442f4c5faf4e34be"
+      },
+      {
+        "id": "action",
+        "before": "5feaa05afebb833f1f2b8da292ba0235a7bdfaa92fbb2960688e7bd493f98cff",
+        "after": "ad0efdcacc25f10180ac7b1de7eda6db3e809637d96a82228f33332fd802f848"
+      }
+    ],
+    "before_sha256": "be2761dd8c1beeb463f673a80ec7af1da2757305d18bce357a9e3c6a12332af9",
+    "after_sha256": "41825732c03ff03e23a69e250cb23665259400270ac4482ffc6bbbdd48ee880f"
   },
   {
     "date": "2026-09-12",
@@ -48,8 +433,107 @@
       "answer_B",
       "answer_C"
     ],
-    "before_sha256": "e6babb2f67711491af84781e7578dc730106e90d6279069d6f64db350bdecf86",
-    "after_sha256": "17dca3c75fc600cc8522083e02802a0ba30fd33c7c79dbd84519646274cdb6be"
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "be837c05cf1b29f0b9c378b0ccd87724ee931efd00f23f526bd197ebbea690c7",
+        "after": "a902e714ddf1ac5e3fa54f0bd5249cb4e572bce2b09ac875b58fc3f879d43d75"
+      },
+      {
+        "id": "story",
+        "before": "c657702dee88f53485c08c850cdd740dab8f6380d3f26439357fe9f960e30e7a",
+        "after": "0985378b1887aab0c7e3e934c0fd435e9e74cd5193bce8ab69d8553056fbb22a"
+      },
+      {
+        "id": "answer_A",
+        "before": "4c5061cf728a0cead50918aebedc49a3b8124d79583308065de73878cdafcb33",
+        "after": "a24ab909e9783caa62a48911b4a4771bdb0778edbc5eb5d4b8ba7ebe908e45b0"
+      },
+      {
+        "id": "answer_B",
+        "before": "a4d5f449ddd627e484f7ae576f72ea6a4017ef8bdacdc818b7d770f2183886de",
+        "after": "86cec9c381775048f6ecc6f17fe684f99eb425869285be378f09797fefe79eaa"
+      },
+      {
+        "id": "answer_C",
+        "before": "b114e95082c68b6766a3ac9fef258f5c7474169f5029572f92b61fd5497517fb",
+        "after": "740c9c1feb2e13aa368bcd1741a38b5c591fa1d388af9a2412dce4879cfaf8c9"
+      }
+    ],
+    "before_sha256": "17dca3c75fc600cc8522083e02802a0ba30fd33c7c79dbd84519646274cdb6be",
+    "after_sha256": "13bcc41ad50fbf521f81b2eccb97341357903c217be80baf243cfae6de41555b"
+  },
+  {
+    "date": "2026-09-14",
+    "form": "型式五下集",
+    "changed_slots": [
+      "card_A_tail",
+      "card_B_tail",
+      "card_C_tail"
+    ],
+    "slot_sha256": [
+      {
+        "id": "card_A_tail",
+        "before": "f81516d1f2daba519fff8c183c5231fa7b5dea2b53f36c6717cbc91838cc5eda",
+        "after": "fc8bb3eb3168247bb3f6f9d4f60fc1a40967ad55542bcd85188ba7336b5f692e"
+      },
+      {
+        "id": "card_B_tail",
+        "before": "3aa61b9c4feadea6854be30ff67e3e8b486d29942f882c4beac99a590efa9293",
+        "after": "abb6833be0b4a7b61dabb5b5279e0f565267b718c7c68d2743c1b100d152e3ba"
+      },
+      {
+        "id": "card_C_tail",
+        "before": "b4f42e115e0856d2165d96caff7e2f3105e31b157b01ee8321adc40b3b2a6d1f",
+        "after": "6ef1bc2b8fedebcb1e5f1775c1164cff3395c08a903081ceb15696f6bd15e219"
+      }
+    ],
+    "before_sha256": "e645fb94940567014df4b3f3cc4276915eb352c030daded4c2827dcf535a0efc",
+    "after_sha256": "3204b194eb35de8fd217bf208add69d86416d552fef7227106e2176af923c597"
+  },
+  {
+    "date": "2026-09-16",
+    "form": "型式二",
+    "changed_slots": [
+      "scene",
+      "reflection",
+      "action"
+    ],
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "d5c671f53e8fc00bc7ce84b65bc954684594705371944a6c4fb70b00b7acb39c",
+        "after": "e5927f619b2b137404dcebbec6e84f4a0e9ed2dd2e2351ff12606b94c057cadd"
+      },
+      {
+        "id": "reflection",
+        "before": "c5cd88ef002958e6de618f46761c44b11a6b36884bf29a62f4825a5bdc2f0ee4",
+        "after": "31534c82fb825a46513e6a555412496021e60ac9abd367236a1eb99dc07715ab"
+      },
+      {
+        "id": "action",
+        "before": "5c4151a23c7be8d5ca4907aeed9cbe883df03e6669c51a06cd4c46631e5252b0",
+        "after": "2e19610b95e1b3d66f5dbdef7a78c7b07ef136dbd75aace9d1099011ed563ca7"
+      }
+    ],
+    "before_sha256": "ca15d850cb5c27abc696d5344a497cfe752d4ff10c238f9fe28dcb27649ae491",
+    "after_sha256": "55a68f1aac5a5f545d17aca0d02e607530499020a33956a13ee8fcdc9e504945"
+  },
+  {
+    "date": "2026-09-17",
+    "form": "型式三",
+    "changed_slots": [
+      "explain"
+    ],
+    "slot_sha256": [
+      {
+        "id": "explain",
+        "before": "02b645332b4f01e8695c78a6b94771f98d51f3097f0b41daedfa74a7bcade47c",
+        "after": "9d2ff7776cc35250658def6257fc69418a2047042c110577ee9dd543d57a6512"
+      }
+    ],
+    "before_sha256": "b061e2fbb7168ef6dbf28a5d3554d078e50ef7b5cf5b20bc2f522c239c5636eb",
+    "after_sha256": "28d3318517627602a1f4f8987af5fc183823bebef28bfa88442f08e9467dbac7"
   },
   {
     "date": "2026-09-19",
@@ -61,8 +545,143 @@
       "answer_B",
       "answer_C"
     ],
-    "before_sha256": "b7a6f1d346ce12ada3853f6464a4b4d3cb0ab37d54e4d2fc173d7cfcd9b5dc70",
-    "after_sha256": "8fcbdc54981479ef7c1ab7201712ec04453e3b1b60848aa213f98115e2ff507f"
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "69d99a2d10d542781963d564ca795281aab91d63797c9c000fbce9b7a1eefd47",
+        "after": "e81ebafe8cbe4220700988367e41ad56f4bfa3146eea946ddc1bc5f6cd66cb76"
+      },
+      {
+        "id": "story",
+        "before": "fa399827afcfa4804193ab06decab80b494973354319761b9ab9f1a4db9d61bc",
+        "after": "982f9009b7c52d2ff7e35e34628274cbf212a888c77033338830ca19e25eb577"
+      },
+      {
+        "id": "answer_A",
+        "before": "de35df6358c0e9ca5e64c86e9170ac6c9b90653eea401c16a0551b0b64fc3c51",
+        "after": "b0fa023aa7f950f964e38987f5886bec7cebdd0c9a2a59af13af3e07dfa66a93"
+      },
+      {
+        "id": "answer_B",
+        "before": "239c5d49cb371d2df7ea7fc4fabccb4b1384c37b092c3cd721592d990deaab52",
+        "after": "9c7e67b150e2959a06595c3f75a874cfe677339f4c4e45a6f3545db775fc4bef"
+      },
+      {
+        "id": "answer_C",
+        "before": "4e9303a2874fc9bd65673acee90be8b554dfb359b91c892cb8020af43e94d3f0",
+        "after": "012a75d82ed3eb6c784047d9bb1c27fa032d2c1e3b744d80f336c023fbdfc797"
+      }
+    ],
+    "before_sha256": "8fcbdc54981479ef7c1ab7201712ec04453e3b1b60848aa213f98115e2ff507f",
+    "after_sha256": "303c9d53d5b678ce016086f9ce38b5a7870a80009fb8321f42473c46d09718b7"
+  },
+  {
+    "date": "2026-09-21",
+    "form": "型式五下集",
+    "changed_slots": [
+      "card_A_tail",
+      "card_B_tail",
+      "card_C_tail"
+    ],
+    "slot_sha256": [
+      {
+        "id": "card_A_tail",
+        "before": "99ca7f739462ca5c27754ef27c376ac3804d37389d22d977234ad8a51c66a365",
+        "after": "7c49b30ae5b493dc756fcc22f0fb54c19a44d952acaeac012c34645ff186392b"
+      },
+      {
+        "id": "card_B_tail",
+        "before": "ce059ad46fbecf5d4881a2069cf8a3599312bc9f9695a2095ab50995caec4fe0",
+        "after": "24afe1b09c48f5c17cd3f8fd44dcfbe3ed3033e77e7d352bdaa97473247f7ab8"
+      },
+      {
+        "id": "card_C_tail",
+        "before": "f7a3f2c463915a5ee9a9af5bdb28cf3ed4730e305a0b919ae0e99fa44cd3a8f1",
+        "after": "ebe7c6df039394ac8ee730688981e514391dc51eb1889483357fab8caf9f1e0f"
+      }
+    ],
+    "before_sha256": "0c5465ded197e0478661c4c41facf78116f63d0b6feb0262891f24f71da05a7a",
+    "after_sha256": "04835e8748026ae6db48e6edcbf70fceb54062ff5b4f3782f7baeea11af4c4c2"
+  },
+  {
+    "date": "2026-09-23",
+    "form": "型式一",
+    "changed_slots": [
+      "scene",
+      "answer_A",
+      "answer_B",
+      "answer_C",
+      "answer_D",
+      "answer_E",
+      "answer_F"
+    ],
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "055ff525fa39ebc155f4552fab8045d9a25d14ab6c0ac3730e1ed4e73c5955aa",
+        "after": "9486be639f8aad4163e3c38193deed875b36cfc13d6ec73feab3a2293f22093e"
+      },
+      {
+        "id": "answer_A",
+        "before": "bea1491fff6841340038e839fe074ad6da0fb0baadf36a6936b210769e165156",
+        "after": "6aaa6ccb4d6b0addeb1af1828b21ad18e1c6cb6ff3a6627b532962f7cd5acbcd"
+      },
+      {
+        "id": "answer_B",
+        "before": "f48b671c7e5f20dc456096899ece59f6caedd4cfead2641a9ed9bf248a3d767c",
+        "after": "5304a24c459873612463b67b86e9b8896c70afdf475ee85021e557f397a607a9"
+      },
+      {
+        "id": "answer_C",
+        "before": "dd0bb2d1d54f648384686b20b3a2c56f557dacc289beb1dc6bb5982396b7301d",
+        "after": "9a9bc9814fdd1f0d688f8341ba1ec02cdcbc5a677cf1b9094f535d05f997336c"
+      },
+      {
+        "id": "answer_D",
+        "before": "3d137522ffad2dc9886ba7b486b9887949afd44e44155a75bf2c054111bbefdf",
+        "after": "51e4b510b12ffce098a9f9cb463722f614b22794311777d4db46e6d887a737c3"
+      },
+      {
+        "id": "answer_E",
+        "before": "6a4470c9f7d45d160996587e59e325b27c17cff11d14faf7894cc053d41759d5",
+        "after": "165b1bb921d9b5e3e4a2a5c5d244e7dc67881eb5897010174fa690470cfd9a43"
+      },
+      {
+        "id": "answer_F",
+        "before": "9cecce03aacbe0ea75721c4f5b587abd042b20352442973aeadd6e81139cad6a",
+        "after": "dda36c0ddb62dde47b8cb5baa7e8c3da40bd7c0f52c2a4f15dbd96925f30d59c"
+      }
+    ],
+    "before_sha256": "5deb2547bef9d1142b5898abf49865251605b813cf74b09beebf7a9d49ef26d2",
+    "after_sha256": "cf25e8d445e1bc166bd1f383a075223f51282085593d017cf5088352148bd6c5"
+  },
+  {
+    "date": "2026-09-24",
+    "form": "型式四",
+    "changed_slots": [
+      "scene",
+      "check",
+      "action"
+    ],
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "98bb7fdca833c705d50123587bdf6dce0b6581c741b01bb4278f63117935812c",
+        "after": "cb889300dc4dc0e967e956f33c325e9c93ac2fe45514e2d071b9475a2bb5dca6"
+      },
+      {
+        "id": "check",
+        "before": "c21593a488dc54860cf592da269c8ef3487bf7d42b26e835233b0da9c335a951",
+        "after": "ae5c2c065f225cc0bc36a9a6bb1f7a4d84f73b1387183b0d1b12c11dfd1c9a6d"
+      },
+      {
+        "id": "action",
+        "before": "62300be9018b245b744edcaa89badf59dc3e98864d9218239b6084de5d567316",
+        "after": "667e0e273effb278a41fe4a41c566ab0e031b9d197b3690391054f600ddfcde8"
+      }
+    ],
+    "before_sha256": "76d9175e31edc7b6c84de79432a48786d85cd65ead428396058a7a727487a267",
+    "after_sha256": "730a795b4cdfe9deac4dbf8b572c41c459423dfa84fa81b1a76cb3b6f3489f29"
   },
   {
     "date": "2026-09-26",
@@ -74,7 +693,34 @@
       "answer_B",
       "answer_C"
     ],
-    "before_sha256": "8f8f4f43674907d0dbe03fc4441026d1d8e6ac4e09ea6301e8241d53295327fe",
-    "after_sha256": "6aa08168231bc2b172406a68ff113b5ef9e7dc3923359eeb41a80fbd44de35f0"
+    "slot_sha256": [
+      {
+        "id": "scene",
+        "before": "531a4442c41a2be46f222683e159a6392fed3e1e8923263ed0d6344dad0a1682",
+        "after": "110d27b732edef8a20c535c2ecf3def1545b42da09f5287d7a95718baf32e811"
+      },
+      {
+        "id": "story",
+        "before": "29155019e7ce9e8539963938731f8bf059aa020837bf279400f7e3501956bd45",
+        "after": "b8d698679ca374a89dcf331383a8907e295f459a45fbf4b7530e4f0c49475e7f"
+      },
+      {
+        "id": "answer_A",
+        "before": "60fa042ad9072fdc953ae4fbe4a0ad596af50a33faf7615eade3c1f60e81bb13",
+        "after": "56bbe07438133e6664597c899836034ef9e6fd0dfa91660ef290a4f97cbfc53b"
+      },
+      {
+        "id": "answer_B",
+        "before": "d73dd7f378750bc4de008504d1aebb7c9028a85f062a4fca0083ffbd73b1d6c6",
+        "after": "da416ac80cfbe9b21ccf38bd886d6227dc4eb50f442080db3097f12b49d44004"
+      },
+      {
+        "id": "answer_C",
+        "before": "a2a757746c33209b983b785744efa8abe07db079417102cb663e3053f299317b",
+        "after": "f880c3ee8906cbebf0fdfa002edb55e6d79339e3b6a712c5f6faadc023ebfe6b"
+      }
+    ],
+    "before_sha256": "fc3d2d5e3ec1a7bc3b32cadb5187cb83589bb4e74758d2b4d14bce1f21d41e5c",
+    "after_sha256": "62c7b43d3ca891583bfd239d3395b21f8b9eda7bb3e52d9b150431995bb98d5c"
   }
 ]
