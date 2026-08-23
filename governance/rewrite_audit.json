@@ -1,0 +1,262 @@
+[
+  {
+    "date": "2026-08-20",
+    "form": "型式三",
+    "changed_slots": [
+      "explain"
+    ],
+    "before_sha256": "7472ab26baffde7a5d8162a0cc635a25ef6630681e1f0a123fc36fa9e5ba27da",
+    "after_sha256": "49a73d9d042149df0e19940190163967f875e410479e26d3cf5652dda5985359"
+  },
+  {
+    "date": "2026-08-22",
+    "form": "型式五上集",
+    "changed_slots": [
+      "scene",
+      "story",
+      "answer_A",
+      "answer_B",
+      "answer_C"
+    ],
+    "before_sha256": "0fdf07b335d5b88a4ece9cf9a852b311397a7410d98c6e30c104c8956a38d455",
+    "after_sha256": "c4cddc8903bb7f8118e3016516699d8d753b1e64c4a5b7436357bc5be2ec6616"
+  },
+  {
+    "date": "2026-08-24",
+    "form": "型式五下集",
+    "changed_slots": [
+      "card_A_tail",
+      "card_B_tail",
+      "card_C_tail"
+    ],
+    "before_sha256": "a0c97e766c15e4320c28a28c34eba33c89cedacf562be587f396884221b89a40",
+    "after_sha256": "da93851bf31c207a709304e9085d292fe19063dcacc484c4f3443363dd760fcb"
+  },
+  {
+    "date": "2026-08-26",
+    "form": "型式一",
+    "changed_slots": [
+      "scene",
+      "answer_A",
+      "answer_B",
+      "answer_C",
+      "answer_D",
+      "answer_E",
+      "answer_F"
+    ],
+    "before_sha256": "cfe7d384e0612f41db2782263c8577ff9ba1e2fcf836fc6097191670c2c57446",
+    "after_sha256": "e3d08ec107be69ad33b34b360cd8e8479de7ac9ca60dafd12b0278f8d76ee240"
+  },
+  {
+    "date": "2026-08-27",
+    "form": "型式四",
+    "changed_slots": [
+      "scene",
+      "check",
+      "action"
+    ],
+    "before_sha256": "9cfedda05e7279c7d1834a13235f4b434a95554c8514142e6ef79d3da8811f96",
+    "after_sha256": "266b5b6d261de6231b408eb20cebbabdb27882a52bb4a3e4136cda55e6024af0"
+  },
+  {
+    "date": "2026-08-29",
+    "form": "型式五上集",
+    "changed_slots": [
+      "scene",
+      "story",
+      "answer_A",
+      "answer_B",
+      "answer_C"
+    ],
+    "before_sha256": "f417bac7fc1d2b723690dc254b86241aec5f69bd4f05e71e70677677e4897ada",
+    "after_sha256": "0b528b081f06e4a7f47c1069288bffee7b8a166424f56447f1f89cfd53b91e8b"
+  },
+  {
+    "date": "2026-08-31",
+    "form": "型式五下集",
+    "changed_slots": [
+      "card_A_tail",
+      "card_B_tail",
+      "card_C_tail"
+    ],
+    "before_sha256": "b2a3ea992ae8253215036e78fbb692502503d593d448eb2ceb317350016814c5",
+    "after_sha256": "ee20e86feb16a5b764b6e325871724746369a570f05d789bd855dcf8d04ee22b"
+  },
+  {
+    "date": "2026-09-02",
+    "form": "型式二",
+    "changed_slots": [
+      "scene",
+      "reflection",
+      "action"
+    ],
+    "before_sha256": "695865b9eb7e014210e05840ea215a2dad744f23270db32f51cf2a626d36e391",
+    "after_sha256": "a3bbbc91f572970d87877600fb5e932cdefbbf068d6061bc556e95163c421a5d"
+  },
+  {
+    "date": "2026-09-03",
+    "form": "型式三",
+    "changed_slots": [
+      "explain"
+    ],
+    "before_sha256": "2fa03d93ba636e8dd6826d69229bd6413332a02f7c27a36e12746f0d98a456a3",
+    "after_sha256": "1cb7560418d2ad6d371ce9d845516d69eae9663db9a5d21a0f00a4e6a1de8a8d"
+  },
+  {
+    "date": "2026-09-05",
+    "form": "型式五上集",
+    "changed_slots": [
+      "scene",
+      "story",
+      "answer_A",
+      "answer_B",
+      "answer_C"
+    ],
+    "before_sha256": "74c56df9ea54b3d5abd35c8cf6103dd7d59e923d5810b2000b0486ec4d3a80de",
+    "after_sha256": "4e8480f7a1e9b8876c191e6be59edcd1d4549c663870460b8b411c5b85d0c69a"
+  },
+  {
+    "date": "2026-09-07",
+    "form": "型式五下集",
+    "changed_slots": [
+      "card_A_tail",
+      "card_B_tail",
+      "card_C_tail"
+    ],
+    "before_sha256": "d9b6486139081ff2f950f034f21ae00d8b6fd12c451d91bcf25e6ab3b79c8db0",
+    "after_sha256": "94cbb09469adec196d71a04a7b5b0eabf3f3da0d8fc1444a1f432f81cda4d2de"
+  },
+  {
+    "date": "2026-09-09",
+    "form": "型式一",
+    "changed_slots": [
+      "scene",
+      "answer_A",
+      "answer_B",
+      "answer_C",
+      "answer_D",
+      "answer_E",
+      "answer_F"
+    ],
+    "before_sha256": "3733410cdd45e756feaca74ca878e87e07583a77269b72c4eaddbe4c73b35477",
+    "after_sha256": "ffa380ba2b8ec0ae6273e4ebf735943251659d6c5a4a4dc26e4e26327a09eca2"
+  },
+  {
+    "date": "2026-09-10",
+    "form": "型式四",
+    "changed_slots": [
+      "scene",
+      "check",
+      "action"
+    ],
+    "before_sha256": "6a26f1a273577412b5954ca6afa970acb01ccda4ec22b8eafee528ffb0251bea",
+    "after_sha256": "c33c2b6c4dcb28ead34eab8ebf51abd67b4642facfa06baeae8e5a002f5df53d"
+  },
+  {
+    "date": "2026-09-12",
+    "form": "型式五上集",
+    "changed_slots": [
+      "scene",
+      "story",
+      "answer_A",
+      "answer_B",
+      "answer_C"
+    ],
+    "before_sha256": "426d27c9db5b090cee94ede0d5496f6f79403e365ba214d1398d3ec39f5bdfce",
+    "after_sha256": "5b33445634c248eaa68f42d6694213729567b7acf3303fc641312d685e10206c"
+  },
+  {
+    "date": "2026-09-14",
+    "form": "型式五下集",
+    "changed_slots": [
+      "card_A_tail",
+      "card_B_tail",
+      "card_C_tail"
+    ],
+    "before_sha256": "6f8f990d2f8e391d934dff8feaf7df42991e239e7bc51558fa7707664830a326",
+    "after_sha256": "487287cda046fa3eb0b83865f3a0de8f8207f88f760418a54de4a7bdcd248f82"
+  },
+  {
+    "date": "2026-09-16",
+    "form": "型式二",
+    "changed_slots": [
+      "scene",
+      "reflection",
+      "action"
+    ],
+    "before_sha256": "11851ad54457d3811f3df3b2d183f10b861fde6ef140e016107bbec32671a216",
+    "after_sha256": "84a2685b124e46be7fadf2359c5550bc955ce50697ea45866ac4493e7baf2524"
+  },
+  {
+    "date": "2026-09-17",
+    "form": "型式三",
+    "changed_slots": [
+      "explain"
+    ],
+    "before_sha256": "34796f2c8c986f3292e2ec9cc9e1bca8855ec394247310fb1d810d1499a8fe58",
+    "after_sha256": "9ce9817ce24634a46b9ad78c0e5691da9753188a2ab2ca519e00faa7076ca129"
+  },
+  {
+    "date": "2026-09-19",
+    "form": "型式五上集",
+    "changed_slots": [
+      "scene",
+      "story",
+      "answer_A",
+      "answer_B",
+      "answer_C"
+    ],
+    "before_sha256": "d11c145d8d52bde1646ceb2fa698ae79238ea2a8ec51013da04e5f5ca822cc02",
+    "after_sha256": "cd671d73dd9b1b695497ebe5080e7dede28d8692a4bf98b9c52a0849c0bb5b70"
+  },
+  {
+    "date": "2026-09-21",
+    "form": "型式五下集",
+    "changed_slots": [
+      "card_A_tail",
+      "card_B_tail",
+      "card_C_tail"
+    ],
+    "before_sha256": "02f92fbc95ecb13cbdd2f751390f1f7f92961429473fda06be0d19c66e791a50",
+    "after_sha256": "16b81236234179f32a6e02d84d512fd1c3a2af8fec605c83a38f21e98defecff"
+  },
+  {
+    "date": "2026-09-23",
+    "form": "型式一",
+    "changed_slots": [
+      "scene",
+      "answer_A",
+      "answer_B",
+      "answer_C",
+      "answer_D",
+      "answer_E",
+      "answer_F"
+    ],
+    "before_sha256": "4ce07cebc2950707afa073d1570a5b13b253418dea8dab9cc841f170620522e9",
+    "after_sha256": "31a48bff60063f20a3714424735c4d956df22fada674018d7fcc5855af065b51"
+  },
+  {
+    "date": "2026-09-24",
+    "form": "型式四",
+    "changed_slots": [
+      "scene",
+      "check",
+      "action"
+    ],
+    "before_sha256": "69bc566e49829efa5e465dc880a1fc108c5d799070c388d8c3abc0926bac1134",
+    "after_sha256": "602f194279aa2977cdc116db9db0749090678accb51627fdd0fb2f62a9a8a125"
+  },
+  {
+    "date": "2026-09-26",
+    "form": "型式五上集",
+    "changed_slots": [
+      "scene",
+      "story",
+      "answer_A",
+      "answer_B",
+      "answer_C"
+    ],
+    "before_sha256": "662543d439ee72b2be303f61573e4a22ce3875ce98f12f9f59dd50b27e4ac967",
+    "after_sha256": "97ff27a481ed31e6efbe23db1fffad0e4db39f8ee137d6582d5f75c18a93be49"
+  }
+]
