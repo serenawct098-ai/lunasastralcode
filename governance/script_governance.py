@@ -36,10 +36,10 @@ PUBLISHED = {"2026-08-17", "2026-08-18"}
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
 GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
-STANDARD_SHA256 = "a5abdb4fa1e799478ee6ec3d1985592d8ce1868723d77ba75a4439587b9f0756"
-GUIDE_SHA256 = "a866819e9dbba396ab19ca74ab70e22347055a220f0688bf2abe2c468a976844"
-PLAYBOOK_SHA256 = "3d7dffdd926acc037907fd46ce0fffd58a0f964808985e49e496c48afb20d616"
-DYNAMIC_RULES_SHA256 = "debc63551ca63fdd527eab0e04ed1562f0c2f9581d0704709d5b99470d227897"
+STANDARD_SHA256 = "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0"
+GUIDE_SHA256 = "137abee479ab42eaa8f275f25239b1297de404240ce278a9fe5d0026bb99a1d2"
+PLAYBOOK_SHA256 = "4cdf6c5a275d2d3ace3d2cc1d953f3fe947822537c134c1c698539fecc2bfcd9"
+DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
     "型式二": "點擊「追蹤」隨時陪伴在你身邊～",
@@ -66,9 +66,6 @@ ANCHOR_PATTERN = r"西北|正北|正東|正西|正南|東北|東南|西南|中�
 PRECISE_ANCHOR_PATTERN = r"(?:早上|下午|晚上)\s*\d{1,2}\s*(?:[–—\-至到])\s*\d{1,2}\s*(?:點|時)|\d+\s*(?:步|分鐘|天)"
 SOFTENERS = ("可能", "也許", "看起來", "未必")
 READABILITY_BLOCKED = ("正處於", "若有若無", "進退兩難", "心有不甘", "牽動", "軸線", "收斂", "承接空缺", "補位", "判斷權", "推演", "脈絡", "能量狀態", "可落實", "局面", "不替沉默加上意思", "把空下來的事接走", "替別人的沉默找理由", "把事情想得更遠")
-# Clockwise geographic ring, derived directly from each palace's direction.
-CLOCKWISE_PALACE_RING = (1, 8, 3, 4, 9, 2, 7, 6)
-
 
 def sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
@@ -254,18 +251,6 @@ def qi_category(qi: str) -> str:
     return "三奇" if qi in ("乙", "丙", "丁") else "六儀"
 
 
-def spirit_placement(rules: dict, value_star: str, dun: str = "陰遁") -> dict[int, str]:
-    star = rules["nine_stars_九星"][value_star]
-    start_palace = 2 if star["palace"] == 5 else star["palace"]  # A1
-    start_index = CLOCKWISE_PALACE_RING.index(start_palace)
-    step = 1 if dun == "陽遁" else -1
-    placement = {}
-    for offset, spirit in enumerate(rules["eight_spirits_八神"]["sequence_order"]):
-        palace = CLOCKWISE_PALACE_RING[(start_index + step * offset) % len(CLOCKWISE_PALACE_RING)]
-        placement[palace] = spirit
-    return placement
-
-
 def auspice(rules: dict, star: str, door: str, spirit: str, qi: str) -> tuple[int, str]:
     matrix = rules["auspice_judgment_matrix_吉凶判斷矩陣"]
     score = (
@@ -291,19 +276,21 @@ def combo_key(combo: dict) -> str:
     return "|".join((combo["star"], combo["door"], combo["spirit"], combo["qi"], combo["hour"]))
 
 
-def derive_combo(rules: dict, star: str, door: str, qi: str, hour: str) -> dict:
-    """Recompute every downstream field from the immutable five-tuple under the current rule schema."""
+def derive_combo(rules: dict, star: str, door: str, spirit: str, qi: str, hour: str) -> dict:
+    """Recompute derived display fields from an independently sampled five-tuple."""
     door_data = rules["eight_doors_八門"][door]
-    placement = spirit_placement(rules, star, "陰遁")
-    spirit = placement[door_data["palace"]]  # B1
     score, label = auspice(rules, star, door, spirit, qi)
     combo = {
-        "star": star, "door": door, "spirit": spirit, "qi": qi, "hour": hour,
-        "dun": "陰遁", "value_star": star,
-        "value_star_palace": 2 if rules["nine_stars_九星"][star]["palace"] == 5 else rules["nine_stars_九星"][star]["palace"],
-        "door_palace": door_data["palace_name"], "direction": door_data["direction"],
-        "spirit_placement": {str(key): value for key, value in placement.items()},
-        "score": score, "auspice": label,
+        "star": star,
+        "door": door,
+        "spirit": spirit,
+        "qi": qi,
+        "hour": hour,
+        "sampling_model": "independent_v2",
+        "door_palace": door_data["palace_name"],
+        "direction": door_data["direction"],
+        "score": score,
+        "auspice": label,
     }
     combo["key"] = combo_key(combo)
     return combo
@@ -313,11 +300,16 @@ def generate_combo(rules: dict, occupied: set[str], used_stars: set[str], used_d
     rng = random.SystemRandom()
     stars = [item for item in rules["nine_stars_九星"] if item not in used_stars]
     doors = [item for item in rules["eight_doors_八門"] if item not in used_doors]
+    spirits = list(rules["eight_spirits_八神"]["category"])
     qi_values = list(rules["three_qi_six_yi_三奇六儀"]["三奇"]) + list(rules["three_qi_six_yi_三奇六儀"]["六儀"])
     hours = rules["time_derivation_rule_時間推導規則"]["shi_chen_十二時辰"]
     for _ in range(500):
-        star, door, qi, hour = rng.choice(stars), rng.choice(doors), rng.choice(qi_values), rng.choice(hours)
-        combo = derive_combo(rules, star, door, qi, hour)
+        star = rng.choice(stars)
+        door = rng.choice(doors)
+        spirit = rng.choice(spirits)
+        qi = rng.choice(qi_values)
+        hour = rng.choice(hours)
+        combo = derive_combo(rules, star, door, spirit, qi, hour)
         if combo["key"] not in occupied:
             return combo
     raise RuntimeError("500 次抽樣後仍無可用盤象組合。")
@@ -331,10 +323,10 @@ def pair_map(posts: list[tuple[Path, str, str, str]]) -> dict[str, str]:
 
 def dynamic_assignments(posts: list[tuple[Path, str, str, str]], registry: dict, rules: dict, persist: bool) -> dict[str, dict[str, dict]]:
     assignments = deepcopy(registry.get("assignments", {}))
-    # v1.1 correction safety: preserve the five-tuple, but always recompute all derived fields.
+    # v2.0 safety: preserve the independently sampled five-tuple, then recompute display fields.
     for date, values in assignments.items():
         for label, combo in list(values.items()):
-            values[label] = derive_combo(rules, combo["star"], combo["door"], combo["qi"], combo["hour"])
+            values[label] = derive_combo(rules, combo["star"], combo["door"], combo["spirit"], combo["qi"], combo["hour"])
     occupied = {item.get("five_tuple") for item in registry.get("recent_posts", []) if item.get("five_tuple")}
     for values in assignments.values():
         for combo in values.values():
@@ -368,11 +360,12 @@ def dynamic_assignments(posts: list[tuple[Path, str, str, str]], registry: dict,
         registry["assignments"] = assignments
         registry["recent_posts"] = records[-90:]
         registry["schema_source_sha256"] = DYNAMIC_RULES_SHA256
+        registry["schema_version"] = "2.0"
         registry["decision_log"] = {
-            "value_star_rule": "九星抽樣值直接視為值符星",
-            "tianqin_start_rule": "天禽星抽中為值符星時，以寄坤二宮作八神起點",
-            "spirit_selection_rule": "取門的固有宮位所落八神為卡面神值與吉凶計分神",
-            "dun_direction_rule": "本輪 22 篇日期使用陰遁逆時針",
+            "sampling_rule": "九星、八門、八神、奇儀、時辰均為獨立隨機抽樣輸入",
+            "direction_rule": "門的固有宮位為卡面主方位",
+            "auspice_rule": "以獨立抽樣的星、門、神、奇儀 category 權重加總映射五級吉凶",
+            "dedup_rule": "星＋門＋神＋儀＋時辰五元組於近 30 篇內不得重複",
         }
         REGISTRY_FILE.write_text(json.dumps(registry, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return assignments
@@ -731,9 +724,10 @@ def audit() -> int:
         assignments = dynamic_assignments(posts, registry, rules, persist=False)
         for stored_date, values in registry.get("assignments", {}).items():
             for stored_label, stored_combo in values.items():
-                derived = derive_combo(rules, stored_combo["star"], stored_combo["door"], stored_combo["qi"], stored_combo["hour"])
-                if stored_combo != derived:
-                    issues.append(f"{stored_date} {stored_label} 去重紀錄衍生欄位未依 v1.1 五元組重算。")
+                derived = derive_combo(rules, stored_combo["star"], stored_combo["door"], stored_combo["spirit"], stored_combo["qi"], stored_combo["hour"])
+                fields = ("star", "door", "spirit", "qi", "hour", "door_palace", "direction", "score", "auspice", "key")
+                if any(stored_combo.get(field) != derived[field] for field in fields):
+                    issues.append(f"{stored_date} {stored_label} 五元組或顯示欄位未與 v2.0 規則一致。")
     except Exception as exc:
         print(json.dumps({"posts_checked": 22, "pass": False, "issues": issues + [str(exc)]}, ensure_ascii=False, indent=2))
         return 1
@@ -762,9 +756,8 @@ def write_rule_map() -> None:
         "dynamic_panxiang": {
             "source": "governance/dynamic_panxiang_rules.json",
             "source_sha256": DYNAMIC_RULES_SHA256,
-            "input": ["九星", "八門", "奇儀", "時辰"],
-            "value_star_rule": "九星抽樣值直接視為值符星；天禽星以寄坤二宮作八神起點。",
-            "spirit_rule": "陰遁逆時針排列八神，取門之固有宮位所落八神為卡面神值與吉凶計分神。",
+            "input": ["九星", "八門", "八神", "奇儀", "時辰"],
+            "sampling_rule": "九星、八門、八神、奇儀、時辰均為獨立隨機抽樣輸入；八神不由星或門推導。",
             "direction_rule": "門的固有宮位為主方位。",
             "auspice_rule": "以星、門、神、奇儀 category 權重加總映射大吉／中吉／平／中凶／大凶。",
             "dedup_rule": "星＋門＋神＋儀＋時辰五元組於近 30 篇內不得重複。",
@@ -793,6 +786,26 @@ def write_rule_map() -> None:
         ],
     }
     RULE_MAP_FILE.write_text(json.dumps(rule_map, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def migrate_registry(args) -> int:
+    load_rules()
+    registry = load_json(REGISTRY_FILE)
+    assignment_count = sum(len(values) for values in registry.get("assignments", {}).values())
+    recent_post_count = len(registry.get("recent_posts", []))
+    registry["schema_version"] = "2.0"
+    registry["schema_source_sha256"] = DYNAMIC_RULES_SHA256
+    registry["decision_log"] = {
+        "sampling_rule": "九星、八門、八神、奇儀、時辰均為獨立隨機抽樣輸入",
+        "direction_rule": "門的固有宮位為卡面主方位",
+        "auspice_rule": "以獨立抽樣的星、門、神、奇儀 category 權重加總映射五級吉凶",
+        "dedup_rule": "星＋門＋神＋儀＋時辰五元組於近 30 篇內不得重複",
+    }
+    registry["historical_assignment_policy"] = "既有五元組保持原值與原有衍生欄位；只更新 schema 治理中繼資料，不重新抽樣或覆寫未發布腳本內容。"
+    if not args.dry_run:
+        REGISTRY_FILE.write_text(json.dumps(registry, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(json.dumps({"dry_run": args.dry_run, "assignments_preserved": assignment_count, "recent_posts_preserved": recent_post_count}, ensure_ascii=False))
+    return 0
 
 
 def sync(args) -> int:
@@ -865,6 +878,8 @@ def main() -> int:
     sub = parser.add_subparsers(dest="command", required=True)
     sync_parser = sub.add_parser("sync", help="Synchronize governance map and latest fixed typography.")
     sync_parser.add_argument("--dry-run", action="store_true")
+    migrate_parser = sub.add_parser("migrate-registry", help="Migrate stored five-tuples to the independent sampling schema.")
+    migrate_parser.add_argument("--dry-run", action="store_true")
     rewrite_parser = sub.add_parser("rewrite", help="Rewrite registered variable prose for every unpublished post.")
     rewrite_parser.add_argument("--dry-run", action="store_true")
     rewrite_parser.add_argument("--audit", type=Path, default=AUDIT_FILE)
@@ -872,6 +887,8 @@ def main() -> int:
     args = parser.parse_args()
     if args.command == "sync":
         return sync(args)
+    if args.command == "migrate-registry":
+        return migrate_registry(args)
     if args.command == "rewrite":
         return rewrite(args)
     return audit()

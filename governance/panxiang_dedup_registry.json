@@ -1,10 +1,10 @@
 {
-  "schema_source_sha256": "debc63551ca63fdd527eab0e04ed1562f0c2f9581d0704709d5b99470d227897",
+  "schema_source_sha256": "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5",
   "decision_log": {
-    "value_star_rule": "九星抽樣值直接視為值符星",
-    "tianqin_start_rule": "天禽星抽中為值符星時，以寄坤二宮作八神起點",
-    "spirit_selection_rule": "取門的固有宮位所落八神為卡面神值與吉凶計分神",
-    "dun_direction_rule": "本輪 22 篇日期使用陰遁逆時針"
+    "sampling_rule": "九星、八門、八神、奇儀、時辰均為獨立隨機抽樣輸入",
+    "direction_rule": "門的固有宮位為卡面主方位",
+    "auspice_rule": "以獨立抽樣的星、門、神、奇儀 category 權重加總映射五級吉凶",
+    "dedup_rule": "星＋門＋神＋儀＋時辰五元組於近 30 篇內不得重複"
   },
   "recent_posts": [
     {
@@ -2428,5 +2428,7 @@
         "key": "天蓬星|杜門|玄武|乙|亥"
       }
     }
-  }
+  },
+  "schema_version": "2.0",
+  "historical_assignment_policy": "既有五元組保持原值與原有衍生欄位；只更新 schema 治理中繼資料，不重新抽樣或覆寫未發布腳本內容。"
 }

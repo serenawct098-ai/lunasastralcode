@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+"""Cross-file contract checks for independent dynamic panxiang sampling v2."""
+from __future__ import annotations
+
+import importlib.util
+import json
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+MODULE_PATH = Path(__file__).with_name("script_governance.py")
+SPEC = importlib.util.spec_from_file_location("script_governance", MODULE_PATH)
+assert SPEC and SPEC.loader
+GOVERNANCE = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(GOVERNANCE)
+
+
+class GovernanceContractV2Test(unittest.TestCase):
+    def test_rule_map_and_registry_lock_the_independent_five_tuple(self) -> None:
+        rule_map = json.loads((ROOT / "governance/latest_playbook_rule_map.json").read_text(encoding="utf-8"))
+        registry = json.loads((ROOT / "governance/panxiang_dedup_registry.json").read_text(encoding="utf-8"))
+
+        self.assertEqual(rule_map["playbook_sha256"], GOVERNANCE.PLAYBOOK_SHA256)
+        self.assertEqual(rule_map["dynamic_panxiang"]["source_sha256"], GOVERNANCE.DYNAMIC_RULES_SHA256)
+        self.assertEqual(rule_map["dynamic_panxiang"]["input"], ["九星", "八門", "八神", "奇儀", "時辰"])
+        self.assertIn("八神不由星或門推導", rule_map["dynamic_panxiang"]["sampling_rule"])
+        self.assertEqual(registry["schema_version"], "2.0")
+        self.assertEqual(registry["schema_source_sha256"], GOVERNANCE.DYNAMIC_RULES_SHA256)
+        self.assertIn("八神", registry["decision_log"]["sampling_rule"])
+        self.assertIn("不重新抽樣", registry["historical_assignment_policy"])
+
+    def test_playbook_contract_and_direct_spirit_input_are_current(self) -> None:
+        rules = GOVERNANCE.load_rules()
+        playbook = (ROOT / "lunas_astral_code_master_playbook.md").read_text(encoding="utf-8")
+        combo = GOVERNANCE.derive_combo(rules, "天心星", "開門", "白虎", "乙", "子")
+
+        self.assertEqual(GOVERNANCE.current_contract_issues(), [])
+        self.assertIn("五組，五值均為獨立隨機抽樣輸入", playbook)
+        self.assertIn("八神不由九星、八門、宮位或陰陽遁方向推導", playbook)
+        self.assertEqual(combo["spirit"], "白虎")
+        self.assertEqual(combo["key"], "天心星|開門|白虎|乙|子")
+        self.assertNotIn("spirit_placement", combo)
+
+
+if __name__ == "__main__":
+    unittest.main()

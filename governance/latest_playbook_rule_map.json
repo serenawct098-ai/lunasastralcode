@@ -1,18 +1,18 @@
 {
   "playbook_source": "lunas_astral_code_master_playbook.md",
-  "playbook_sha256": "3d7dffdd926acc037907fd46ce0fffd58a0f964808985e49e496c48afb20d616",
+  "playbook_sha256": "4cdf6c5a275d2d3ace3d2cc1d953f3fe947822537c134c1c698539fecc2bfcd9",
   "fixed_template_policy": "Only [ ] or ［］ variables may change. Fixed wording, punctuation, CTA, cards, media, seconds, colors, visual structure and order are immutable.",
   "dynamic_panxiang": {
     "source": "governance/dynamic_panxiang_rules.json",
-    "source_sha256": "debc63551ca63fdd527eab0e04ed1562f0c2f9581d0704709d5b99470d227897",
+    "source_sha256": "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5",
     "input": [
       "九星",
       "八門",
+      "八神",
       "奇儀",
       "時辰"
     ],
-    "value_star_rule": "九星抽樣值直接視為值符星；天禽星以寄坤二宮作八神起點。",
-    "spirit_rule": "陰遁逆時針排列八神，取門之固有宮位所落八神為卡面神值與吉凶計分神。",
+    "sampling_rule": "九星、八門、八神、奇儀、時辰均為獨立隨機抽樣輸入；八神不由星或門推導。",
     "direction_rule": "門的固有宮位為主方位。",
     "auspice_rule": "以星、門、神、奇儀 category 權重加總映射大吉／中吉／平／中凶／大凶。",
     "dedup_rule": "星＋門＋神＋儀＋時辰五元組於近 30 篇內不得重複。"
