@@ -1,6 +1,6 @@
 {
-  "playbook_sha256": "3d7dffdd926acc037907fd46ce0fffd58a0f964808985e49e496c48afb20d616",
-  "dynamic_rules_sha256": "debc63551ca63fdd527eab0e04ed1562f0c2f9581d0704709d5b99470d227897",
+  "playbook_sha256": "4cdf6c5a275d2d3ace3d2cc1d953f3fe947822537c134c1c698539fecc2bfcd9",
+  "dynamic_rules_sha256": "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5",
   "posts": [
     {
       "date": "2026-08-20",
@@ -12,12 +12,12 @@
       "slot_sha256": [
         {
           "id": "explain",
-          "before": "a6be005ad988efb94a4ab7f91adf850028c6188420a2b2a842d1743656924b45",
-          "after": "e829a1afbbf44ce3e9a433a947e341508e25c3dc02b9d896d708a9f8486c9864"
+          "before": "33e36090db4942a157f379b7c69c9e86fe2df7ed22a61996b9ef70126c8e9716",
+          "after": "7fb0a0a510261c1c3fac4df4bd7bb30822b45a12900d27794a378ef45256ce8d"
         }
       ],
-      "before_sha256": "c97007153df93cc1731a8e30d9b11cb854d8dc832440d90536e7cd5b5554d301",
-      "after_sha256": "791b7d212f97345414db0d2cd1af88097c62030c16d764abce6a94d348224ac7"
+      "before_sha256": "d209071912c9a5ee8644d0314d700d4149e1220231d6258065a99da15c81e6c6",
+      "after_sha256": "b3e641c10f5beb81eb56c72a274bd7e3407b4c8c1870f2d24439ddef278c6d2d"
     },
     {
       "date": "2026-08-22",
@@ -29,21 +29,9 @@
           "spirit": "太陰",
           "qi": "丁",
           "hour": "午",
-          "dun": "陰遁",
-          "value_star": "天芮星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": 0,
           "auspice": "平（吉凶參半）",
           "key": "天芮星|杜門|太陰|丁|午"
@@ -54,21 +42,9 @@
           "spirit": "九天",
           "qi": "辛",
           "hour": "卯",
-          "dun": "陰遁",
-          "value_star": "天英星",
-          "value_star_palace": 9,
+          "sampling_model": "independent_v2",
           "door_palace": "坤二宮",
           "direction": "西南",
-          "spirit_placement": {
-            "9": "值符",
-            "4": "騰蛇",
-            "3": "太陰",
-            "8": "六合",
-            "1": "白虎",
-            "6": "玄武",
-            "7": "九地",
-            "2": "九天"
-          },
           "score": -1,
           "auspice": "中凶",
           "key": "天英星|死門|九天|辛|卯"
@@ -79,21 +55,9 @@
           "spirit": "九天",
           "qi": "戊",
           "hour": "戌",
-          "dun": "陰遁",
-          "value_star": "天任星",
-          "value_star_palace": 8,
+          "sampling_model": "independent_v2",
           "door_palace": "震三宮",
           "direction": "東",
-          "spirit_placement": {
-            "8": "值符",
-            "1": "騰蛇",
-            "6": "太陰",
-            "7": "六合",
-            "2": "白虎",
-            "9": "玄武",
-            "4": "九地",
-            "3": "九天"
-          },
           "score": 1,
           "auspice": "中吉",
           "key": "天任星|傷門|九天|戊|戌"
@@ -109,32 +73,32 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "200f40ccbe0cc4467a5a1c88604ca37aa3708880496d731640ebc565bac7d2be",
-          "after": "0058c2dd7fc0e4845d097238e1a535ab0ca31892c6f75469773ce0cc692e0142"
+          "before": "5607a36fe7bdd01363bbd7930ea55f12ffd45bee7b3ef1098400627afadf814b",
+          "after": "3994d97dc447a92d6d8e21dd274b42d6f33ce35123842563eb6bf00d27dcf112"
         },
         {
           "id": "tip",
-          "before": "941ba518a867154abc48433a4796e9eb183a818be3a9563c787eb7098dce77e0",
-          "after": "7cdae5f0f2e523615f9ff6a27aa0bd9c29f38752af239dd7f4fafd8ea3c79f71"
+          "before": "7d4f2fd73f196358202722b4ce4fe94527a7c14be080f1f603e6153e3b756071",
+          "after": "04c1ab7ae8440c7d96acc08ce3aef23f5d9ef51473d27461d9dd0546ae63f334"
         },
         {
           "id": "answer_A",
-          "before": "e9738235913c0c3bc614bdb36b5f1f309273d99295c18d2430ee5da2ae3ec480",
-          "after": "fcdcda861ed7b873220095e3b552a7a313fe2eac5f3700ecaabcacab401bcb52"
+          "before": "3e3848a5f7d44dce8b59f87260ea1c6aecc48af3ccfb02ac68a8514884552b65",
+          "after": "d786dfefb620116904881778bacdac9eef6bf7f28d7a21da3af0d4e7175f60de"
         },
         {
           "id": "answer_B",
-          "before": "7908c32823aa12427746a4d92139409c9e40b88b0040f2d5a9677c9ec0ad2f04",
-          "after": "984a1b5d3c42418245d73468ce8b51035da5378190758897f45d875976b29cff"
+          "before": "df8e1c2b28c75b918168c05779daf76cbfc0290009d47e78b97fd9155eebbd1c",
+          "after": "42d2cd2ed58f93ebaafa9ddd158ebb8b480bdb34a53d80aca9ccb66abd8c740c"
         },
         {
           "id": "answer_C",
-          "before": "9eea6b332f4468ce2b44e6701ae7eb7766e0a89323d202e2287b0c66779fd96d",
-          "after": "b46396ccefab8941f980ad41cb1a0213ea6a2709fc61de2311a5083dbcfd66be"
+          "before": "e6851ce370825b57d40f0103f6f0d50500b446076ace2afc77a74e6516ac2859",
+          "after": "d758dd828a2efdceca4e5fe8b962476ba18a3f28de6a0b27748632a090f08dfb"
         }
       ],
-      "before_sha256": "12609e93d60c3994ed6f5481e83eddaa0fbb8ba3c94e7d22a498f3d31463c20d",
-      "after_sha256": "7db1c9449d2e09a6c21484e0a73088138d3796661867493ee5d21f25759fed98"
+      "before_sha256": "31224ea8975cc42eae2776077757830061a762dbe7e65688a2a37d503e7cd94f",
+      "after_sha256": "959e37b3d0b66c45b1f63c4cdc6dd78eaf9ad7ef8fd637332865e8dbe0e66b2d"
     },
     {
       "date": "2026-08-24",
@@ -146,21 +110,9 @@
           "spirit": "太陰",
           "qi": "丁",
           "hour": "午",
-          "dun": "陰遁",
-          "value_star": "天芮星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": 0,
           "auspice": "平（吉凶參半）",
           "key": "天芮星|杜門|太陰|丁|午"
@@ -171,21 +123,9 @@
           "spirit": "九天",
           "qi": "辛",
           "hour": "卯",
-          "dun": "陰遁",
-          "value_star": "天英星",
-          "value_star_palace": 9,
+          "sampling_model": "independent_v2",
           "door_palace": "坤二宮",
           "direction": "西南",
-          "spirit_placement": {
-            "9": "值符",
-            "4": "騰蛇",
-            "3": "太陰",
-            "8": "六合",
-            "1": "白虎",
-            "6": "玄武",
-            "7": "九地",
-            "2": "九天"
-          },
           "score": -1,
           "auspice": "中凶",
           "key": "天英星|死門|九天|辛|卯"
@@ -196,21 +136,9 @@
           "spirit": "九天",
           "qi": "戊",
           "hour": "戌",
-          "dun": "陰遁",
-          "value_star": "天任星",
-          "value_star_palace": 8,
+          "sampling_model": "independent_v2",
           "door_palace": "震三宮",
           "direction": "東",
-          "spirit_placement": {
-            "8": "值符",
-            "1": "騰蛇",
-            "6": "太陰",
-            "7": "六合",
-            "2": "白虎",
-            "9": "玄武",
-            "4": "九地",
-            "3": "九天"
-          },
           "score": 1,
           "auspice": "中吉",
           "key": "天任星|傷門|九天|戊|戌"
@@ -224,22 +152,22 @@
       "slot_sha256": [
         {
           "id": "card_A",
-          "before": "56921f209c2620c2f14e77580d32454a04782dfbebe92144abd3515eb5f62759",
-          "after": "d038960afa1df5714fc5cc8382f5253e462a26b3d313a50146dfa671db77f171"
+          "before": "797ecba427a6eb931955eff4cac984d63357804c1ed7913f42bd7baab3ceed25",
+          "after": "8f7fd128abe721deb654b1bcc172a9d46710caf571a5e9951002daf499089153"
         },
         {
           "id": "card_B",
-          "before": "e8989a61d1a1962231fc58326cb1393126a46369b4fc52d45165432dd160b9cc",
-          "after": "0c8fc4a0d14e7f4046700ac8d6c3eaa0f3c9dc788c0c33876c75f4ce7ce86cc1"
+          "before": "4c47bdccc0ba0b77e0128c4fa8f92ae06fa3de38a4f05a6b8e7d2df85341cdbf",
+          "after": "bc39bbc4aeaba79558fa095d3134b05f1ba2513c9f950590e86cb81d4efe2adc"
         },
         {
           "id": "card_C",
-          "before": "6c1662161704f53c76d586ed59a3939eb3752aa77f282acfc78bef15e46c259e",
-          "after": "35f3cc56b573b63655c141f40706c7f71b9cecf8e5cc1bcfb613bc3dee4994ba"
+          "before": "fbadcfde5fd8564da001f4c6bc9d1c35d303e532d674459834cb483b25d2ed90",
+          "after": "a1b842cc7597e1018a1fe7c49a4a5ca24ad8e57916e9bad867328a82bec4f591"
         }
       ],
-      "before_sha256": "52e186db1050587e5c3dd0f4784accadb015a236afb813a9db43b8c4046bbf3e",
-      "after_sha256": "9b0f7499e33f4375a5279bbf26e4c15956a303aaafaa7a22bb3a50feb25017ec"
+      "before_sha256": "02183f909731567a39f2bbfa2cbfd29da1e25e1634940525ade0ca4df86d56a1",
+      "after_sha256": "c098790953a4f5dcf2e9de16c9b3a023e3f81952368d3c6062007ef50e30f39c"
     },
     {
       "date": "2026-08-26",
@@ -251,21 +179,9 @@
           "spirit": "白虎",
           "qi": "丙",
           "hour": "子",
-          "dun": "陰遁",
-          "value_star": "天心星",
-          "value_star_palace": 6,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "6": "值符",
-            "7": "騰蛇",
-            "2": "太陰",
-            "9": "六合",
-            "4": "白虎",
-            "3": "玄武",
-            "8": "九地",
-            "1": "九天"
-          },
           "score": 0,
           "auspice": "平（吉凶參半）",
           "key": "天心星|杜門|白虎|丙|子"
@@ -276,21 +192,9 @@
           "spirit": "九地",
           "qi": "丁",
           "hour": "戌",
-          "dun": "陰遁",
-          "value_star": "天輔星",
-          "value_star_palace": 4,
+          "sampling_model": "independent_v2",
           "door_palace": "坤二宮",
           "direction": "西南",
-          "spirit_placement": {
-            "4": "值符",
-            "3": "騰蛇",
-            "8": "太陰",
-            "1": "六合",
-            "6": "白虎",
-            "7": "玄武",
-            "2": "九地",
-            "9": "九天"
-          },
           "score": 2,
           "auspice": "中吉",
           "key": "天輔星|死門|九地|丁|戌"
@@ -301,21 +205,9 @@
           "spirit": "騰蛇",
           "qi": "癸",
           "hour": "亥",
-          "dun": "陰遁",
-          "value_star": "天芮星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "離九宮",
           "direction": "南",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": -2,
           "auspice": "中凶",
           "key": "天芮星|景門|騰蛇|癸|亥"
@@ -326,21 +218,9 @@
           "spirit": "值符",
           "qi": "丁",
           "hour": "丑",
-          "dun": "陰遁",
-          "value_star": "天任星",
-          "value_star_palace": 8,
+          "sampling_model": "independent_v2",
           "door_palace": "艮八宮",
           "direction": "東北",
-          "spirit_placement": {
-            "8": "值符",
-            "1": "騰蛇",
-            "6": "太陰",
-            "7": "六合",
-            "2": "白虎",
-            "9": "玄武",
-            "4": "九地",
-            "3": "九天"
-          },
           "score": 5,
           "auspice": "大吉",
           "key": "天任星|生門|值符|丁|丑"
@@ -351,21 +231,9 @@
           "spirit": "白虎",
           "qi": "辛",
           "hour": "未",
-          "dun": "陰遁",
-          "value_star": "天英星",
-          "value_star_palace": 9,
+          "sampling_model": "independent_v2",
           "door_palace": "坎一宮",
           "direction": "北",
-          "spirit_placement": {
-            "9": "值符",
-            "4": "騰蛇",
-            "3": "太陰",
-            "8": "六合",
-            "1": "白虎",
-            "6": "玄武",
-            "7": "九地",
-            "2": "九天"
-          },
           "score": -2,
           "auspice": "中凶",
           "key": "天英星|休門|白虎|辛|未"
@@ -376,21 +244,9 @@
           "spirit": "白虎",
           "qi": "丁",
           "hour": "申",
-          "dun": "陰遁",
-          "value_star": "天柱星",
-          "value_star_palace": 7,
+          "sampling_model": "independent_v2",
           "door_palace": "震三宮",
           "direction": "東",
-          "spirit_placement": {
-            "7": "值符",
-            "2": "騰蛇",
-            "9": "太陰",
-            "4": "六合",
-            "3": "白虎",
-            "8": "玄武",
-            "1": "九地",
-            "6": "九天"
-          },
           "score": -3,
           "auspice": "中凶",
           "key": "天柱星|傷門|白虎|丁|申"
@@ -408,71 +264,77 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "3a0e3760fdca71a9947f2830a5cdd9db82cbdcb7d91ce5911e94eba4fd5fd86b",
-          "after": "643bbc586ca27858ffd977f3316fb66a7651656ad0e207c75890eba7e3ced247"
+          "before": "20d0ff696e1592b51e6c52c71eb9edd49015ae2e0bb5becf5e93547c57f448b3",
+          "after": "0611147bf68825e40adf2adff0a4d9980ce0858a49e5494e96ef09befb3545a6"
         },
         {
           "id": "answer_A",
-          "before": "273402f5126c7415bed0738d64d29e63bd33de00822db23ddccaaf70f3ea96b5",
-          "after": "a615cf60aede426621e58a721ab6f1c2557d6cfd005b9cded823752cfff15712"
+          "before": "7128a21427622790cd683f2ca7485474530e781e0669d726a21df4835c7851da",
+          "after": "ec50e2491fa6c8eef67793850b77e0f2a1d10dfbcc44741227800a89bc142b8d"
         },
         {
           "id": "answer_B",
-          "before": "600ff290f31a0206fc8820ac54438ce9e1fe4005a8ff7561a629d27e91c76869",
-          "after": "874626cc90bdf4a5bd3b91ce761dc93ca304cdba84855c7aa28959605a536018"
+          "before": "d54221a420ba3b3ba0158bd11ba56d59410227c67e7d6862947e04e2a24ae348",
+          "after": "718d2cc68d6a02da3cd9edc1cd9159594eccda95ada07a3e714ebe2fcd9672d2"
         },
         {
           "id": "answer_C",
-          "before": "578783f47762989aef3997cdbc0634ce120934fff0f233a22a0038576984a8a5",
-          "after": "17fd774ccf4ed2794da84da8f39d97469db7e45288354259c90fa0053c5c3dd9"
+          "before": "b747585a550be6af2dd717fc6c44df918ff7a17fd23b491b711a160041d23864",
+          "after": "cbbf9a1bdab17317db908e4834543cc000aea538347a5829c784e4b5ee404e2b"
         },
         {
           "id": "answer_D",
-          "before": "acaced5497b7a98f20a7737bbca41240769a138d7636a5ad4d55a1504fd67e98",
-          "after": "192d9cb3b30e58262db1b04a414fc505f24a2a1596b75e753e7d283796e0fc25"
+          "before": "dce4672dcf010d134f692c417a183aa9875b6d985b6377ce7f85ca93f58e4aac",
+          "after": "62c010a09c84d4ce0550b8c0d9438c40b08bcaec714da8247c57fd7d9592efad"
         },
         {
           "id": "answer_E",
-          "before": "7039de4194f0602b4c7a6bb95bb314bc101ffc37b098146294957890ebce6873",
-          "after": "b161697620af3b96e85715dc6bf8c68a46941c4d096276955cc4710b30c8cfc0"
+          "before": "7968f5fa4d4d8f4b5c6ff642b8465a3d8a52ab84913a160ea85231b4814560bb",
+          "after": "eb8681a51414e198f33a96c5b725b69e50786787131579b757fb3faae2fd2784"
         },
         {
           "id": "answer_F",
-          "before": "8333c186bdce4b76c88cd5004fbe1928125947e9881e359de025d002928025f5",
-          "after": "14dee6253357e6999cd3f6dda1c9a4bd60fdb74800071f998a88db4ae302e125"
+          "before": "d87381e579ca7cc9e087db61a455e78f4e8fc6cc0f1900e2789b85ca94bbe2d1",
+          "after": "aca70c46de8860afb4c65db78cc5167a5e3066971767fab6659475db92ac96b8"
         }
       ],
-      "before_sha256": "1f346cb1e9c6f72e08d5a9edeb18dc207f93d2b3fd8a660ebbd8b35d04cdd068",
-      "after_sha256": "4d94c424a2b799e5440e03306889eb9572ed36cf3fb87f4567d5d2ff75365f6a"
+      "before_sha256": "46065b055f9f8b6336fb988e0dc6a0282e8bcb5acb858c34b978c13df6d637f5",
+      "after_sha256": "f84f703d73da59b2ab8c28b163523890cdd2c218fae94c93d2a1e9f4682ee1d1"
     },
     {
       "date": "2026-08-27",
       "form": "型式四",
       "dynamic_panxiang": {},
       "changed_slots": [
+        "hook",
         "scene",
         "check",
         "action"
       ],
       "slot_sha256": [
         {
+          "id": "hook",
+          "before": "e9968e8940af879ba68601d3e59741b43e301a4d65e5baa23e4a8e5d9148b2b5",
+          "after": "2f0759af5443b58dcb28d0a579cdca9eb6fd0a765253ccf71bf19ccd0f8117e4"
+        },
+        {
           "id": "scene",
-          "before": "611b3d44420cfedc6a65d60d0ac0cf993d77681d7c348870c6b569fddf6e4838",
-          "after": "05c6b094afe3157f6a3d067800fb9e251cd4426ebe0073d4bc8e5ad170b72c45"
+          "before": "9138c71e059a90129451f7b36f57b69dba2bb6678ca0fcf7d1a3f893bfdec5ad",
+          "after": "6eabc5d30403c7ff24505b4c8b15df9978728af34703addec07dfdc0afe9e342"
         },
         {
           "id": "check",
-          "before": "b620f96fc2f1d844b0c919661bac3fd574a2dd98ac4140d79cc0f1136175a074",
-          "after": "24759caf772e2de7f016156e27e7d0172f63a96dc65238cba4ebfae520f4ded6"
+          "before": "a8476afdb8651d39a3ebcf933e5079cdc67c7c060b9a760546b3876e28403807",
+          "after": "3f9525a5ad924a603cfc0b769b14eb103a1acf9f8cc6609e868f1833087df8f7"
         },
         {
           "id": "action",
-          "before": "d0276737cc3e654f1429b7cf400756f50b70c377c991e26c0dc33efc0e01aed8",
-          "after": "5a598e7a17c32ebb301ca06e84fb42581cc23d3be65663b373180d9f6a53722a"
+          "before": "5663df589b8b9c0eb6f90657614f1e6ac447c8bec2a39cf66587150ad09d6f7a",
+          "after": "803191bbd78b080e36d809d47c80b8bb539ea4dda31cf20b208b7d2be0d1258c"
         }
       ],
-      "before_sha256": "618fc0c389f654741e9bf4c92b4c53e1d1fa0e80fa8fcb6bacc5f640f5af8baa",
-      "after_sha256": "5e2ff7b2028b93d1827db5b653ae6a7f8fafceedd776df563259dcbc41f1046f"
+      "before_sha256": "329cafbc98eae6c5437132d7fd1cbe74ff3a842edcab5d867f69a67f535ef7ce",
+      "after_sha256": "2ab09873293c33a6ff38b3898bdc81ddbc53f11bebf1219eea0816932caaf196"
     },
     {
       "date": "2026-08-29",
@@ -484,21 +346,9 @@
           "spirit": "九天",
           "qi": "己",
           "hour": "酉",
-          "dun": "陰遁",
-          "value_star": "天心星",
-          "value_star_palace": 6,
+          "sampling_model": "independent_v2",
           "door_palace": "坎一宮",
           "direction": "北",
-          "spirit_placement": {
-            "6": "值符",
-            "7": "騰蛇",
-            "2": "太陰",
-            "9": "六合",
-            "4": "白虎",
-            "3": "玄武",
-            "8": "九地",
-            "1": "九天"
-          },
           "score": 3,
           "auspice": "中吉",
           "key": "天心星|休門|九天|己|酉"
@@ -509,21 +359,9 @@
           "spirit": "值符",
           "qi": "己",
           "hour": "亥",
-          "dun": "陰遁",
-          "value_star": "天冲星",
-          "value_star_palace": 3,
+          "sampling_model": "independent_v2",
           "door_palace": "震三宮",
           "direction": "東",
-          "spirit_placement": {
-            "3": "值符",
-            "8": "騰蛇",
-            "1": "太陰",
-            "6": "六合",
-            "7": "白虎",
-            "2": "玄武",
-            "9": "九地",
-            "4": "九天"
-          },
           "score": 2,
           "auspice": "中吉",
           "key": "天冲星|傷門|值符|己|亥"
@@ -534,21 +372,9 @@
           "spirit": "騰蛇",
           "qi": "己",
           "hour": "戌",
-          "dun": "陰遁",
-          "value_star": "天英星",
-          "value_star_palace": 9,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "9": "值符",
-            "4": "騰蛇",
-            "3": "太陰",
-            "8": "六合",
-            "1": "白虎",
-            "6": "玄武",
-            "7": "九地",
-            "2": "九天"
-          },
           "score": -2,
           "auspice": "中凶",
           "key": "天英星|杜門|騰蛇|己|戌"
@@ -564,32 +390,32 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "6d1e346c82d339f4b6cd0a8dbb17ef00a49d6d45c55f415d54e883c1cb4f8400",
-          "after": "9a2db395c120220b01e06ffdb51e35e7fbebfa3b58e43c9f0b4cff714662a30e"
+          "before": "a3aec012a2d6791837adc954ecac2966c7b290f0d9e61fc04262777a45b86dcb",
+          "after": "b58b3f1f99c2c7e95faafc3bb022811c5bacc1846d52dafff1681e11d5f5423e"
         },
         {
           "id": "tip",
-          "before": "050eea74bfc056b7651a80b53eb9024a0bbbf3f7563054a06b0194e8b70772a0",
-          "after": "c3c2a862ca71508bc10fd417c772ba7bc398b13eb6e340d49a66167cb63a9ad0"
+          "before": "9c61aa15254e91a80b8a0a873d74a2c354f74edb61cab0a94908bd4804f20b84",
+          "after": "46620a08a17931859c106491c71c5378a286136d4ca975f7f225f6b50e1f87ce"
         },
         {
           "id": "answer_A",
-          "before": "d792bc47a9c07f5dbcc1ebf473902fae1d57a59c6bff6df02032805ce6a747a1",
-          "after": "333c9360c2ed9e066ea14472db7361a22de5544439cad9e63d7e7cec4b88bb04"
+          "before": "7959313f02c7cc2fcafdb2d81a92040a92fef0786c8feedd98dbec309e622892",
+          "after": "65e9e2b8d034d9d7d9253110c80d9b7d3ec0d83a0553a28f427ac23d56f2fd5e"
         },
         {
           "id": "answer_B",
-          "before": "effed4c7e96f075e2d8e002b14ad36ca74c1ee9c77bc371db4358b04d255fa9d",
-          "after": "cb9eea0357a134cb71bf23293c40bff1302c37124f4238d60f3f91770cff43d2"
+          "before": "c89ae372336a1f00d734a96cbca83a8c54aefcfa42eb9dbbbd38ca4476c788c8",
+          "after": "3f21bed3f66f1fee93832c71d42b845612932ee964544bc6170a670813761a6f"
         },
         {
           "id": "answer_C",
-          "before": "f4e0106e6f63c709e537a3ee211cd43b855bde2406778837a77125976891cc1d",
-          "after": "af0e079743e398700f11ce12f0878f8e95d079fae9b3eb520276f5b5b9bb9435"
+          "before": "ebc6133de937744e9db3a74f8db056b58612f36567ad6fc064e9604f06851c2d",
+          "after": "94beccb5cee964433eb14091c5c28e93314b178beab3d27c18808647e2d28247"
         }
       ],
-      "before_sha256": "a2a9fd4081c155796ee44bcbda2cffdf5baaa5d572bfe73c3c544c06c3d4918f",
-      "after_sha256": "942a86f7487245ef361db4e4cdad00a89a6e58d7bd515d6712ef3e96f8e186f7"
+      "before_sha256": "eb0dc4eb3864b84ce8eebf842c5cb193380295bd5c86b0802e4bcbf3e15f97dc",
+      "after_sha256": "d7656943d2720b371a2b4ec39f6acfd2931ac392afb97baa9a2d3792587bd9d0"
     },
     {
       "date": "2026-08-31",
@@ -601,21 +427,9 @@
           "spirit": "九天",
           "qi": "己",
           "hour": "酉",
-          "dun": "陰遁",
-          "value_star": "天心星",
-          "value_star_palace": 6,
+          "sampling_model": "independent_v2",
           "door_palace": "坎一宮",
           "direction": "北",
-          "spirit_placement": {
-            "6": "值符",
-            "7": "騰蛇",
-            "2": "太陰",
-            "9": "六合",
-            "4": "白虎",
-            "3": "玄武",
-            "8": "九地",
-            "1": "九天"
-          },
           "score": 3,
           "auspice": "中吉",
           "key": "天心星|休門|九天|己|酉"
@@ -626,21 +440,9 @@
           "spirit": "值符",
           "qi": "己",
           "hour": "亥",
-          "dun": "陰遁",
-          "value_star": "天冲星",
-          "value_star_palace": 3,
+          "sampling_model": "independent_v2",
           "door_palace": "震三宮",
           "direction": "東",
-          "spirit_placement": {
-            "3": "值符",
-            "8": "騰蛇",
-            "1": "太陰",
-            "6": "六合",
-            "7": "白虎",
-            "2": "玄武",
-            "9": "九地",
-            "4": "九天"
-          },
           "score": 2,
           "auspice": "中吉",
           "key": "天冲星|傷門|值符|己|亥"
@@ -651,21 +453,9 @@
           "spirit": "騰蛇",
           "qi": "己",
           "hour": "戌",
-          "dun": "陰遁",
-          "value_star": "天英星",
-          "value_star_palace": 9,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "9": "值符",
-            "4": "騰蛇",
-            "3": "太陰",
-            "8": "六合",
-            "1": "白虎",
-            "6": "玄武",
-            "7": "九地",
-            "2": "九天"
-          },
           "score": -2,
           "auspice": "中凶",
           "key": "天英星|杜門|騰蛇|己|戌"
@@ -679,51 +469,57 @@
       "slot_sha256": [
         {
           "id": "card_A",
-          "before": "85e09ee74abcaafd1f86c7a2408936b4423d1a6e8d56f76f81656bd69b207e50",
-          "after": "bf387aa90b7bf4c89617695bd465c30f3670db4db04a74244c1722010dcb3584"
+          "before": "39aca1f71ed8f3bb2e713f6535ee252916089589b7bce230d3c84cdb333b692b",
+          "after": "46766199b1d89ac6cdca7fca0c8ca64e3dfa07688eee8a27735fe6b237c6e821"
         },
         {
           "id": "card_B",
-          "before": "9f01832d6791e69de024144b76039df97391c392f84b80bce173b55c2206c09c",
-          "after": "2d73f91d6c82683538205b6eeabb93a54205d1e2cf6a471b72d3a53d14a27931"
+          "before": "35d806f3c4c22e3b2b48fa1d5a218de01351ebccaf593d1afe6b140d10c18c81",
+          "after": "63dfbd7a34ba64c45b254a1d798d523c9a58b4e668c1745ec94792577e7fdb99"
         },
         {
           "id": "card_C",
-          "before": "f8b1777f3d4e990b2b11e6ac89a350ea14b438ee1e4947009c9e5a21f80aebf5",
-          "after": "c95efeb7fc4989406c3bdb41c47cf13097e18b41f2c8af7e8068714934755b8a"
+          "before": "7c8b0f99ca5a8ba07753c24786dab5cebf426154236bb43441754d1ed9d9fed8",
+          "after": "b93d76b904f5c96e998e13058f2352cdc50863b5a3466a39434bd58569607d3e"
         }
       ],
-      "before_sha256": "42e4a8afc2f0c9f080d41bb6309f34c08f80c18a539271e692856b67632c053c",
-      "after_sha256": "6beda0b8a3272da9a902011f4d0352bbd2b2cdd2ba516990bea4fab8b881d778"
+      "before_sha256": "7b714f87291c5e8f91c721f72ae5cecb8552594eba08d37199340c718723b7b6",
+      "after_sha256": "1231a452b572d051e53f54efe18d9823235a6c24415f166745aa5935f5bd0cff"
     },
     {
       "date": "2026-09-02",
       "form": "型式二",
       "dynamic_panxiang": {},
       "changed_slots": [
+        "hook",
         "scene",
         "reflection",
         "action"
       ],
       "slot_sha256": [
         {
+          "id": "hook",
+          "before": "9a5fd4c44af4f2e80e4498a41e7d97dd7b60cca4a7c315c89eb0a377ab3bd7df",
+          "after": "659e0e90efaa0d422d50b19bb333db3119fd2e9830e55afda5a318bdf10c6ee3"
+        },
+        {
           "id": "scene",
-          "before": "4fd86b4debcf366698af393698f86676eee295ada297658ba790cf2a98e97bbd",
-          "after": "3a5e917e3b4600ad490e6c94ac5e43978e0c051739bc8061617e1a52fa191633"
+          "before": "6453107eb8cd7303d80f4d7cdcf71bbb09efec39ea18abe5a9c7b370bc8c8f09",
+          "after": "954a2025ae12a75229d4e1e0763785b45bf50f878f36e277c987ce695b72f223"
         },
         {
           "id": "reflection",
-          "before": "aad32d85b2fc986e49b566fd0f11ee3be301fc89afcbc1e98f3332c7ff3f62ff",
-          "after": "17cd1e8c21bc4e87dac80f939aed98b752ebc69430789708cb072da7fb949fcb"
+          "before": "45304700b52a8ac8666dd939d25bbbb4134afb7d802824a69a8f8446258e0bf0",
+          "after": "c3933063849cec26a7ad146515e9af22418a0388f93aa4d383dcf10c577a9953"
         },
         {
           "id": "action",
-          "before": "1ef25afd46c567f59f83e375613ce686df73bce0bfaa8a7c11335244b54c6daa",
-          "after": "9451fa0099c9114d5faf070e617b11b73aeb83b884e4f42b5fb905d33aa8d416"
+          "before": "c499e3a8dbb7b7aed33cea097d7149278ca029eee974dc3be2a9e0ad37cae9de",
+          "after": "bbe27dd45229408fc1b0ba5bac823d6ac99645b0e1dd046d810e9c8fde25a3bc"
         }
       ],
-      "before_sha256": "89eaacb0990efb6550fb77af6e0a1e50a2e9ca8515236fe2e298c96f9dec83f0",
-      "after_sha256": "d8495a87e27f1b341271f8db05594fc918b6fb354266bf446c4522c7d96d6dec"
+      "before_sha256": "c868f1c1d0c1385d0543f28ec06fb281258459f157a31c18173b969b06fdedd4",
+      "after_sha256": "090483fe58bd1a15874900bbabbc30b2298a504c1519b964bc6c724c71257071"
     },
     {
       "date": "2026-09-03",
@@ -735,12 +531,12 @@
       "slot_sha256": [
         {
           "id": "explain",
-          "before": "71c4acc37952741a02dbbc33446af52f6a534292cfb67bb118e4dbb187d33118",
-          "after": "14a963415071ac5dc49fb665e3ebbc4d4a28806a8a4a1f5eaa1155985f8fd5f6"
+          "before": "e5d6b6f725d8b71e7facc5b80ef5145ef23caa16342bea3aef32cd7ec7f737e2",
+          "after": "376ac773c78348dc2f484961b98c36e7ab9c9ff64c9c18caf7ddbb7d162afbab"
         }
       ],
-      "before_sha256": "18683a903c7eeab81d917083de877e767a57c362b84f7a2686e540ec8d4001ca",
-      "after_sha256": "5c51bdae029714b5c0475f4a1d6639a27e9481a742eae10bee82502cecda1cf6"
+      "before_sha256": "f2613621427fbc60518c4b8f592a07506acaea88ebab442704a3c9c7810f28fc",
+      "after_sha256": "99938be4ac66706b1b316cc1f804a5ba03be3c81277646229b3b1e68ed9b92b9"
     },
     {
       "date": "2026-09-05",
@@ -752,21 +548,9 @@
           "spirit": "騰蛇",
           "qi": "癸",
           "hour": "寅",
-          "dun": "陰遁",
-          "value_star": "天芮星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "離九宮",
           "direction": "南",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": -2,
           "auspice": "中凶",
           "key": "天芮星|景門|騰蛇|癸|寅"
@@ -777,21 +561,9 @@
           "spirit": "白虎",
           "qi": "戊",
           "hour": "卯",
-          "dun": "陰遁",
-          "value_star": "天柱星",
-          "value_star_palace": 7,
+          "sampling_model": "independent_v2",
           "door_palace": "震三宮",
           "direction": "東",
-          "spirit_placement": {
-            "7": "值符",
-            "2": "騰蛇",
-            "9": "太陰",
-            "4": "六合",
-            "3": "白虎",
-            "8": "玄武",
-            "1": "九地",
-            "6": "九天"
-          },
           "score": -4,
           "auspice": "大凶",
           "key": "天柱星|傷門|白虎|戊|卯"
@@ -802,21 +574,9 @@
           "spirit": "玄武",
           "qi": "辛",
           "hour": "申",
-          "dun": "陰遁",
-          "value_star": "天禽星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "坎一宮",
           "direction": "北",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": 0,
           "auspice": "平（吉凶參半）",
           "key": "天禽星|休門|玄武|辛|申"
@@ -832,32 +592,32 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "26c2798598145337f10e36ec1d4ffdee89c112164e93b1de0750cb31014493b4",
-          "after": "3be298dc3ce5522b8e74ca2b21191f3ed1a6f239856e68f8be35b2d6a8f68226"
+          "before": "46210af05c9c609d23bfb6909c398ac4676a7ebfb411973d74f87ced3446c571",
+          "after": "55ff87d923436b05240e81b9d6099a8f57bfd3f15c71c1c42cb12758155672fe"
         },
         {
           "id": "tip",
-          "before": "bc0f0a770112ab7b563ebf8ba9f4ca95660ccee4e501ce62792217ad64afc011",
-          "after": "1799e6148c251a567a953034a96d86d83d0ee54c884bc5b25ae60f1578d06daa"
+          "before": "181815251bf81ddb6e92630ce141be5d823db323f0cdaf7c45f12620eda2dca6",
+          "after": "c317199765c65b136a37836ea42f705a7434ae95377ced8f67e4e4081afd0cee"
         },
         {
           "id": "answer_A",
-          "before": "54ab1c136d1f67680a5d1ee3c04e7986d0639d2507b7ce6d0d43dd735551cce9",
-          "after": "f39400776c6c3ace135978b5ab361b6e6ddf1187ed18981f44eef1261142c9aa"
+          "before": "3d85b5b930e4b0ad9a530335bd6d4d33a3420db3039193f28a4798b41fcb5b74",
+          "after": "82e6b39c05dce912d0ae0b97f41254c7a102c428896a19e5ef320f428052031b"
         },
         {
           "id": "answer_B",
-          "before": "e47cae49660b8b2ca0478bfb39b256ce183cd6191e73fb683c971ce203555637",
-          "after": "43e153bf10ced476e534c170137e2747c2805c499fdadefa10684a2a36cd67db"
+          "before": "2c74c19e85590368a56efd30df11cb05d8753e13f5e800ca7e28ade948d3abea",
+          "after": "1f9dcfa3204ff51ff14404eaec74ab293c64bb8b5e44c48a6604b5a2e8911fd6"
         },
         {
           "id": "answer_C",
-          "before": "8dddd5fba7a52e5304876f8bea47c472059ffdeb4fe51096770d49008d701116",
-          "after": "b7ede269192fc6c2751e69a77116673c94e04d60776644b91f0bf3a29aeb60eb"
+          "before": "2056d0ddc82fc2bebc35e9d5006447beb7ad2efaed802b80e8e5f701bf73ed7f",
+          "after": "eda36262161c2d4b40426a80374827e47c57b0cdf3eb3253f7cd88ed2e589b80"
         }
       ],
-      "before_sha256": "a4feeb680e7b372db700ac5b632e0e2c088a9fb2b6050e8164da581c5c966e9f",
-      "after_sha256": "1afaba1fb41a7ab3d106d11c746d1697a0b61bfe661a09569871c8adf1d1fa48"
+      "before_sha256": "f308c62b1c936e4281923e62b061f62d2446bf55ae2932871770bd0d1c49992b",
+      "after_sha256": "fd52e814ce7f2ce20cd0b4d5015afa074756fcd8dd2b0cbf87a86bcdbbee01c2"
     },
     {
       "date": "2026-09-07",
@@ -869,21 +629,9 @@
           "spirit": "騰蛇",
           "qi": "癸",
           "hour": "寅",
-          "dun": "陰遁",
-          "value_star": "天芮星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "離九宮",
           "direction": "南",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": -2,
           "auspice": "中凶",
           "key": "天芮星|景門|騰蛇|癸|寅"
@@ -894,21 +642,9 @@
           "spirit": "白虎",
           "qi": "戊",
           "hour": "卯",
-          "dun": "陰遁",
-          "value_star": "天柱星",
-          "value_star_palace": 7,
+          "sampling_model": "independent_v2",
           "door_palace": "震三宮",
           "direction": "東",
-          "spirit_placement": {
-            "7": "值符",
-            "2": "騰蛇",
-            "9": "太陰",
-            "4": "六合",
-            "3": "白虎",
-            "8": "玄武",
-            "1": "九地",
-            "6": "九天"
-          },
           "score": -4,
           "auspice": "大凶",
           "key": "天柱星|傷門|白虎|戊|卯"
@@ -919,21 +655,9 @@
           "spirit": "玄武",
           "qi": "辛",
           "hour": "申",
-          "dun": "陰遁",
-          "value_star": "天禽星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "坎一宮",
           "direction": "北",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": 0,
           "auspice": "平（吉凶參半）",
           "key": "天禽星|休門|玄武|辛|申"
@@ -947,22 +671,22 @@
       "slot_sha256": [
         {
           "id": "card_A",
-          "before": "4698b4a6797f6d96506642c9e9348c2edf282892366f44cf03a160a51e5b14ca",
-          "after": "2ff6b5580c0e83ffaa490cd1f3fe7cccd34f0f57b3f1dab0e60d14e6adf955eb"
+          "before": "2ea318cd3deedaa7277fcd1e0cb2a3bcfcd3dbf5d051dfb38decf023b6a096d4",
+          "after": "46944aa2f13441d634d21c44e294b5318379414fe16d9478377eba3b8eceb187"
         },
         {
           "id": "card_B",
-          "before": "3e81b180f52e81bd659c316794ca2ee592dbcf6e86f642d053743cc0b3390fcd",
-          "after": "7fae0d29e7ea82c5c229fa34e20caf6f53e7d1df81023edd40e4be987ee61762"
+          "before": "b9321abdcfa154164e29963e90d7af2d90331a5ea1844347da07abaa08da2388",
+          "after": "e5737a910337539670d3ab8d111bb570b615f9312d3c5e33ec764aa45f6c02e9"
         },
         {
           "id": "card_C",
-          "before": "c0110072821748c474743f37f1f16ccf1039598402360f24a54730d148b8d78f",
-          "after": "c1923149f104cb8a7c3bed0a9ad6a78078498a08e55ff6c480402f8b71e8906d"
+          "before": "0d730dc6d24c3d1999f410a8de2c8c0a0fcfd84451210558b40fa651d5948f60",
+          "after": "e17d3330c19fa3edc1d34ccee53f45ffc63f3c1ee7d57124b52590f1397c1e7d"
         }
       ],
-      "before_sha256": "2403f9f7a00fb2449787690064a60651e875a38612c911c292ea946e99b18772",
-      "after_sha256": "1b55921ac4c8478cb5ca19a8eb63e1f9921ddcaa8ebe9dd5c816baba34bf2835"
+      "before_sha256": "09e4c4e7958971480bd815671aca1e6ec50c807bd0569c3f9d95aaa2db0c2e69",
+      "after_sha256": "9feec380bb9364612b901b823aa9efb8ebfdff0f63de1176b29df10cbd0e6265"
     },
     {
       "date": "2026-09-09",
@@ -974,21 +698,9 @@
           "spirit": "值符",
           "qi": "乙",
           "hour": "卯",
-          "dun": "陰遁",
-          "value_star": "天禽星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "坤二宮",
           "direction": "西南",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": 2,
           "auspice": "中吉",
           "key": "天禽星|死門|值符|乙|卯"
@@ -999,21 +711,9 @@
           "spirit": "騰蛇",
           "qi": "癸",
           "hour": "子",
-          "dun": "陰遁",
-          "value_star": "天冲星",
-          "value_star_palace": 3,
+          "sampling_model": "independent_v2",
           "door_palace": "艮八宮",
           "direction": "東北",
-          "spirit_placement": {
-            "3": "值符",
-            "8": "騰蛇",
-            "1": "太陰",
-            "6": "六合",
-            "7": "白虎",
-            "2": "玄武",
-            "9": "九地",
-            "4": "九天"
-          },
           "score": 1,
           "auspice": "中吉",
           "key": "天冲星|生門|騰蛇|癸|子"
@@ -1024,21 +724,9 @@
           "spirit": "太陰",
           "qi": "丙",
           "hour": "辰",
-          "dun": "陰遁",
-          "value_star": "天蓬星",
-          "value_star_palace": 1,
+          "sampling_model": "independent_v2",
           "door_palace": "兌七宮",
           "direction": "西",
-          "spirit_placement": {
-            "1": "值符",
-            "6": "騰蛇",
-            "7": "太陰",
-            "2": "六合",
-            "9": "白虎",
-            "4": "玄武",
-            "3": "九地",
-            "8": "九天"
-          },
           "score": -1,
           "auspice": "中凶",
           "key": "天蓬星|驚門|太陰|丙|辰"
@@ -1049,21 +737,9 @@
           "spirit": "值符",
           "qi": "辛",
           "hour": "卯",
-          "dun": "陰遁",
-          "value_star": "天心星",
-          "value_star_palace": 6,
+          "sampling_model": "independent_v2",
           "door_palace": "乾六宮",
           "direction": "西北",
-          "spirit_placement": {
-            "6": "值符",
-            "7": "騰蛇",
-            "2": "太陰",
-            "9": "六合",
-            "4": "白虎",
-            "3": "玄武",
-            "8": "九地",
-            "1": "九天"
-          },
           "score": 4,
           "auspice": "大吉",
           "key": "天心星|開門|值符|辛|卯"
@@ -1074,21 +750,9 @@
           "spirit": "九天",
           "qi": "壬",
           "hour": "丑",
-          "dun": "陰遁",
-          "value_star": "天任星",
-          "value_star_palace": 8,
+          "sampling_model": "independent_v2",
           "door_palace": "震三宮",
           "direction": "東",
-          "spirit_placement": {
-            "8": "值符",
-            "1": "騰蛇",
-            "6": "太陰",
-            "7": "六合",
-            "2": "白虎",
-            "9": "玄武",
-            "4": "九地",
-            "3": "九天"
-          },
           "score": 1,
           "auspice": "中吉",
           "key": "天任星|傷門|九天|壬|丑"
@@ -1099,21 +763,9 @@
           "spirit": "玄武",
           "qi": "丙",
           "hour": "未",
-          "dun": "陰遁",
-          "value_star": "天芮星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "坎一宮",
           "direction": "北",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": 0,
           "auspice": "平（吉凶參半）",
           "key": "天芮星|休門|玄武|丙|未"
@@ -1131,71 +783,77 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "4eae3427f99c18087fa0376e92c533a9bbab470e1e8da0e450d504274f5f08f2",
-          "after": "0cc5a594e47eab6e3031c68da4e976e4d454201bc7e32e7c0b58a3cb031dc8f0"
+          "before": "27c18fc9c9c8fba6aa20fe3fb7de8267e51c31b978459841707aee4f20020595",
+          "after": "5cff3e316a4f061ac791ed61929a8cda2bad69a4e72b514cb84e413684122aa9"
         },
         {
           "id": "answer_A",
-          "before": "f64ea549955796e32deeb943979dc71de225c2d0ef094aa0bf33e9c2ca57c83f",
-          "after": "044d515ae4f2718450a44deb2e1948b6d1bbc78c88cb1fe51523ce725eed79a6"
+          "before": "c9ada3c73ddd8d9f7ff723c35a0ed95d870cedbf6383a21f6a45c0c8db1c823a",
+          "after": "97da555dadfc1bedfcb4ecdc5d1407bafc0ea4e1ffaf31ce4ef78bee12259d7a"
         },
         {
           "id": "answer_B",
-          "before": "4ef238be88c64d3691e8e4d196f52016b49fa705860b047b4631aedd7ce14bf9",
-          "after": "64d6d706ac2c2d57ef1dbf154d52e9c30349212cb6058a3ddce53c29d8e48b14"
+          "before": "217591c2605171d670454da1cc43b2aacaa1e15e53a143cd21c30d3577d703a0",
+          "after": "61a40b54503e174b35847d329757809a2590f3533cfacda9a7a2b52dc31aeb2d"
         },
         {
           "id": "answer_C",
-          "before": "d8a24e46f2db012116c82890c06f0eaf6b03788ec252601fd89edacabfffbb4c",
-          "after": "cafd8f8d1248e1ef57c070b7687f4f26b13169bc4eea4eacd94116674b765f75"
+          "before": "6b3c808ed7992622c4e655a977e4a1273a25b362861e250532d193e236bf75ab",
+          "after": "09a19cf20686b3179ebb0c7799276c29325d8074b14f3edb817a2e06afde85f8"
         },
         {
           "id": "answer_D",
-          "before": "5d21d987bd9b60d7d4d5d69511a2f44ad1c374e64afbcea24bc75344031038d3",
-          "after": "65c1fbe6033d571af0d6be764b52563d681292b8239d3aa1bf95694d84d5cc40"
+          "before": "41a89a6cfbd9ef2534c7d6106cc4f958d4bcde4783ea95908bd5967dbc464bd4",
+          "after": "5e44d090504ee84631b98998c9c7ad7dfe79421c392c6a048e419bbb37a2ca19"
         },
         {
           "id": "answer_E",
-          "before": "04d9278df1de1a0b8db09d79be034da6b8df2cfe7f1f57ff4dac56013fa35afd",
-          "after": "b9389669c602104c81c4996b9ccb8dfe084ff41ff072d8faef0729d786635fdf"
+          "before": "2387f57c28902682de80d7335fa0e53361d1dbcf7d6835fffb668c5ee8fb0bcd",
+          "after": "b66b9d8dca4ff3a74c74d4b5d06a95edec8795359d8c41f1bc1d4d0d8cb83942"
         },
         {
           "id": "answer_F",
-          "before": "6971b7ad553c1b93b888652d9a123415d660881361a510dce5256901d204ee9d",
-          "after": "b20d5102f77fcc66007d8e594e075fbd18478393cbe100cf24b6337f34b34077"
+          "before": "0a35382beeb6df6fd58a6034656aa06b9e442e135870e872c24f56b8ac2e81cf",
+          "after": "5d6fde597d9820aac2f6dfdcdabe12465440ef3f7f840a6809d8ab17484decf7"
         }
       ],
-      "before_sha256": "770e18c8f6036a2290e51c82411207b457691f500a61c813df7c2393bb09754f",
-      "after_sha256": "d700829f4046d2456d98e4b2e7309c9c7b634fffd2f359dd0de2ec4b07d22035"
+      "before_sha256": "39d150e79eba50849b8c7ece7f6151127ef5e61208ce8349bd0db9944c2495a7",
+      "after_sha256": "493e1fb055cbf9b3ce2137418b1743889611aaf0cd7322d417579629653936fa"
     },
     {
       "date": "2026-09-10",
       "form": "型式四",
       "dynamic_panxiang": {},
       "changed_slots": [
+        "hook",
         "scene",
         "check",
         "action"
       ],
       "slot_sha256": [
         {
+          "id": "hook",
+          "before": "84d6a4a2332c760aa3a187a3e3f74d7b17ecdcf547641a18c5d37290e6a5b361",
+          "after": "64653114509328032ab4dc7f5854be50c1c72a757a0fa2eed95378082885c507"
+        },
+        {
           "id": "scene",
-          "before": "6af40d1f427a42aab2ae9f9eeef3c96b52d386535ac2396e4503d22f8ac56186",
-          "after": "ce6601cf6d50b3b0120bdbad8f421bd74c41807c1ea0807406099912f75d72a5"
+          "before": "98505d1569ad75bfc8e1748850fa1dd59ca73d79b457a62fe58aeb0e5649f008",
+          "after": "33e78e07721bd6b9273089fb1305bb2df517705f94acbf2d9615b61cec967fbf"
         },
         {
           "id": "check",
-          "before": "028457cf4da89a928529d53c1491a3efeb3527d109668d761fd8adec71a217f1",
-          "after": "73482d40d88a320c3cb959b427bdf7402989e95d12c0fcf6d6d4f1f323fd1557"
+          "before": "81fb02e8d33b609360cb7244635df3b5e518459d214874c9f9892688c00d3ccf",
+          "after": "760e8d3e64beed2dcd61dff5b35817802a197131240c91622afbe78947e35f3f"
         },
         {
           "id": "action",
-          "before": "2adbcddb8a5125f1682fa33067548b463429afca2db3c86eb50ca6e6b07ca089",
-          "after": "bad47cbfd136d6e76236b414ccc07a3fc358485fb3a5b1a73a9a44a4b635c2df"
+          "before": "145e713db8b8181f66cfa3dc0dce9c33f193ee73020c8b49137349e9384fe062",
+          "after": "53506f7ffa57a736a3a9d9f2d835367e4c9a1f8c8fb7186af6234ac9eeb526db"
         }
       ],
-      "before_sha256": "43695f75e9f331b34a5d4d328b9176816963a2b80072a01ad0bda4426f6a699f",
-      "after_sha256": "f0da4edf97ec76830da56b30ae36ba949a1937f84bb040c53c84c7d347b7d4e0"
+      "before_sha256": "6c080621ff366008a1cc378ce1555186923803c84b2efe6d4e3f8cdaacf53a57",
+      "after_sha256": "eec5e31103c2f7fea17a6bcf55dfab6d82e9e731a679f8a84676b26816dc9692"
     },
     {
       "date": "2026-09-12",
@@ -1207,21 +865,9 @@
           "spirit": "玄武",
           "qi": "辛",
           "hour": "巳",
-          "dun": "陰遁",
-          "value_star": "天輔星",
-          "value_star_palace": 4,
+          "sampling_model": "independent_v2",
           "door_palace": "兌七宮",
           "direction": "西",
-          "spirit_placement": {
-            "4": "值符",
-            "3": "騰蛇",
-            "8": "太陰",
-            "1": "六合",
-            "6": "白虎",
-            "7": "玄武",
-            "2": "九地",
-            "9": "九天"
-          },
           "score": -1,
           "auspice": "中凶",
           "key": "天輔星|驚門|玄武|辛|巳"
@@ -1232,21 +878,9 @@
           "spirit": "九地",
           "qi": "丙",
           "hour": "辰",
-          "dun": "陰遁",
-          "value_star": "天任星",
-          "value_star_palace": 8,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "8": "值符",
-            "1": "騰蛇",
-            "6": "太陰",
-            "7": "六合",
-            "2": "白虎",
-            "9": "玄武",
-            "4": "九地",
-            "3": "九天"
-          },
           "score": 3,
           "auspice": "中吉",
           "key": "天任星|杜門|九地|丙|辰"
@@ -1257,21 +891,9 @@
           "spirit": "六合",
           "qi": "癸",
           "hour": "丑",
-          "dun": "陰遁",
-          "value_star": "天心星",
-          "value_star_palace": 6,
+          "sampling_model": "independent_v2",
           "door_palace": "離九宮",
           "direction": "南",
-          "spirit_placement": {
-            "6": "值符",
-            "7": "騰蛇",
-            "2": "太陰",
-            "9": "六合",
-            "4": "白虎",
-            "3": "玄武",
-            "8": "九地",
-            "1": "九天"
-          },
           "score": 2,
           "auspice": "中吉",
           "key": "天心星|景門|六合|癸|丑"
@@ -1287,32 +909,32 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "f2753d41708b4728ae047ba997ae7f1a7f745d982f3573f955b03d6f0e2aacb8",
-          "after": "f9298b4449d2413bcbf2381fa64bdef81b530dfe2c957e77c0d47acf5ec34e61"
+          "before": "3e8e8df424e7fa5293101e939fc8858c8b491ba1da4503d6d3e3048c706fc59f",
+          "after": "2e27f66bd60c77dc8688a385837b2ce05562d7aca8bc09e0f527a5114f694380"
         },
         {
           "id": "tip",
-          "before": "645725f3f2df1915647c95337373703be62facbc614dd37f3d1029beb0ad2489",
-          "after": "8e88c09ddfebe0c5ad3794cba137cd3406d7518b33831d3436bdba671a7e7f48"
+          "before": "cdaf075c8ff4390d8d1b34979f6ef1075d938422397ac94a923326e58d4ae0f0",
+          "after": "3cfb1acae5533a73a8639c4c61d17abaf5c2164ada60ebe8b3f44dc3540f116f"
         },
         {
           "id": "answer_A",
-          "before": "3aa61f2d88af7b0005878c4da36fed7a13ff80dc7735411e0d054d6fa9018e14",
-          "after": "648de36fc8d86cc8be3b2d82bb356de98675ce775b2ae15405dcb9f1445b59d3"
+          "before": "b00f05e4bab37035d09dceb2997165f20eefdb70e46861ef4d258336b7e7dd25",
+          "after": "adb70dd723ca33579a3b13292a1ff740a141e9df68691ef1dd38ef5fe930db27"
         },
         {
           "id": "answer_B",
-          "before": "4197ee05712c45a8d1c86d18ee01cf44c18f8788286f282c154158925de39bf5",
-          "after": "bc6cd374478e0f6a78ed861c6d1e92af2303712d8a8e3443692e2f0c101147e9"
+          "before": "4b5eef96066ebfb0b4784d566cdbd9b65bcbd7e0690254cba6034e8de75b3fab",
+          "after": "609a79295dbbf4a18c9a498c0836edd11570b5ab6717758ae7bb3eb117e1c918"
         },
         {
           "id": "answer_C",
-          "before": "0c14424df8b293d48c8c1635f04fd0a11495cf1a2d0bf862fde6de53a68949d0",
-          "after": "21b689c7bac8b8bd18a01e802b8f310a8f91f2dade7aa8082957f146bea8ab5b"
+          "before": "6b72e6323ed3266f98971714c9dccb85f0ecd7d01f54d6ad8ca7642d3d9dd51d",
+          "after": "fc99bb46e247f0567af68251b0d125d4200a260cc35c1c523a1c824d9c3dc2c2"
         }
       ],
-      "before_sha256": "d106433f226c1a82e02a72046fad9e4b549d30c1842792d17d279d1aabf84e33",
-      "after_sha256": "59566d31adcea332a25b2b61db3526a80cc2c0e5f752b0526be20b122614ece4"
+      "before_sha256": "90e6d28449450cd7e058018f26d761c9623aa8a29e14f602b9f65946c41766bc",
+      "after_sha256": "11f155753bc0380ca302ca55cfcf6c028d3156b644c20a2e2f86cc753ab7ca39"
     },
     {
       "date": "2026-09-14",
@@ -1324,21 +946,9 @@
           "spirit": "玄武",
           "qi": "辛",
           "hour": "巳",
-          "dun": "陰遁",
-          "value_star": "天輔星",
-          "value_star_palace": 4,
+          "sampling_model": "independent_v2",
           "door_palace": "兌七宮",
           "direction": "西",
-          "spirit_placement": {
-            "4": "值符",
-            "3": "騰蛇",
-            "8": "太陰",
-            "1": "六合",
-            "6": "白虎",
-            "7": "玄武",
-            "2": "九地",
-            "9": "九天"
-          },
           "score": -1,
           "auspice": "中凶",
           "key": "天輔星|驚門|玄武|辛|巳"
@@ -1349,21 +959,9 @@
           "spirit": "九地",
           "qi": "丙",
           "hour": "辰",
-          "dun": "陰遁",
-          "value_star": "天任星",
-          "value_star_palace": 8,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "8": "值符",
-            "1": "騰蛇",
-            "6": "太陰",
-            "7": "六合",
-            "2": "白虎",
-            "9": "玄武",
-            "4": "九地",
-            "3": "九天"
-          },
           "score": 3,
           "auspice": "中吉",
           "key": "天任星|杜門|九地|丙|辰"
@@ -1374,21 +972,9 @@
           "spirit": "六合",
           "qi": "癸",
           "hour": "丑",
-          "dun": "陰遁",
-          "value_star": "天心星",
-          "value_star_palace": 6,
+          "sampling_model": "independent_v2",
           "door_palace": "離九宮",
           "direction": "南",
-          "spirit_placement": {
-            "6": "值符",
-            "7": "騰蛇",
-            "2": "太陰",
-            "9": "六合",
-            "4": "白虎",
-            "3": "玄武",
-            "8": "九地",
-            "1": "九天"
-          },
           "score": 2,
           "auspice": "中吉",
           "key": "天心星|景門|六合|癸|丑"
@@ -1402,51 +988,57 @@
       "slot_sha256": [
         {
           "id": "card_A",
-          "before": "5c1eebfef45d92f27e17dbf9302ff7f1c5538c2f4f0d7aa2990c418e2146e7c2",
-          "after": "60dd407207f9d44df708980b5f68091dfc5a32766ddc5c8db0b8fed422f5a0ca"
+          "before": "ace1f2a34f87328e64d3fb002b4b8d5433eb9ad8fc7cbf169fb0a587951240f1",
+          "after": "eeee9f8e404b07ff091286d60cb035b304d1299827692fe10591c822563546b7"
         },
         {
           "id": "card_B",
-          "before": "ded7d19f57a3666354eab699533f4c61101d82182391350b9eca974393613e89",
-          "after": "62dc0e64ee8a0b1358fd2e977e93baec605a4a0866cccfe0280d5f8b7377fbff"
+          "before": "c9bbafa48da416adb55315fe43d61d5138bb612b698429ecf4108b9b0f903122",
+          "after": "4df8e2695063a6173128889814aaa3d0fb001454a6e4296db1ba0ba0a3f1d3a8"
         },
         {
           "id": "card_C",
-          "before": "65d8d0247f8e0a796deadcbe9d922d34901a2d43ed3ab54554c84ed944d3f24a",
-          "after": "af11668f9e83d884538c0dac6fa79eaaf4cd89b799076dca209b08f7020ab265"
+          "before": "770647d3902347e24cb17d979b17b41932e7702136cd01b04f8258afd14cf0b5",
+          "after": "bb16cec0aa3caae93c287598774d6b405e3a76503a444d68563d568b8fb2dad6"
         }
       ],
-      "before_sha256": "c8f5ceca60d01c2eb5401a65985babdb90ea5023eef22b5856c6b5b885b892c7",
-      "after_sha256": "fdad7a22cb968446cffd4e1b67a67c3cadcab0d5e7e33057d5312b4398a82546"
+      "before_sha256": "ac7098c85792a33621324e58eeda39678932ac2b5137d286b1eae404d69a3db8",
+      "after_sha256": "8fa622f98d54c9e3dcb1ce420c023ff484a585d1d937baed9857f64743e69cae"
     },
     {
       "date": "2026-09-16",
       "form": "型式二",
       "dynamic_panxiang": {},
       "changed_slots": [
+        "hook",
         "scene",
         "reflection",
         "action"
       ],
       "slot_sha256": [
         {
+          "id": "hook",
+          "before": "5e1494361b0ad886b3e54cf441f6940b5a7087451d7a102369b28577a00ff4d2",
+          "after": "8eb3c52c84e844fdc57927767d27049e208837a21573eb032aebd63ca8fb4922"
+        },
+        {
           "id": "scene",
-          "before": "54dda89c6f99a28682cba40b5d8291f9c4f7bf0d9b2c3fdb1b45af22d7f85279",
-          "after": "81b509b5f62f77e146ddffc4a4ff68e69e4d54af912704b1568eb5810074cbb8"
+          "before": "1be6614e2a5b0f40df62ccf2852e4fe6acf1129b2d30c3d9b5dce7f75b78c97a",
+          "after": "2f5b99d24aab68fb14ef22f0c1af0d01a68d86f9b8492e77bd73c6d1f1187fe7"
         },
         {
           "id": "reflection",
-          "before": "f58639b40883a560545cf6c5ad41bf55d3f9bc977eb88fc3c20a91beb4562819",
-          "after": "b53c981449b129c22e18dc1c4ff6f6cf8644a9b71c3990f5e2dc88b4e342bb30"
+          "before": "df0c00a8f3a2ee3845f67623f0f56fe0487138ddc926552c34094a961d983856",
+          "after": "cef33b97892c18a5499ddae9246b60801247869faac1eb5d57a5479a2204bf9f"
         },
         {
           "id": "action",
-          "before": "584b0861c718e076be6ec80ef2b96d1db2b0433703c7f77c00a21871ed73132c",
-          "after": "93dbcb417443e5033accd177ac9042246cb0500d7b0108e56903206e58c3a723"
+          "before": "8de112992f9674772151c72c7c212c40284f4a3f58ee7038e16cb5f6dedf1dab",
+          "after": "7123231fadb9e7ab8ae5f95efa32c01256630de1bdde1623dd4bfe5157209bac"
         }
       ],
-      "before_sha256": "ed4b4d709611db1f46649f95085f531f510d4f9d928a5bb385b987fff0b7ec46",
-      "after_sha256": "c2d916235aa04987b7e5049096736420a279619bc5164381a804c3ea979963a5"
+      "before_sha256": "e5c966eea45b9047a82d36f5673c03c0e7cf8f3cd823f5aaa23d276e070126de",
+      "after_sha256": "94f87355144f5ffd9f392cc2621f48d5dca6b41cfe16381ea614d9bcf57d315c"
     },
     {
       "date": "2026-09-17",
@@ -1458,12 +1050,12 @@
       "slot_sha256": [
         {
           "id": "explain",
-          "before": "09be821a7829540709db4c8a15bdae8bf444e1ccf2f0765347e30a2f7d4ea592",
-          "after": "e247586ba6cf8fb82adab6c37abaa89cb7c5a74933ff725c48ee5b836dee288e"
+          "before": "c82a46401e6a935f747ad3b52f5f243c7a3513a5129fa72a48de7223ed8dfe8e",
+          "after": "82183ca1062490b6fc34d6945d3568a685876d77f01026e8f7fe9c79bb1d8564"
         }
       ],
-      "before_sha256": "5371251c2fee79bb8d032247c65bd9c00a113ec38472874fe4ed89ed38a0c191",
-      "after_sha256": "ebaf3063d2fa1a5c587298d78c9be8867050790740c47eff42c05f34b4e41d2f"
+      "before_sha256": "f012d8e189d5b6577af6c3e18f913f580d5b78de98e7e640881392a1e7443b24",
+      "after_sha256": "012f887b07e01b6e0ea3b9193aa87ab7afeac38794b82cabb42a58076b6fa001"
     },
     {
       "date": "2026-09-19",
@@ -1475,21 +1067,9 @@
           "spirit": "九天",
           "qi": "癸",
           "hour": "酉",
-          "dun": "陰遁",
-          "value_star": "天禽星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "兌七宮",
           "direction": "西",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": 0,
           "auspice": "平（吉凶參半）",
           "key": "天禽星|驚門|九天|癸|酉"
@@ -1500,21 +1080,9 @@
           "spirit": "值符",
           "qi": "乙",
           "hour": "酉",
-          "dun": "陰遁",
-          "value_star": "天心星",
-          "value_star_palace": 6,
+          "sampling_model": "independent_v2",
           "door_palace": "乾六宮",
           "direction": "西北",
-          "spirit_placement": {
-            "6": "值符",
-            "7": "騰蛇",
-            "2": "太陰",
-            "9": "六合",
-            "4": "白虎",
-            "3": "玄武",
-            "8": "九地",
-            "1": "九天"
-          },
           "score": 5,
           "auspice": "大吉",
           "key": "天心星|開門|值符|乙|酉"
@@ -1525,21 +1093,9 @@
           "spirit": "玄武",
           "qi": "乙",
           "hour": "亥",
-          "dun": "陰遁",
-          "value_star": "天蓬星",
-          "value_star_palace": 1,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "1": "值符",
-            "6": "騰蛇",
-            "7": "太陰",
-            "2": "六合",
-            "9": "白虎",
-            "4": "玄武",
-            "3": "九地",
-            "8": "九天"
-          },
           "score": -1,
           "auspice": "中凶",
           "key": "天蓬星|杜門|玄武|乙|亥"
@@ -1555,32 +1111,32 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "d253c2cb68980ffd47d78a634a950ee86468cbe885735270a44eab1aeb03720d",
-          "after": "b938f06bab3323a62881aeb4a29d23dd45861c42e71f56b37d72e725b3896bcf"
+          "before": "b611b952126f7a1d5258e89081c3f8d758fe92b8c26b87de8e9d9aca56e5cfa8",
+          "after": "ef4330aa052bdc763715275cc56a81a2808bacb2389df3e91d2be73670c73496"
         },
         {
           "id": "tip",
-          "before": "26b5a79263ea29d3999e8ea58bf04709347c243456e2ffcdccdd3edbf15d1bbd",
-          "after": "1316fc7db74c79b24bb2a52ccfd4cbe7bf8fde07f070133b40d9f56e11d77869"
+          "before": "a4847b25b80457b76b117416c3a421539a209469eb7756bbcc0a053d1cda8657",
+          "after": "ae8f2ad4fb0e1cb3f10c8a091e1c2ef264f19f401474a83b91a0c16ff84a9fd3"
         },
         {
           "id": "answer_A",
-          "before": "36396380d6eac647eeb07f2909981e7d64350c54529e5d470097e9fe76a52179",
-          "after": "685917528d4ccb89e4ccc662e1d5b5f4aefe44bfa3bacbed8bf2c09e38c48d5b"
+          "before": "91bff6fc91ea59720cd3225549f3e21df59537b08cfe70a12e2ec269855e1215",
+          "after": "f6e828260cb3c948c7ec4762437d78603656323f39942f6f403d503e318021db"
         },
         {
           "id": "answer_B",
-          "before": "e67e874f8aeada2945266c319e101fce2fd1198ffc737fd39491b3aec431bb18",
-          "after": "f40f046e9fe05b1a4c00471878f547bcc27217038c2d897d81eba106162b69a2"
+          "before": "3b86ee2d7280d618a642d20a08247c3684fa177b5922dfdef4c98e40b05ba60e",
+          "after": "6ba2e3e0d8c5bd180e9eb96d6463162a88098ed32c5ea114cf5a2dd42479078b"
         },
         {
           "id": "answer_C",
-          "before": "dee5dbecec85c67d2e637e8c5fef2cdc54b7be223499c2b7c463687f1ae70001",
-          "after": "5ac634908c5047445834c5f73f18350a0d87ec40c5284372d3b3923258119773"
+          "before": "9e1cbe2f325d56e73a9bcf3d15dc7f9f07763fd916d511a8ed103bf522eb6586",
+          "after": "92d2af469415ea7a7bffc3c88b70c8d1e6094d37cad4c4824f743a3d05f56c14"
         }
       ],
-      "before_sha256": "c1668ac714b470152855ebb0716dabf64435796383c8129ad8fb8e2aa7cd0f3d",
-      "after_sha256": "c6b04c67b0c2762988b1c9fddadc0d36504e7ef2f5dbfc589c87da3d17d6acad"
+      "before_sha256": "3dc4d32e60f726acc791cb4d558c8170303f145e3ad7385c7bf11400203d6078",
+      "after_sha256": "a6ea9e7828a0156e029aeaaf6d5f0eb20e6e4461b24ca91f79362e37934cf5cc"
     },
     {
       "date": "2026-09-21",
@@ -1592,21 +1148,9 @@
           "spirit": "九天",
           "qi": "癸",
           "hour": "酉",
-          "dun": "陰遁",
-          "value_star": "天禽星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "兌七宮",
           "direction": "西",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": 0,
           "auspice": "平（吉凶參半）",
           "key": "天禽星|驚門|九天|癸|酉"
@@ -1617,21 +1161,9 @@
           "spirit": "值符",
           "qi": "乙",
           "hour": "酉",
-          "dun": "陰遁",
-          "value_star": "天心星",
-          "value_star_palace": 6,
+          "sampling_model": "independent_v2",
           "door_palace": "乾六宮",
           "direction": "西北",
-          "spirit_placement": {
-            "6": "值符",
-            "7": "騰蛇",
-            "2": "太陰",
-            "9": "六合",
-            "4": "白虎",
-            "3": "玄武",
-            "8": "九地",
-            "1": "九天"
-          },
           "score": 5,
           "auspice": "大吉",
           "key": "天心星|開門|值符|乙|酉"
@@ -1642,21 +1174,9 @@
           "spirit": "玄武",
           "qi": "乙",
           "hour": "亥",
-          "dun": "陰遁",
-          "value_star": "天蓬星",
-          "value_star_palace": 1,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "1": "值符",
-            "6": "騰蛇",
-            "7": "太陰",
-            "2": "六合",
-            "9": "白虎",
-            "4": "玄武",
-            "3": "九地",
-            "8": "九天"
-          },
           "score": -1,
           "auspice": "中凶",
           "key": "天蓬星|杜門|玄武|乙|亥"
@@ -1670,22 +1190,22 @@
       "slot_sha256": [
         {
           "id": "card_A",
-          "before": "e198b201b5f87370571fc64200e3576b461f1336938bc4e4670e3342715ec081",
-          "after": "d58ad9571b7d2e5bacafd927eb3bbd4d6f68de0adaed4318d5b7700a73c11aa2"
+          "before": "2f861f795d0c1d89d7e7efd04565b8a11d2c607f02c357bcaf4d1a9a0675c869",
+          "after": "9aa25b83bda1eb10e7eb7d2d0766298871c7b3ecba87a14c7e7fc83966e4e1b6"
         },
         {
           "id": "card_B",
-          "before": "5ccc531e582802532d0c579edc3bf1564c28fb15e83c48059aa6efd1e6c4a7c1",
-          "after": "197d81e8c294c85ec7ce8337d0ce2cb8f0fa581d469d86f73f128e39b4b27fbe"
+          "before": "92177830eb1227d0bca354f524f198a87ec413b7bd78633ab146eb97264e317e",
+          "after": "0bc44f5c4441db196311f8be835fbd6ac8b42d42048b9dedd95f998e06fa7c68"
         },
         {
           "id": "card_C",
-          "before": "df508bab1f5e7093e353d0a48f4b27122913573e99740c90835c477bcce3be19",
-          "after": "0c06a45e29a415402284f3cadcd734ceb77fa64a513dd9034798d954ef6ac502"
+          "before": "6dfe2c5d782b1131f0f71ef67ce13d5f660b49d9f62de0ff427b06b9ca51327d",
+          "after": "c844a830e87f7ab6467368ffebcec823093eac1357c202b5c93055e4e6590f9e"
         }
       ],
-      "before_sha256": "c9964458ac07803692d6bc6b651a799e3e1f3ee6aa37a57fbf75a8902f66b1a9",
-      "after_sha256": "e351ded9881b32e8a92b300079bc70045e8ae4dd92f9de9ca11304cd48e7de99"
+      "before_sha256": "6314d4777f973f9ddaf40abbbdd411d2f5a35d2d3c2bc9ed584e3cf15be7b236",
+      "after_sha256": "9abdac27f80b37816f28c925fb9ff354f3d9c24990f647276e996bab73efd9a0"
     },
     {
       "date": "2026-09-23",
@@ -1697,21 +1217,9 @@
           "spirit": "值符",
           "qi": "癸",
           "hour": "戌",
-          "dun": "陰遁",
-          "value_star": "天英星",
-          "value_star_palace": 9,
+          "sampling_model": "independent_v2",
           "door_palace": "離九宮",
           "direction": "南",
-          "spirit_placement": {
-            "9": "值符",
-            "4": "騰蛇",
-            "3": "太陰",
-            "8": "六合",
-            "1": "白虎",
-            "6": "玄武",
-            "7": "九地",
-            "2": "九天"
-          },
           "score": 1,
           "auspice": "中吉",
           "key": "天英星|景門|值符|癸|戌"
@@ -1722,21 +1230,9 @@
           "spirit": "騰蛇",
           "qi": "辛",
           "hour": "寅",
-          "dun": "陰遁",
-          "value_star": "天柱星",
-          "value_star_palace": 7,
+          "sampling_model": "independent_v2",
           "door_palace": "坤二宮",
           "direction": "西南",
-          "spirit_placement": {
-            "7": "值符",
-            "2": "騰蛇",
-            "9": "太陰",
-            "4": "六合",
-            "3": "白虎",
-            "8": "玄武",
-            "1": "九地",
-            "6": "九天"
-          },
           "score": -3,
           "auspice": "中凶",
           "key": "天柱星|死門|騰蛇|辛|寅"
@@ -1747,21 +1243,9 @@
           "spirit": "玄武",
           "qi": "癸",
           "hour": "午",
-          "dun": "陰遁",
-          "value_star": "天芮星",
-          "value_star_palace": 2,
+          "sampling_model": "independent_v2",
           "door_palace": "坎一宮",
           "direction": "北",
-          "spirit_placement": {
-            "2": "值符",
-            "9": "騰蛇",
-            "4": "太陰",
-            "3": "六合",
-            "8": "白虎",
-            "1": "玄武",
-            "6": "九地",
-            "7": "九天"
-          },
           "score": -1,
           "auspice": "中凶",
           "key": "天芮星|休門|玄武|癸|午"
@@ -1772,21 +1256,9 @@
           "spirit": "六合",
           "qi": "壬",
           "hour": "亥",
-          "dun": "陰遁",
-          "value_star": "天任星",
-          "value_star_palace": 8,
+          "sampling_model": "independent_v2",
           "door_palace": "兌七宮",
           "direction": "西",
-          "spirit_placement": {
-            "8": "值符",
-            "1": "騰蛇",
-            "6": "太陰",
-            "7": "六合",
-            "2": "白虎",
-            "9": "玄武",
-            "4": "九地",
-            "3": "九天"
-          },
           "score": 1,
           "auspice": "中吉",
           "key": "天任星|驚門|六合|壬|亥"
@@ -1797,21 +1269,9 @@
           "spirit": "九天",
           "qi": "丙",
           "hour": "巳",
-          "dun": "陰遁",
-          "value_star": "天冲星",
-          "value_star_palace": 3,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "3": "值符",
-            "8": "騰蛇",
-            "1": "太陰",
-            "6": "六合",
-            "7": "白虎",
-            "2": "玄武",
-            "9": "九地",
-            "4": "九天"
-          },
           "score": 3,
           "auspice": "中吉",
           "key": "天冲星|杜門|九天|丙|巳"
@@ -1822,21 +1282,9 @@
           "spirit": "值符",
           "qi": "己",
           "hour": "申",
-          "dun": "陰遁",
-          "value_star": "天心星",
-          "value_star_palace": 6,
+          "sampling_model": "independent_v2",
           "door_palace": "乾六宮",
           "direction": "西北",
-          "spirit_placement": {
-            "6": "值符",
-            "7": "騰蛇",
-            "2": "太陰",
-            "9": "六合",
-            "4": "白虎",
-            "3": "玄武",
-            "8": "九地",
-            "1": "九天"
-          },
           "score": 4,
           "auspice": "大吉",
           "key": "天心星|開門|值符|己|申"
@@ -1854,71 +1302,77 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "63d521d3073e5a4773099d8661cabe7064837ba32e9e283e65a9373235b0dc5d",
-          "after": "0ed914ce2a75cfa5d5b4a02d9cffae51a755799faa8c6ac5f4418a765a3a7267"
+          "before": "2530f17d6f56afd09b96b79276e07989df4a671df36bf88142e9ed52cd3d8af6",
+          "after": "fe0ec6350478f8e99a5bff7ac1b27627e9d884aa65e5f35aa7a4f0f4c6fef474"
         },
         {
           "id": "answer_A",
-          "before": "68826bb3a4d15fa0eac05eb94290c2dd64665ba868655cefd99a37e525d7b9c4",
-          "after": "858c1e7989c2e1b5424f0973f72942d854aad6e78612c6c615e36bc1e7f35c8f"
+          "before": "4bca200e6c2329a7bace0210dfaabf8ff77a57cc990292cad9d1a2e1391f24f0",
+          "after": "945ac0f4633539f508fdffa205935ccca236795ceca68563282cd2d7666b647a"
         },
         {
           "id": "answer_B",
-          "before": "0e7a57d7f15b8396295c5df99328ff85839a25876f78b5133eff7f411c7f939a",
-          "after": "6806dc3f94189b6cab03ba0d4db8ca8b3f39b9ba2928678384799153aea9097f"
+          "before": "fd4d08e36da388ec019a25ed630583f05f51e474381eee2d6708a7c88a06db00",
+          "after": "59440fd7ab5b05d45de0dd74741c6b42e147ddd402ba0f7d1f7fdd240d8de9bd"
         },
         {
           "id": "answer_C",
-          "before": "fbe4746a1ebf0efe152a26ba0bfe279570d15151ccb8fb28f935bb29a5bf0504",
-          "after": "03b32a7ab130a59e33e42acfa3f14223d00776365c3e3c78be4ab61ee6488f77"
+          "before": "45f259edd8e3755776a92c1565e7feb6742518285533be433258a5aff817fde8",
+          "after": "2e08e5d9075de746f1960e6cad4e5f1599058fdbde6e3559e984497c900e157d"
         },
         {
           "id": "answer_D",
-          "before": "77013ee819113eb4357a3e8b66488283ee11a5ff7c1e369b9ae63909a1650500",
-          "after": "3ae6661bbe96236a9d49dc161dd85de22e3a1da03df00bab261f4189a3a79d4f"
+          "before": "7aad90c9aa685b8c3e9735a4bcab743bc69dfe4b6f349c4d4058d8b6e102bb43",
+          "after": "e3894a7caf652c98aa97b1c7d4fd928fe5795d11d18775e5b2b9eaee6856751f"
         },
         {
           "id": "answer_E",
-          "before": "e400c5757b6af667b18313fef42f23be33a985369158d4fc73e26a77e3405ae4",
-          "after": "babaa9810ce0b53c28eecc0b216222545ae1d249ed4e33dac7369d3e5d6c6531"
+          "before": "dfedabc5687cb8ce64ff0785c8ef4555b7c202acd206a8ee0f7b7ed5afd19e6b",
+          "after": "a6ef48f763ca09edac0ec652c7f01df749daaa2b3f0aca9d4fc2030189d1d613"
         },
         {
           "id": "answer_F",
-          "before": "a910f1835f0ab8770d6ce0fadd5418184b39a0e81e47cc5b46994660fbff65f6",
-          "after": "961b825482b0e8f449134ea6719e7480178e87f59c27362ddba06dc022d78fb4"
+          "before": "1e415d63e3cd21cd3cdbb06ed1127e9b24e95e1dd9fac510b820cc2a5f3d41cb",
+          "after": "509c8ff051a3971794c73b3f96f995f7eea35ee42dbe2ce2192f46d75a357c2c"
         }
       ],
-      "before_sha256": "16d44749b8ff0c58c042697651713ad206abf91d0f1df4ca83b54a5d8bbe3f73",
-      "after_sha256": "fcf6e9549e8600ac97058b4bed91d399638154a92be878ac2e180f58c48a6857"
+      "before_sha256": "407a0a33c4b56080956ea4f31293ff2aedccd0aa2840593b07d2ac3d21631f19",
+      "after_sha256": "ce2a9f46457b25ec2627b7e9b24f79a9d59b60f5c18e41639dded0b084061f71"
     },
     {
       "date": "2026-09-24",
       "form": "型式四",
       "dynamic_panxiang": {},
       "changed_slots": [
+        "hook",
         "scene",
         "check",
         "action"
       ],
       "slot_sha256": [
         {
+          "id": "hook",
+          "before": "b2ce46d944d984a50e638ab1a0f094e69727372a16dc47bb1fc488200b5d4aa5",
+          "after": "8ea1c234aeb02aac70e0cdd863e02acf29b19ad2ebbe30b06b326d9cd4cfb530"
+        },
+        {
           "id": "scene",
-          "before": "534bf3b1315c148d24f28129589b69dcef4abb027a3c1e1201b5dc7006777a96",
-          "after": "c3fdcf8e5cf35d4d38c4c0c90dbed23e35f7e4a890906bcd156f5f0205c3a50c"
+          "before": "1852bf4874b0801d5bda154890019380c8194f5a5ccb2ec47ade5aa7d44546a2",
+          "after": "3a246c4de4af3044ffbf3f55c36672f66abcf6f4a94a9b0d99bc50c6152de23d"
         },
         {
           "id": "check",
-          "before": "440cdcba11f21c754a5ba80eb8c89778bddf9bcb6e62e63c96360927e65de472",
-          "after": "4c0e1a9dafbcfb3384f8c580207b78bfeb5c2d2b1506ac08610c73e5ff8b6414"
+          "before": "d300d9fbb95f4f7559bd5b7b642193e80423e2d1bda3dc434726cbd016b0d67f",
+          "after": "3a5277cad7e351928f2cc4b506b190e54dddc210ce045e9f37bbf321f688c866"
         },
         {
           "id": "action",
-          "before": "703f98535ffb88a156f3a19996906490e48012caa543c5ef3548447ac7e54e91",
-          "after": "5b4db0a65a34e115280c910b60530a0852c2cda2e1fc49e11637c8e7d82bfcf8"
+          "before": "00c0e2e42f01df663faffd6c8dba3b5ec8f66f564b061b72564f3f196dfa34ea",
+          "after": "000add38ad7cf8616e2846beafa59aba07ec578c0c5598ef57929f429af4cf68"
         }
       ],
-      "before_sha256": "d3f02e0922f42379bf84ba924bbb8a6356b80b27ac66361f50e7db2ed314ec7c",
-      "after_sha256": "9cee73ef1ab45b3749f47f4f082df5f436799154a3cc251f39c51a14d9f1e21c"
+      "before_sha256": "c43a484613ae7847599896d1419230aee4931db10da755e8f8ee1f215b1030a3",
+      "after_sha256": "4f6bda900b56335216c15d92655bd12b9af06b270b0681eb16207a1083162aee"
     },
     {
       "date": "2026-09-26",
@@ -1930,21 +1384,9 @@
           "spirit": "白虎",
           "qi": "癸",
           "hour": "酉",
-          "dun": "陰遁",
-          "value_star": "天任星",
-          "value_star_palace": 8,
+          "sampling_model": "independent_v2",
           "door_palace": "坤二宮",
           "direction": "西南",
-          "spirit_placement": {
-            "8": "值符",
-            "1": "騰蛇",
-            "6": "太陰",
-            "7": "六合",
-            "2": "白虎",
-            "9": "玄武",
-            "4": "九地",
-            "3": "九天"
-          },
           "score": -2,
           "auspice": "中凶",
           "key": "天任星|死門|白虎|癸|酉"
@@ -1955,21 +1397,9 @@
           "spirit": "騰蛇",
           "qi": "庚",
           "hour": "亥",
-          "dun": "陰遁",
-          "value_star": "天蓬星",
-          "value_star_palace": 1,
+          "sampling_model": "independent_v2",
           "door_palace": "乾六宮",
           "direction": "西北",
-          "spirit_placement": {
-            "1": "值符",
-            "6": "騰蛇",
-            "7": "太陰",
-            "2": "六合",
-            "9": "白虎",
-            "4": "玄武",
-            "3": "九地",
-            "8": "九天"
-          },
           "score": -1,
           "auspice": "中凶",
           "key": "天蓬星|開門|騰蛇|庚|亥"
@@ -1980,21 +1410,9 @@
           "spirit": "騰蛇",
           "qi": "庚",
           "hour": "未",
-          "dun": "陰遁",
-          "value_star": "天英星",
-          "value_star_palace": 9,
+          "sampling_model": "independent_v2",
           "door_palace": "巽四宮",
           "direction": "東南",
-          "spirit_placement": {
-            "9": "值符",
-            "4": "騰蛇",
-            "3": "太陰",
-            "8": "六合",
-            "1": "白虎",
-            "6": "玄武",
-            "7": "九地",
-            "2": "九天"
-          },
           "score": -2,
           "auspice": "中凶",
           "key": "天英星|杜門|騰蛇|庚|未"
@@ -2010,32 +1428,32 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "142b4f07ddd9f8d93e3af33279fc6563bf13e8bdb8f7066fd99137b267fc6d7f",
-          "after": "5e8203854acf24f86cc37403972b741721e402e3e4e72b0ad3f373965c967961"
+          "before": "3159862dc9914bed46a4db97224a5e875db37e7f98dde5427c6dff99fb95e15b",
+          "after": "aa39cdf6900ca3c67ed933dd4b14b75bab6fe30091fd8cbcda8a1f5f4a47a1ed"
         },
         {
           "id": "tip",
-          "before": "66b381e1f4d8a001574f3f65dd4a122940f03745f480ee679d0e55cb552eec4b",
-          "after": "60721420397917c9c87c746b5069c4d0847529d87aaf0949e5fc7220b53c9103"
+          "before": "5922b6c3d9e6332373869c3b893ac3ff0552103c6b044c026e5d83d40a7fe2af",
+          "after": "81e916079e1d69906f051efceb9b1e64e40a3a7e1f9aaddd513678fcb44fae12"
         },
         {
           "id": "answer_A",
-          "before": "965b937ca2d40eaff99955937b44a4f77388bf4eb1a1af064a37118001efd9ad",
-          "after": "82921d25c80ac3b644545745b605fba7f39e410885d846af593524374d4ad7e1"
+          "before": "297af79bc2e8b403e7f0af3a7b4b014aac791bcf438f786aa74e733c76c9ac0a",
+          "after": "964c480f8dfd6f411f01e072ecbbb16f1eef6f71c7bf8338213f17afdd19c4d2"
         },
         {
           "id": "answer_B",
-          "before": "dd6d0ae10ef7190bead82c460f68ce3c30eab361b2c08448e9d244bd646a9c6d",
-          "after": "7b8c4ee22679a24290b25218e2cdb0bcbfb25cb033270f149a0c83c1eb53b329"
+          "before": "9e485571793d277bf71701a7314409845bde7130a8d5e9c23a92735b753e0204",
+          "after": "0f1052c8fff6f5599f8827034c19d0501b0973f3f4114ea8eb3564176dee7e6f"
         },
         {
           "id": "answer_C",
-          "before": "45d38aa8da853b1b811f40c55c4fc597394562f1962fe46b71b79e8ed8765170",
-          "after": "9423c1f14b4b560b5a9d8c6a98d0d46a608516808f0716c0700789f319dc3790"
+          "before": "bb22df71c9955c7a4ee26a0abb09643410a6dc7c6af236bb6f7c577eeea134e1",
+          "after": "b41e9bf7fc4f74fc2dd168308d376e414a5651d205ec47a1d2fdc8989da66399"
         }
       ],
-      "before_sha256": "a5c962681c6dc3ce9e6f45bbc0698b59a6e9a06eeee53f0d8330b12569846bb7",
-      "after_sha256": "872e177f90ee7513eae3caecbd9d83248d608bdd663b607e432c7148e5417eea"
+      "before_sha256": "c9ed991ba5d4658c098e70a6d5838f3946240d325685cc213099a9ed7613e7a7",
+      "after_sha256": "ab53a42ee87077586c6f768b53586971cad6cdd70fbdd291c1b82718ea530d5f"
     }
   ]
 }

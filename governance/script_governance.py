@@ -33,6 +33,11 @@ FILES = (
 )
 MODEL = "claude-sonnet-4-6"
 PUBLISHED = {"2026-08-17", "2026-08-18"}
+TYPE3_SSOT_TERMS = {
+    "2026-08-20": "四化標記",
+    "2026-09-03": "夫妻宮與交友宮",
+    "2026-09-17": "官祿宮與財帛宮",
+}
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
 GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
@@ -66,6 +71,8 @@ ANCHOR_PATTERN = r"西北|正北|正東|正西|正南|東北|東南|西南|中�
 PRECISE_ANCHOR_PATTERN = r"(?:早上|下午|晚上)\s*\d{1,2}\s*(?:[–—\-至到])\s*\d{1,2}\s*(?:點|時)|\d+\s*(?:步|分鐘|天)"
 SOFTENERS = ("可能", "也許", "看起來", "未必")
 READABILITY_BLOCKED = ("正處於", "若有若無", "進退兩難", "心有不甘", "牽動", "軸線", "收斂", "承接空缺", "補位", "判斷權", "推演", "脈絡", "能量狀態", "可落實", "局面", "不替沉默加上意思", "把空下來的事接走", "替別人的沉默找理由", "把事情想得更遠")
+SIMPLIFIED_CHARS = "个这时后里么说给动过还"
+TYPOGRAPHIC_BLOCKED = ("不子是", "占住")
 
 def sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
@@ -81,9 +88,14 @@ def load_json(path: Path) -> dict:
 
 def readability_issues(text: str) -> list[str]:
     issues = [f"使用抽象詞：{word}" for word in READABILITY_BLOCKED if word in text]
-    for line in text.splitlines():
-        if line.startswith(("【盤象：", "【時空與感官錨定】", "【奇門行為改運】", "**選項 ", "‧")):
+    simplified = sorted({char for char in text if char in SIMPLIFIED_CHARS})
+    if simplified:
+        issues.append(f"含簡體字：{'、'.join(simplified)}")
+    issues.extend(f"含錯別字：{word}" for word in TYPOGRAPHIC_BLOCKED if word in text)
+    for raw_line in text.splitlines():
+        if raw_line.startswith(("【盤象：", "【時空與感官錨定】", "【奇門行為改運】", "**選項 ")):
             continue
+        line = raw_line.removeprefix("‧ ").strip()
         for sentence in re.split(r"[。！？；]", line):
             if cjk_count(sentence) > 36:
                 issues.append("句子超過 36 個中文字")
@@ -144,6 +156,13 @@ def normalize_block(block: str) -> str:
     changed = changed.replace("本篇只教讀取盤面標示。", "")
     changed = changed.replace("本篇只做定位與記錄，不輸出個人關係判定。", "")
     changed = changed.replace("本篇只做盤面讀取與記錄。", "")
+    changed = changed.replace("天沖星", "天冲星").replace(" he ", " 他 ")
+    changed = changed.replace("【置頂留言區解答｜24 小時發布後】", "【置頂留言區解答｜24 小時後發布】")
+    changed = changed.replace("｜共鳴型｜型式四", "｜資訊型｜型式四")
+    changed = re.sub(r"(（3）三選項圖卡.*?暖米白 #F5F5DC)（邊框 \+ 文字）", r"\1（邊框）", changed)
+    changed = re.sub(r"(?m)^(- [A-F]：.+?)\s*\+\s*暖米白", lambda match: match.group(1).rstrip() + " + 暖米白", changed)
+    changed = re.sub(r"(?m)^(- [A-F]：[^\n]+)\n{2,}", r"\1\n", changed)
+    changed = changed.replace("的速度進行切換\n", "的速度進行切換。\n")
     return changed
 
 
@@ -156,6 +175,8 @@ def synchronize_fixed_typography() -> dict:
             if date < "2026-08-20" or date in PUBLISHED:
                 continue
             normalized = normalize_block(block)
+            if date in TYPE3_SSOT_TERMS:
+                normalized = normalized.replace("命盤標記", TYPE3_SSOT_TERMS[date])
             if normalized != block:
                 if rebuilt.count(block) != 1:
                     raise ValueError(f"Ambiguous fixed-template migration for {date}")
@@ -195,6 +216,13 @@ def lower_cards(block: str) -> list[dict]:
     return slots
 
 
+def hook_slot(block: str) -> dict:
+    match = re.search(r"(?m)^Hook： 【(.*?)】$", block)
+    if not match:
+        raise ValueError("Hook absent")
+    return {"id": "hook", "text": match.group(1).strip(), "minimum_cjk": 1}
+
+
 def slots_for(block: str, kind: str) -> list[dict]:
     body = section(block, "正文：\n", "\n\nHashtags：")
     if kind == "型式一":
@@ -204,9 +232,10 @@ def slots_for(block: str, kind: str) -> list[dict]:
         return slots
     if kind == "型式二":
         lines = [line.strip() for line in body.splitlines() if line.strip()]
-        if len(lines) != 3:
-            raise ValueError(f"Type 2 needs three variable body lines, got {len(lines)}")
-        return [{"id": name, "text": value, "minimum_cjk": 0} for name, value in zip(("scene", "reflection", "action"), lines)]
+        if len(lines) not in {3, 6}:
+            raise ValueError(f"Type 2 needs three logical fields, got {len(lines)} prose lines")
+        labels = ("scene", "reflection", "action") if len(lines) == 3 else ("scene_1", "scene_2", "reflection_1", "reflection_2", "action_1", "action_2")
+        return [hook_slot(block)] + [{"id": name, "text": value, "minimum_cjk": 0} for name, value in zip(labels, lines)]
     if kind == "型式三":
         lines = [line.strip() for line in body.splitlines() if line.strip()]
         if len(lines) < 3:
@@ -214,16 +243,17 @@ def slots_for(block: str, kind: str) -> list[dict]:
         return [{"id": "explain", "text": lines[1], "minimum_cjk": 50}]
     if kind == "型式四":
         lines = [line.strip() for line in body.splitlines() if line.strip()]
-        if len(lines) != 3:
-            raise ValueError(f"Type 4 needs three body lines, got {len(lines)}")
-        return [{"id": name, "text": value, "minimum_cjk": 0} for name, value in zip(("scene", "check", "action"), lines)]
+        if len(lines) not in {3, 6}:
+            raise ValueError(f"Type 4 needs three logical fields, got {len(lines)} prose lines")
+        labels = ("scene", "check", "action") if len(lines) == 3 else ("scene_1", "scene_2", "check_1", "check_2", "action_1", "action_2")
+        return [hook_slot(block)] + [{"id": name, "text": value, "minimum_cjk": 0} for name, value in zip(labels, lines)]
     if kind == "型式五上集":
         scene = re.search(r"(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺", body)
         tip = re.search(r"(?ms)^🔮 C\. .*?\n\n(.*?)\n下一期帶你解鎖更多新的占卜提示～", body)
         if not scene or not tip:
             raise ValueError("Type 5 upper scene or tip missing")
         slots = [
-            {"id": "scene", "text": scene.group(1).strip(), "minimum_cjk": 1, "maximum_cjk": 15, "short_window": True},
+            {"id": "scene", "text": scene.group(1).strip(), "minimum_cjk": 1, "maximum_cjk": 15, "short_window": True, "hook_context": hook_slot(block)["text"]},
             {"id": "tip", "text": tip.group(1).strip(), "minimum_cjk": 1, "maximum_cjk": 50},
         ]
         slots.extend(answer_slots(block, "ABC"))
@@ -391,10 +421,25 @@ def add_dynamic_requirements(slots: list[dict], date: str, kind: str, assignment
             slot["must_include"] = combo_terms(combo)
 
 
+def split_long_sentence(line: str) -> str:
+    """Split only comma-delimited prose that would otherwise exceed the sentence-length gate."""
+    if cjk_count(line) <= 36 or "，" not in line:
+        return line
+    segments = line.split("，")
+    rebuilt = segments[0]
+    for segment in segments[1:]:
+        if cjk_count(rebuilt.rsplit("；", 1)[-1] + "，" + segment) > 32:
+            rebuilt += "。" + segment
+        else:
+            rebuilt += "，" + segment
+    return rebuilt
+
+
 def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]) -> dict[str, str]:
     """Canonicalize required headings and safely pad under-length short answers."""
     for slot in slots:
-        value = rewrites[slot["id"]].strip()
+        value = "\n".join(split_long_sentence(line) for line in rewrites[slot["id"]].strip().splitlines())
+        rewrites[slot["id"]] = value
         if slot.get("short_dynamic") and cjk_count(value) < 35:
             addition = "先不用急著替它下結論。"
             if cjk_count(value + addition) <= 50:
@@ -407,29 +452,15 @@ def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]
         if not lines:
             continue
         first = lines[0].strip()
-        match = re.match(rf"^\*\*選項 {label}(?:\*\*)?[：:](.*?)(?:\*\*)?$|^選項 {label}[：:](.*)$", first)
-        if match:
-            conclusion = (match.group(1) if match.group(1) is not None else match.group(2)).strip()
+        if slot.get("upper_answer"):
+            conclusion = re.sub(rf"^\*\*選項 {label}[：:]\s*|\*\*$", "", slot["upper_answer"]).replace("**", "").strip()
             lines[0] = f"**選項 {label}：{conclusion}**"
-        rewritten = "\n".join(lines).strip()
-        if cjk_count(rewritten) < 300:
-            action_lines = [index for index, line in enumerate(lines) if line.startswith("‧")]
-            if action_lines:
-                last = action_lines[-1]
-                suffixes = (
-                    "先把眼前一件事做好，再慢慢看下一步。",
-                    "有新消息時，再回來調整就好。",
-                    "這樣比較不會被一時的焦慮帶著走。",
-                )
-                for suffix in suffixes:
-                    if cjk_count("\n".join(lines)) >= 300:
-                        break
-                    if lines[last].endswith("。"):
-                        lines[last] = lines[last][:-1] + "，" + suffix
-                    else:
-                        lines[last] += "，" + suffix
-                rewritten = "\n".join(lines).strip()
-        rewrites[slot["id"]] = rewritten
+        else:
+            match = re.match(rf"^\*\*選項 {label}(?:\*\*)?[：:](.*?)(?:\*\*)?$|^選項 {label}[：:](.*)$", first)
+            if match:
+                conclusion = (match.group(1) if match.group(1) is not None else match.group(2)).strip()
+                lines[0] = f"**選項 {label}：{conclusion}**"
+        rewrites[slot["id"]] = "\n".join(lines).strip()
     return rewrites
 
 
@@ -445,9 +476,13 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
             item["five_layer"] = bool(slot.get("five_layer"))
             item["short_dynamic"] = bool(slot.get("short_dynamic"))
         if slot.get("five_layer"):
-            item["generation_target_cjk"] = 360
+            item["generation_target_cjk"] = 430
+        if slot.get("upper_answer"):
+            item["upper_answer"] = slot["upper_answer"]
+        if slot.get("hook_context"):
+            item["hook_context"] = slot["hook_context"]
         payload_slots.append(item)
-    system = """你是繁體中文（台灣）IG 文案主筆。只能重寫給定的可變欄位，不得輸出或改動 Hook、Hashtags、CTA、卡片標題、視覺模板、圖騰、日期、型式、色碼與任何固定文字。
+    system = """你是繁體中文（台灣）IG 文案主筆。只能重寫給定的可變欄位。若 payload 內含 id 為 `hook` 的欄位，該 Hook 是可變欄位，必須重寫並輸出；其他未列入 payload 的 Hook、Hashtags、CTA、卡片標題、視覺模板、圖騰、日期、型式、色碼與固定文字不得輸出或改動。
 
 用冷靜、清楚、像直接跟人說話的繁體中文。讀者不懂奇門也要第一次就聽懂。全文保留第二人稱「你」，但每句只講一件事：先說發生什麼，再說你可以做什麼。使用日常詞，例如「先看已發生的事」、「把問題問清楚」、「先做最急的一件」；避免「進退兩難、若有若無、牽動、收斂、補位、局面、脈絡、推演」等抽象詞。避免心理治癒腔、客服腔、命定論、假深刻、空泛雞湯、術語堆砌、無源歸因、微觀動作與道具鏡頭。不得寫免責、邊界澄清、個人起局說明、資料不足或公開資料等句子。
 
@@ -461,7 +496,7 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
 【奇門行為改運】
 ‧ 一至兩項低門檻行動；不得承諾改變他人、化解、招財、吸納吉氣或結果。
 
-型式一與型式五上集置頂解答需約 50 個中文字；請目標寫在 40–48 字，治理驗收範圍為 35–50 字。型式五上集問題聚焦需含「近期」、「本週」、「接下來」或「未來」之一，且 15 字內；貼士 50 字內。型式五下集完整解讀治理驗收至少 300 個中文字；為避免計數不足，若 payload 有 `generation_target_cjk: 360`，請寫約 360 個中文字，且每個模組最多兩句。型式二、三、四維持原有欄位數，不得新增模組標題或命理術語。可變文案每句原則不超過 36 個中文字；可保留少量「可能、也許、看起來、未必」作留白，但不可每句都塞。不得使用精準時段、步數、分鐘、天數或體感狀態。所有 slot 均需實質重組句法、節奏與狀態描寫，不能原文照抄或只換同義詞。"""
+型式一與型式五上集置頂解答需約 50 個中文字；請目標寫在 40–48 字，治理驗收範圍為 35–50 字。若 payload 有 `hook_context`，型式五上集的問題聚焦必須沿用該 Hook 的同一時間窗與核心問題，不得改成不同週期或不同主題；問題聚焦需含「近期」、「本週」、「接下來」或「未來」之一，且 15 字內；貼士 50 字內。型式五下集完整解讀治理驗收至少 300 個中文字；若 payload 有 `generation_target_cjk: 430`，每張完整解讀必須寫 400–460 個中文字，且每個模組最多兩句。用新的觀察、白話轉譯與可執行行動補足內容，不得重複同一句或附加無關收尾。若 payload 有 `upper_answer`，下集卡片第一行的 `**選項 X：...**` 必須逐字沿用該答案作主軸，後續才可擴寫同一個核心困擾與行動方向；不得換題、換人際／工作情境或重設結論。型式二、三、四維持原有欄位數，不得新增模組標題或命理術語。型式三每段最多兩句，句與句換行。型式四的檢查欄必須包含可驗證資料，調整欄必須包含可回報觀察；避免桌面、鍋具、調味料、光線、移動物件、走道等具體鏡頭與動作，改寫成概括的生活狀況與可驗證觀察。可變文案每句原則不超過 36 個中文字；可保留少量「可能、也許、看起來、未必」作留白，但不可每句都塞。不得使用簡體字、精準時段、步數、分鐘、天數或體感狀態。所有 slot 均需實質重組句法、節奏與狀態描寫，不能原文照抄或只換同義詞。"""
     user = {
         "date": date,
         "form": kind,
@@ -567,10 +602,15 @@ def validate_rewrites(slots: list[dict], rewrites: dict[str, str]) -> None:
 
 def apply_slots(block: str, slots: list[dict], rewrites: dict[str, str]) -> str:
     changed = block
-    for slot in sorted(slots, key=lambda item: len(item["text"]), reverse=True):
+    tokens: dict[str, str] = {}
+    for index, slot in enumerate(sorted(slots, key=lambda item: len(item["text"]), reverse=True)):
         if slot["text"] not in changed:
             raise ValueError(f"原欄位消失，無法套用：{slot['id']}")
-        changed = changed.replace(slot["text"], rewrites[slot["id"]])
+        token = f"__LUNA_REWRITE_SLOT_{index}__"
+        changed = changed.replace(slot["text"], token)
+        tokens[token] = rewrites[slot["id"]]
+    for token, value in tokens.items():
+        changed = changed.replace(token, value)
     scene_slot = next((slot for slot in slots if slot.get("short_window")), None)
     if scene_slot:
         scene = rewrites[scene_slot["id"]]
@@ -648,7 +688,8 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
             variable_slots = slots_for(block, kind)
             if kind in {"型式二", "型式三", "型式四"}:
                 for slot in variable_slots:
-                    if slot["text"] not in visual:
+                    required_lines = [line for line in slot["text"].splitlines() if line]
+                    if any(line not in visual for line in required_lines):
                         issues.append(f"{date} 正文欄位 {slot['id']} 未同步至視覺卡。")
             elif kind == "型式五上集":
                 for slot in variable_slots:
@@ -834,12 +875,19 @@ def rewrite(args) -> int:
         raise ValueError(f"Expected 22 unpublished posts, got {len(posts)}")
     rules, registry = load_rules(), load_json(REGISTRY_FILE)
     assignments = dynamic_assignments(posts, registry, rules, persist=True)
+    blocks_by_date = {date: block for _, date, _, block in posts}
+    lower_to_upper = pair_map(posts)
     replacements: dict[Path, list[tuple[str, str]]] = {path: [] for path in FILES}
     audit_rows = []
     for path, date, header, block in posts:
         kind = form(header)
         slots = slots_for(block, kind)
         add_dynamic_requirements(slots, date, kind, assignments)
+        if kind == "型式五下集":
+            upper_block = blocks_by_date[lower_to_upper[date]]
+            for slot in slots:
+                label = slot["id"].rsplit("_", 1)[-1]
+                slot["upper_answer"] = pinned_answer(upper_block, label, "ABC")
         error = None
         feedback = ""
         for attempt in range(5):
@@ -854,6 +902,7 @@ def rewrite(args) -> int:
         if error:
             raise error
         revised = apply_slots(block, slots, rewrites)
+        blocks_by_date[date] = revised
         replacements[path].append((block, revised))
         audit_rows.append({
             "date": date, "form": kind, "dynamic_panxiang": {label: assignments[date][label] for label in assignments.get(date, {})},
