@@ -40,11 +40,11 @@ TYPE3_SSOT_TERMS = {
 }
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
-GUIDE_TITLE = "## 中文病句預防與邏輯品質治理規則庫（v3.0）"
-SENTENCE_QUALITY_TITLE = GUIDE_TITLE
+GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
+SENTENCE_QUALITY_TITLE = "#### 7.6 使用者文章風格與自然中文（v3.2）"
 STANDARD_SHA256 = "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0"
-GUIDE_SHA256 = "61cee98bb31ea727f2a924ea07f06f6eb128cdc51456ad2bc26745f13ba0a739"
-PLAYBOOK_SHA256 = "de4215dfe676555af67c9a097722d2eae3692c05b0986e72e09f6ed42e25604f"
+GUIDE_SHA256 = "f55705f4a2cde89886c7edf71c09dc6be96e9981d8fdb25051d2131b5ac53b09"
+PLAYBOOK_SHA256 = "d6e82bbce21e89e1c50d380f114bf0deeb680c65923f724ed6a01b9da1ea46d1"
 DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
@@ -70,6 +70,7 @@ DANGLING_CONNECTIVES = ("而且", "並且", "以及", "或者", "或", "但是",
 RELATIONAL_PAIRS = (("不但", ("而且", "也")), ("不僅", ("也", "還")))
 OUTCOME_GUARANTEE_PATTERN = r"你(?:注定|必然|一定會|百分之百)|保證(?:你|會|得到)|只要[^。！？\n]{0,30}就會"
 UNSUPPORTED_AUTHORITY_TERMS = ("心理諮商", "療癒技術", "臨床診斷", "投資保證")
+AI_STYLE_TELLS = ("真正的問題是", "本質上", "防護機制", "靜默力量", "底層邏輯", "賦能", "生命路徑", "能量消耗", "共振")
 
 def sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
@@ -108,8 +109,8 @@ def sentence_quality_issues(text: str) -> list[str]:
     if text.count("「") != text.count("」") or text.count("（") != text.count("）"):
         issues.append("引號或括號未成對")
     for sentence in prose_sentences(text):
-        if cjk_count(sentence) > 36:
-            issues.append("句子超過 36 個中文字")
+        if cjk_count(sentence) > 60 and not re.search(r"[，、】【]", sentence):
+            issues.append("句子過長且缺少自然停頓")
         if sentence.endswith(DANGLING_CONNECTIVES):
             issues.append("句尾懸空連詞")
         for left, allowed_rights in RELATIONAL_PAIRS:
@@ -124,6 +125,7 @@ def semantic_boundary_issues(text: str) -> list[str]:
     if re.search(OUTCOME_GUARANTEE_PATTERN, text):
         issues.append("含外部結果承諾")
     issues.extend(f"含不支援的專業權威詞：{term}" for term in UNSUPPORTED_AUTHORITY_TERMS if term in text)
+    issues.extend(f"含常見 AI 腔：{term}" for term in AI_STYLE_TELLS if term in text)
     return issues
 
 
@@ -447,17 +449,8 @@ def add_dynamic_requirements(slots: list[dict], date: str, kind: str, assignment
 
 
 def split_long_sentence(line: str) -> str:
-    """Split only comma-delimited prose that would otherwise exceed the sentence-length gate."""
-    if cjk_count(line) <= 36 or "，" not in line:
-        return line
-    segments = line.split("，")
-    rebuilt = segments[0]
-    for segment in segments[1:]:
-        if cjk_count(rebuilt.rsplit("；", 1)[-1] + "，" + segment) > 32:
-            rebuilt += "。" + segment
-        else:
-            rebuilt += "，" + segment
-    return rebuilt
+    """Preserve model-chosen sentence rhythm; validation, not mechanical splitting, guards readability."""
+    return line
 
 
 def repair_three_field_boundaries(block: str, kind: str) -> str:
@@ -525,23 +518,31 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
         if slot.get("hook_context"):
             item["hook_context"] = slot["hook_context"]
         payload_slots.append(item)
-    system = """你是繁體中文（台灣）IG 文案主筆。只能重寫給定的可變欄位。若 payload 內含 id 為 `hook` 的欄位，該 Hook 是可變欄位，必須重寫並輸出；其他未列入 payload 的 Hook、Hashtags、CTA、卡片標題、視覺模板、圖騰、日期、型式、色碼與固定文字不得輸出或改動。
+    system = """你是繁體中文（臺灣）IG 奇門文案主筆。只能重寫 payload 內的可變欄位；未列入 payload 的 Hook、Hashtags、固定 CTA、卡片標題、視覺模板、圖騰、日期、色碼與固定文字不得輸出或改動。
 
-使用自然、精確、完整的繁體中文（臺灣）。本任務的唯一文案品質目標是避免病句，不要套用任何既定情緒、互動、轉化或敘事策略。輸出前必須對每一個完整句完成兩輪內部校對：第一輪檢查成分殘缺、搭配不當、用詞不當、語序混亂、前後矛盾和邏輯混亂；第二輪檢查標點、全半形、指涉、關聯詞與句子長度。
+必須以使用者上載文章的語氣、用詞、句長與節奏寫作。它是唯一聲音基準。用第二人稱直接說話，像替讀者把心裡卡住的事說出來：先留白、再命名拉扯、再作有邏輯的重述，最後放回讀者能決定的一步。不要把它機械化成步驟，也不要把原有語感刪成制式心理雞湯。
 
-每句只能表達一個主要意思，並有清楚的主語、謂語與必要賓語。條件、因果、轉折、遞進和並列關係必須完整，不能出現懸空的「因為、如果、雖然、對於、而且、並且、以及、所以、因此」。動詞、受詞、量詞與修飾語必須符合日常中文搭配；代詞「這、那、其、此、該」必須有明確所指。若一句混合資料、推論與建議，請拆開處理。先陳述可確認資料，再寫受資料支持的說明，最後才寫建議。不得以模糊形容詞、外來語直譯或空泛詞語掩蓋因果缺口。所有結果承諾、偽專業權威與未經資料支持的推論均不得出現。
+先保護所有日期、數字、固定 CTA、圖騰、星、門、神、奇儀、方位、時辰、吉凶、公式、SSOT 術語、五層標題與既有欄位結構。塔羅的牌名、牌義、牌陣、宇宙授權或命定結論不得寫入，也不得自動映射成奇門術語；只可遷移文章的句法、節奏、情感推進與自然表達。
 
-只有 slot 有 must_include 時，才逐字保留每項術語。這些是動態盤象已推導結果，不得新增其他星、門、神、奇儀、方位、時辰、吉凶、公式或個人結論。型式一與型式五上集的短解答不向讀者塞入完整術語清單，只需用簡單生活語言承接該選項。只在 slot 標記 five_layer 時，才使用下列五層格式，並以換行分隔：
+回到簡單、直白、日常的臺灣中文，優先使用「想、等、問、停、看、分清、放回、決定」等動詞。長句只承接一個狀態；短句只作收束。句長要錯落，不能每句同長，也不能用短句連發造勢。剝離官樣話、行業黑話、翻譯腔、假深刻與常見 AI 口頭禪；不要寫「真正的問題是」「本質上」「防護機制」「靜默力量」「底層邏輯」「賦能」「生命路徑」「能量消耗」「共振」。少用過度華麗或空洞形容詞。
+
+文案可有內心故事，卻只寫關係、選擇、等待、界線、方向、心意與猶豫等可投射狀態。不得捏造職業、地點、訊息往返、對話記錄、精準動作、身體反應、感官畫面、日期、次數、件數、步數、分鐘、具體事件或讀者未提供的經歷。可用「你可能」「也許」「有些事」留白，但每段最多一至兩次。抽象不等於含混：每句都要有可理解的主語、動詞、對象和因果。
+
+「不是……而是……」只能用於前後在同一判準下真正形成對照的情況。不得寫「不是沒有機會，而是你沒問清楚」一類假對比；改成完整推進，例如「你可能很在意這段關係還有沒有機會。現在不必急著替它下結論；先弄清楚自己想知道甚麼，再決定要不要開口。」提問、行動或盤象不得被寫成保證外部結果的原因。
+
+避免心理諮商腔、命定論、假深刻、客服腔、翻譯腔、短句連發、金句公式、靈性名詞堆砌與中國用語。不要寫「你不是不夠好，你只是……」「真正的問題是」「本質上」「宇宙正在替你安排」「一切都會變好」。不要以「能量、頻率、課題、療癒、顯化」取代主語、動詞或因果。使用自然、精確、完整的臺灣繁體中文；長句只承接一個狀態，短句只作收束，不得把關聯詞拆成片段來假裝節奏。
+
+型式一與型式五上集的短解答，只用抽象生活語言承接對應盤象，不塞入完整術語清單。只有 five_layer=true 才使用五層格式並換行：
 **選項 X：一句明確但非命定的主軸結論**
 【盤象：星｜門｜神｜奇儀】
-‧ 表面現象：以概括語句描繪外在或心理狀態。
-‧ 盤象真相：內在拉扯；必須立刻說「白話來說」或同義白話轉譯。
+‧ 表面現象：概括、可投射的狀態。
+‧ 盤象真相：先寫盤象術語，再以「白話來說，」開頭做自然的日常轉譯。
 【時空與感官錨定】
-‧ 只使用已給定的方向、時辰與吉凶；只寫一般錨定，不得寫數字步數、精確時段或身體體感。
+‧ 只使用已給定方向、時辰與吉凶；不加其他時間、數字或具體畫面。
 【奇門行為改運】
-‧ 一至兩項低門檻行動；不得承諾改變他人、化解、招財、吸納吉氣或結果。
+‧ 一至兩項低風險、讀者可決定的行動；不承諾對方反應或外部結果。
 
-型式一與型式五上集置頂解答需約 50 個中文字；請目標寫在 40–48 字，治理驗收範圍為 35–50 字。若 payload 有 `hook_context`，型式五上集的問題聚焦必須沿用該 Hook 的同一時間窗與核心問題；問題聚焦需含「近期」、「本週」、「接下來」或「未來」之一，且 15 字內；貼士 50 字內。型式五下集完整解讀治理驗收至少 300 個中文字；若 payload 有 `generation_target_cjk: 430`，每張完整解讀必須寫 400–460 個中文字，且每個模組最多兩句。若 payload 有 `upper_answer`，下集卡片第一行的 `**選項 X：...**` 必須逐字沿用該答案作主軸；不得換題、改動已驗證資料或重設結論。型式二、三、四維持原有欄位數，不得新增模組標題或命理術語。型式三每段最多兩句，句與句換行。型式四的檢查欄必須包含可驗證資料，調整欄必須包含可回報觀察。可變文案每句原則不超過 36 個中文字；不得使用簡體字。所有 slot 均需逐句校正病句，但不得為了改順而改變事實、日期、數字、否定詞、受保護術語或固定文字。"""
+型式一與型式五上集短解答需 35–50 個中文字；型式五上集問題聚焦保留既有 Hook 的時間窗且 15 字內；貼士 50 字內。型式五下集至少 300 個中文字；有 generation_target_cjk: 430 時，每張完整解讀為 400–460 個中文字，每模組最多兩句。若有 upper_answer，下集第一行必須逐字沿用該答案的主軸。型式二、三、四維持原有欄位數；型式三／四不得改 SSOT 資料、公式、術語或來源。所有句子都要檢查成分、搭配、用詞、語序、前後一致和因果；不確定時保留原意，不自行補造結論。"""
     user = {
         "date": date,
         "form": kind,
@@ -681,8 +682,8 @@ def current_contract_issues() -> list[str]:
         issues.append("固定模板合約雜湊不符。")
     if sha(text[guide:]) != GUIDE_SHA256:
         issues.append("規則庫合約雜湊不符。")
-    if SENTENCE_QUALITY_TITLE not in text[guide:]:
-        issues.append("找不到中文病句預防與邏輯品質規則。")
+    if SENTENCE_QUALITY_TITLE not in text[guide:] or "病句檢查是底線" not in text[guide:]:
+        issues.append("找不到原版規則庫的 v3.1 文章風格與病句增補。")
     if not RULES_FILE.is_file() or sha(RULES_FILE.read_text(encoding="utf-8")) != DYNAMIC_RULES_SHA256:
         issues.append("動態盤象規則檔缺失或來源雜湊不符。")
     return issues
@@ -848,12 +849,16 @@ def write_rule_map() -> None:
             },
         },
         "sentence_quality": {
-            "version": "3.0",
+            "version": "3.2",
             "scope": "僅 Hook、正文、置頂解答、完整解讀與視覺卡中的可變文案；固定模板不適用。",
+            "style_source": "使用者上載文章的語氣、用詞、句長與節奏",
+            "style_application": ["第二人稱直呼", "留白→命名→重述→安置", "長句辨識、短句收束", "簡單直白的臺灣中文", "內心故事而非外在事件"],
+            "abstraction_boundary": "保留關係、選擇、等待、界線等可投射狀態；不得捏造精準情景、人物行為、感官畫面、數量、日期、次數、件數或未提供的經歷。",
+            "ai_style_exclusions": list(AI_STYLE_TELLS) + ["官樣話", "行業黑話", "翻譯腔", "空洞形容詞", "金句公式", "短句連發"],
             "categories": ["成分殘缺", "搭配不當", "用詞不當", "語序混亂", "前後矛盾", "邏輯混亂"],
-            "review_order": ["受保護內容", "成分與標點", "搭配與用詞", "語序與指涉", "前後一致", "因果與推論"],
-            "automatic_gate": "只攔截高信心格式與句法風險；語意、搭配與邏輯由模型逐句複核。",
-            "minimum_edit": "校正不得改變事實、日期、數字、否定詞、已驗證命理資料或固定文字。",
+            "review_order": ["受保護內容", "原版文風與抽象邊界", "成分與標點", "搭配與用詞", "語序與指涉", "前後一致", "因果與推論"],
+            "automatic_gate": "只攔截高信心格式與句法風險；文風、語意、搭配、假對比與邏輯由模型逐句複核。",
+            "minimum_edit": "重寫不得改變事實、日期、數字、否定詞、已驗證命理資料或固定文字；中低信心語意選擇不得自動寫回。",
             "fixed_template_exclusion": "五大型式文案排版輸出標準規範的固定模板及其固定字句、CTA、卡數、順序、媒介、秒數、色碼與視覺結構不得修改。"
         },
         "forms": {
@@ -868,7 +873,7 @@ def write_rule_map() -> None:
             "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
             "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
             "型式一／五短解答維持 35–50 字；型式五問題聚焦維持 15 字內；貼士維持 50 字內。",
-            "所有可變文案均通過成分、搭配、用詞、語序、前後一致與邏輯關係的逐句複核；自動閘門只攔截高信心句法風險。",
+            "所有可變文案均遵循使用者文章的第二人稱、自然邏輯、長短句節奏、直白用詞與抽象投射邊界，並通過 AI 腔、成分、搭配、用詞、語序、前後一致與邏輯關係的逐句複核。",
             "五大型式文案排版輸出標準規範的區段 SHA-256 維持 16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0。",
         ],
     }

@@ -22,7 +22,11 @@ class GovernanceContractV2Test(unittest.TestCase):
 
         self.assertEqual(rule_map["playbook_sha256"], GOVERNANCE.PLAYBOOK_SHA256)
         self.assertEqual(rule_map["dynamic_panxiang"]["source_sha256"], GOVERNANCE.DYNAMIC_RULES_SHA256)
-        self.assertEqual(rule_map["sentence_quality"]["version"], "3.0")
+        self.assertEqual(rule_map["sentence_quality"]["version"], "3.2")
+        self.assertEqual(rule_map["sentence_quality"]["style_source"], "使用者上載文章的語氣、用詞、句長與節奏")
+        self.assertIn("第二人稱直呼", rule_map["sentence_quality"]["style_application"])
+        self.assertIn("不得捏造精準情景", rule_map["sentence_quality"]["abstraction_boundary"])
+        self.assertIn("本質上", rule_map["sentence_quality"]["ai_style_exclusions"])
         self.assertEqual(
             rule_map["sentence_quality"]["categories"],
             ["成分殘缺", "搭配不當", "用詞不當", "語序混亂", "前後矛盾", "邏輯混亂"],
@@ -43,7 +47,11 @@ class GovernanceContractV2Test(unittest.TestCase):
         self.assertEqual(GOVERNANCE.current_contract_issues(), [])
         self.assertEqual(GOVERNANCE.STANDARD_SHA256, "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0")
         self.assertIn(GOVERNANCE.SENTENCE_QUALITY_TITLE, playbook)
-        self.assertIn("成分殘缺、搭配不當、用詞不當、語序混亂、前後矛盾與邏輯混亂", playbook)
+        self.assertIn("IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫", playbook)
+        self.assertIn("共感—重述—賦權—互動", playbook)
+        self.assertIn("使用者上載文章是可變文案的唯一聲音基準", playbook)
+        self.assertIn("常見 AI 口頭禪", playbook)
+        self.assertIn("病句檢查是底線", playbook)
         self.assertIn("五組，五值均為獨立隨機抽樣輸入", playbook)
         self.assertIn("八神不由九星、八門、宮位或陰陽遁方向推導", playbook)
         self.assertEqual(combo["spirit"], "白虎")
