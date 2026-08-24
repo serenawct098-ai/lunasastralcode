@@ -40,11 +40,11 @@ TYPE3_SSOT_TERMS = {
 }
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
-GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
-WRITING_LOGIC_TITLE = "### 7. 共感—重述—賦權—互動寫作規則（可變文案專用）"
+GUIDE_TITLE = "## 中文病句預防與邏輯品質治理規則庫（v3.0）"
+SENTENCE_QUALITY_TITLE = GUIDE_TITLE
 STANDARD_SHA256 = "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0"
-GUIDE_SHA256 = "b97bbeeca9843468b9e5f56577462a4706387dad04676ea076bf441173545a03"
-PLAYBOOK_SHA256 = "882d6576cc586b78bad1ebda557694c48a7c56d6dad0fd26dc61f68859e76afc"
+GUIDE_SHA256 = "61cee98bb31ea727f2a924ea07f06f6eb128cdc51456ad2bc26745f13ba0a739"
+PLAYBOOK_SHA256 = "de4215dfe676555af67c9a097722d2eae3692c05b0986e72e09f6ed42e25604f"
 DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
@@ -62,18 +62,12 @@ RETIRED_DECLARATIONS = (
     "本篇只教讀取盤面標示。", "本篇只做定位與記錄，不輸出個人關係判定。", "本篇只做盤面讀取與記錄。",
 )
 RETIRED_TEXT = ("視覺規範核對清單", "【每張固定版面】", "視覺設定：", "上集主題 +", "三個圖騰並排，提醒讀者回到原選項")
-MICRO_SCENES = {
-    "月台與訊息鏡頭": r"捷運(?:月台|車廂)[^\n]{0,120}(?:手機|對話框|訊息)",
-    "咖啡放涼鏡頭": r"咖啡[^\n]{0,80}(?:涼掉|放涼)",
-    "訊息反覆操作": r"(?:對話框|訊息)[^\n]{0,100}(?:打開|刪掉|改字|滑開)",
-    "廚房動作鏡頭": r"(?:外套|菜|貓|流理台|鍋)[^\n]{0,120}(?:掛上|提在手裡|蹭過|冒小泡)",
-}
 ANCHOR_PATTERN = r"西北|正北|正東|正西|正南|東北|東南|西南|中央|子時|丑時|寅時|卯時|辰時|巳時|午時|未時|申時|酉時|戌時|亥時|早上|下午|晚上|深夜|肩頸|睡眠"
 PRECISE_ANCHOR_PATTERN = r"(?:早上|下午|晚上)\s*\d{1,2}\s*(?:[–—\-至到])\s*\d{1,2}\s*(?:點|時)|\d+\s*(?:步|分鐘|天)"
-SOFTENERS = ("可能", "也許", "看起來", "未必")
-READABILITY_BLOCKED = ("正處於", "若有若無", "進退兩難", "心有不甘", "牽動", "軸線", "收斂", "承接空缺", "補位", "判斷權", "推演", "脈絡", "能量狀態", "可落實", "局面", "不替沉默加上意思", "把空下來的事接走", "替別人的沉默找理由", "把事情想得更遠")
 SIMPLIFIED_CHARS = "个这时后里么说给动过还"
 TYPOGRAPHIC_BLOCKED = ("不子是", "占住")
+DANGLING_CONNECTIVES = ("而且", "並且", "以及", "或者", "或", "但是", "所以", "因此", "從而")
+RELATIONAL_PAIRS = (("不但", ("而且", "也")), ("不僅", ("也", "還")))
 OUTCOME_GUARANTEE_PATTERN = r"你(?:注定|必然|一定會|百分之百)|保證(?:你|會|得到)|只要[^。！？\n]{0,30}就會"
 UNSUPPORTED_AUTHORITY_TERMS = ("心理諮商", "療癒技術", "臨床診斷", "投資保證")
 
@@ -89,24 +83,43 @@ def load_json(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def readability_issues(text: str) -> list[str]:
-    issues = [f"使用抽象詞：{word}" for word in READABILITY_BLOCKED if word in text]
+def prose_sentences(text: str) -> list[str]:
+    """Return prose sentences while excluding required structural labels and Markdown markers."""
+    sentences = []
+    for raw_line in text.splitlines():
+        line = raw_line.strip().removeprefix("‧ ").replace("**", "")
+        if not line or line.startswith(("【盤象：", "【時空與感官錨定】", "【奇門行為改運】", "選項 ")):
+            continue
+        sentences.extend(piece.strip() for piece in re.split(r"[。！？；]", line) if piece.strip())
+    return sentences
+
+
+def sentence_quality_issues(text: str) -> list[str]:
+    """Detect only high-confidence Chinese sentence-quality risks; model review handles semantic judgment."""
+    issues = []
     simplified = sorted({char for char in text if char in SIMPLIFIED_CHARS})
     if simplified:
         issues.append(f"含簡體字：{'、'.join(simplified)}")
     issues.extend(f"含錯別字：{word}" for word in TYPOGRAPHIC_BLOCKED if word in text)
-    for raw_line in text.splitlines():
-        if raw_line.startswith(("【盤象：", "【時空與感官錨定】", "【奇門行為改運】", "**選項 ")):
-            continue
-        line = raw_line.removeprefix("‧ ").strip()
-        for sentence in re.split(r"[。！？；]", line):
-            if cjk_count(sentence) > 36:
-                issues.append("句子超過 36 個中文字")
-    return issues
+    if re.search(r"[，。！？；]{2,}", text):
+        issues.append("重複中文標點")
+    if re.search(r"[\u3400-\u9fff],[\u3400-\u9fff]", text):
+        issues.append("中文句內混用半形逗號")
+    if text.count("「") != text.count("」") or text.count("（") != text.count("）"):
+        issues.append("引號或括號未成對")
+    for sentence in prose_sentences(text):
+        if cjk_count(sentence) > 36:
+            issues.append("句子超過 36 個中文字")
+        if sentence.endswith(DANGLING_CONNECTIVES):
+            issues.append("句尾懸空連詞")
+        for left, allowed_rights in RELATIONAL_PAIRS:
+            if left in sentence and not any(right in sentence for right in allowed_rights):
+                issues.append(f"關聯詞未配對：{left}……{'／'.join(allowed_rights)}")
+    return sorted(set(issues))
 
 
-def writing_logic_issues(text: str) -> list[str]:
-    """Reject outcome guarantees or unsupported professional authority in variable copy."""
+def semantic_boundary_issues(text: str) -> list[str]:
+    """Reject unsupported result promises or professional authority without changing protected facts."""
     issues = []
     if re.search(OUTCOME_GUARANTEE_PATTERN, text):
         issues.append("含外部結果承諾")
@@ -447,16 +460,34 @@ def split_long_sentence(line: str) -> str:
     return rebuilt
 
 
+def repair_three_field_boundaries(block: str, kind: str) -> str:
+    """Repair only malformed variable prose whose sentence-level line breaks split a fixed three-field body."""
+    if kind not in {"型式二", "型式三", "型式四"}:
+        return block
+    body = section(block, "正文：\n", "\n\nHashtags：")
+    lines = [line.strip() for line in body.splitlines() if line.strip()]
+    if len(lines) <= 3:
+        return block
+    changed = block
+    if kind == "型式三":
+        raw, repaired = "\n".join(lines[1:-1]), "".join(lines[1:-1])
+        return changed.replace(raw, repaired)
+    if len(lines) % 3:
+        raise ValueError(f"{kind} 的正文欄位無法平均修復：{len(lines)} 行。")
+    group_size = len(lines) // 3
+    for start in range(0, len(lines), group_size):
+        group = lines[start:start + group_size]
+        raw, repaired = "\n".join(group), "".join(group)
+        changed = changed.replace(raw, repaired)
+    return changed
+
+
 def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]) -> dict[str, str]:
-    """Canonicalize required headings and safely pad under-length short answers."""
+    """Preserve fixed field boundaries while normalizing sentence layout and required headings."""
     for slot in slots:
-        value = "\n".join(split_long_sentence(line) for line in rewrites[slot["id"]].strip().splitlines())
+        source_lines = [split_long_sentence(line.strip()) for line in rewrites[slot["id"]].strip().splitlines() if line.strip()]
+        value = "\n".join(source_lines) if slot.get("five_layer") else "".join(source_lines)
         rewrites[slot["id"]] = value
-        if slot.get("short_dynamic") and cjk_count(value) < 35:
-            addition = "先不用急著替它下結論。"
-            if cjk_count(value + addition) <= 50:
-                value += addition
-                rewrites[slot["id"]] = value
         if not slot.get("five_layer"):
             continue
         label = slot["label"]
@@ -496,9 +527,9 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
         payload_slots.append(item)
     system = """你是繁體中文（台灣）IG 文案主筆。只能重寫給定的可變欄位。若 payload 內含 id 為 `hook` 的欄位，該 Hook 是可變欄位，必須重寫並輸出；其他未列入 payload 的 Hook、Hashtags、CTA、卡片標題、視覺模板、圖騰、日期、型式、色碼與固定文字不得輸出或改動。
 
-用冷靜、清楚、像直接跟人說話的繁體中文。讀者不懂奇門也要第一次就聽懂。全文保留第二人稱「你」，但每句只講一件事：先說發生什麼，再說你可以做什麼。使用日常詞，例如「先看已發生的事」、「把問題問清楚」、「先做最急的一件」；避免「進退兩難、若有若無、牽動、收斂、補位、局面、脈絡、推演」等抽象詞。避免把文案寫成心理諮商、客服腔、命定論、假深刻、空泛雞湯、術語堆砌、無源歸因、微觀動作與道具鏡頭。不得寫免責、邊界澄清、個人起局說明、資料不足或公開資料等句子。
+使用自然、精確、完整的繁體中文（臺灣）。本任務的唯一文案品質目標是避免病句，不要套用任何既定情緒、互動、轉化或敘事策略。輸出前必須對每一個完整句完成兩輪內部校對：第一輪檢查成分殘缺、搭配不當、用詞不當、語序混亂、前後矛盾和邏輯混亂；第二輪檢查標點、全半形、指涉、關聯詞與句子長度。
 
-所有可變文案依「共感 → 重述 → 賦權 → 互動」執行：先命名一個讀者可辨識的生活拉扯；再用「不是……而是……」「先不用急著把它當成……」等句式重述，但不得否定讀者感受或承諾結果；接著給一至兩個低門檻、可由讀者自己完成的行動；最後用短句收束，並讓固定 CTA 前的文字說清楚讀者要帶走什麼。共感只可使用一至兩個生活領域，例如關係、工作、等待、選擇或日常節奏；可保留少量「可能、也許、看起來、未必」，但不可每句都用。道路、門、種子、節奏與流動等意象只可協助理解，不得取代盤象、SSOT 或行動說明。不得把高我、宇宙、能量、順流、磁場寫成心理、醫療、法律或財務專業判斷，也不得使用「保證、注定、一定會、只要……就會……」等外部結果承諾。
+每句只能表達一個主要意思，並有清楚的主語、謂語與必要賓語。條件、因果、轉折、遞進和並列關係必須完整，不能出現懸空的「因為、如果、雖然、對於、而且、並且、以及、所以、因此」。動詞、受詞、量詞與修飾語必須符合日常中文搭配；代詞「這、那、其、此、該」必須有明確所指。若一句混合資料、推論與建議，請拆開處理。先陳述可確認資料，再寫受資料支持的說明，最後才寫建議。不得以模糊形容詞、外來語直譯或空泛詞語掩蓋因果缺口。所有結果承諾、偽專業權威與未經資料支持的推論均不得出現。
 
 只有 slot 有 must_include 時，才逐字保留每項術語。這些是動態盤象已推導結果，不得新增其他星、門、神、奇儀、方位、時辰、吉凶、公式或個人結論。型式一與型式五上集的短解答不向讀者塞入完整術語清單，只需用簡單生活語言承接該選項。只在 slot 標記 five_layer 時，才使用下列五層格式，並以換行分隔：
 **選項 X：一句明確但非命定的主軸結論**
@@ -510,7 +541,7 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
 【奇門行為改運】
 ‧ 一至兩項低門檻行動；不得承諾改變他人、化解、招財、吸納吉氣或結果。
 
-型式一與型式五上集置頂解答需約 50 個中文字；請目標寫在 40–48 字，治理驗收範圍為 35–50 字。若 payload 有 `hook_context`，型式五上集的問題聚焦必須沿用該 Hook 的同一時間窗與核心問題，不得改成不同週期或不同主題；問題聚焦需含「近期」、「本週」、「接下來」或「未來」之一，且 15 字內；貼士 50 字內。型式五下集完整解讀治理驗收至少 300 個中文字；若 payload 有 `generation_target_cjk: 430`，每張完整解讀必須寫 400–460 個中文字，且每個模組最多兩句。用新的觀察、白話轉譯與可執行行動補足內容，不得重複同一句或附加無關收尾。若 payload 有 `upper_answer`，下集卡片第一行的 `**選項 X：...**` 必須逐字沿用該答案作主軸，後續才可擴寫同一個核心困擾與行動方向；不得換題、換人際／工作情境或重設結論。型式二、三、四維持原有欄位數，不得新增模組標題或命理術語。型式三每段最多兩句，句與句換行。型式四的檢查欄必須包含可驗證資料，調整欄必須包含可回報觀察；避免桌面、鍋具、調味料、光線、移動物件、走道等具體鏡頭與動作，改寫成概括的生活狀況與可驗證觀察。可變文案每句原則不超過 36 個中文字；可保留少量「可能、也許、看起來、未必」作留白，但不可每句都塞。不得使用簡體字、精準時段、步數、分鐘、天數或體感狀態。所有 slot 均需實質重組句法、節奏與狀態描寫，不能原文照抄或只換同義詞。"""
+型式一與型式五上集置頂解答需約 50 個中文字；請目標寫在 40–48 字，治理驗收範圍為 35–50 字。若 payload 有 `hook_context`，型式五上集的問題聚焦必須沿用該 Hook 的同一時間窗與核心問題；問題聚焦需含「近期」、「本週」、「接下來」或「未來」之一，且 15 字內；貼士 50 字內。型式五下集完整解讀治理驗收至少 300 個中文字；若 payload 有 `generation_target_cjk: 430`，每張完整解讀必須寫 400–460 個中文字，且每個模組最多兩句。若 payload 有 `upper_answer`，下集卡片第一行的 `**選項 X：...**` 必須逐字沿用該答案作主軸；不得換題、改動已驗證資料或重設結論。型式二、三、四維持原有欄位數，不得新增模組標題或命理術語。型式三每段最多兩句，句與句換行。型式四的檢查欄必須包含可驗證資料，調整欄必須包含可回報觀察。可變文案每句原則不超過 36 個中文字；不得使用簡體字。所有 slot 均需逐句校正病句，但不得為了改順而改變事實、日期、數字、否定詞、受保護術語或固定文字。"""
     user = {
         "date": date,
         "form": kind,
@@ -564,7 +595,8 @@ def five_layer_issues(date: str, text: str, label: str, combo: dict, lower: bool
         issues.append(f"{date} {label} 時空／體感錨定超過兩項。")
     if re.search(PRECISE_ANCHOR_PATTERN, text):
         issues.append(f"{date} {label} 使用精準風格錨定。")
-    issues.extend(f"{date} {label} 可讀性問題：{issue}" for issue in readability_issues(text))
+    issues.extend(f"{date} {label} 句法品質問題：{issue}" for issue in sentence_quality_issues(text))
+    issues.extend(f"{date} {label} 語意邊界問題：{issue}" for issue in semantic_boundary_issues(text))
     return issues
 
 
@@ -572,11 +604,8 @@ def short_dynamic_issues(date: str, text: str, label: str, combo: dict) -> list[
     issues = []
     if not 35 <= cjk_count(text) <= 50:
         issues.append(f"{date} {label} 短解答未落在 35–50 字。")
-    if "你" not in text:
-        issues.append(f"{date} {label} 未維持第二人稱。")
-    if re.search(PRECISE_ANCHOR_PATTERN, text):
-        issues.append(f"{date} {label} 使用精準風格錨定。")
-    issues.extend(f"{date} {label} 可讀性問題：{issue}" for issue in readability_issues(text))
+    issues.extend(f"{date} {label} 句法品質問題：{issue}" for issue in sentence_quality_issues(text))
+    issues.extend(f"{date} {label} 語意邊界問題：{issue}" for issue in semantic_boundary_issues(text))
     return issues
 
 
@@ -594,19 +623,15 @@ def validate_rewrites(slots: list[dict], rewrites: dict[str, str]) -> None:
             raise ValueError(f"欄位超過字數上限：{slot['id']}（{cjk_count(value)} 字，內容：{value[:160]!r}）")
         if slot.get("short_window") and not re.search(r"近|接下來|未來|本週|近期", value):
             raise ValueError(f"欄位缺少短時間窗：{slot['id']}")
-        if re.search(PRECISE_ANCHOR_PATTERN, value):
-            raise ValueError(f"欄位含精準風格錨定：{slot['id']}")
         retired = next((token for token in RETIRED_DECLARATIONS if token in value), None)
         if retired:
             raise ValueError(f"欄位含已刪除聲明：{slot['id']}（命中：{retired!r}；內容：{value[:180]!r}）")
-        if any(re.search(pattern, value) for pattern in MICRO_SCENES.values()):
-            raise ValueError(f"欄位含過度微觀描繪：{slot['id']}")
-        readable = readability_issues(value)
-        if readable:
-            raise ValueError(f"欄位可讀性不足：{slot['id']}（{'；'.join(readable)}）")
-        logic_issues = writing_logic_issues(value)
-        if logic_issues:
-            raise ValueError(f"欄位不符合文案治理：{slot['id']}（{'；'.join(logic_issues)}）")
+        quality_issues = sentence_quality_issues(value)
+        if quality_issues:
+            raise ValueError(f"欄位有病句風險：{slot['id']}（{'；'.join(quality_issues)}）")
+        boundary_issues = semantic_boundary_issues(value)
+        if boundary_issues:
+            raise ValueError(f"欄位超出語意邊界：{slot['id']}（{'；'.join(boundary_issues)}）")
         if slot.get("five_layer"):
             issues = five_layer_issues("重寫輸出", value, slot["label"], slot["combo"], slot["id"].startswith("card_"))
             if issues:
@@ -656,8 +681,8 @@ def current_contract_issues() -> list[str]:
         issues.append("固定模板合約雜湊不符。")
     if sha(text[guide:]) != GUIDE_SHA256:
         issues.append("規則庫合約雜湊不符。")
-    if WRITING_LOGIC_TITLE not in text[guide:]:
-        issues.append("找不到可變文案的共感—重述—賦權—互動規則。")
+    if SENTENCE_QUALITY_TITLE not in text[guide:]:
+        issues.append("找不到中文病句預防與邏輯品質規則。")
     if not RULES_FILE.is_file() or sha(RULES_FILE.read_text(encoding="utf-8")) != DYNAMIC_RULES_SHA256:
         issues.append("動態盤象規則檔缺失或來源雜湊不符。")
     return issues
@@ -695,9 +720,6 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
     cta = re.search(r"(?ms)^固定 CTA：\s*(.*?)(?=\n————————————|\n視覺分鏡描述|\n【待記錄】|\Z)", block)
     if not cta or cta.group(1).strip() != CTA[kind]:
         issues.append(f"{date} CTA 與固定模板不符。")
-    for name, pattern in MICRO_SCENES.items():
-        if re.search(pattern, block):
-            issues.append(f"{date} 含過度微觀描繪：{name}。")
     visual_match = re.search(r"視覺分鏡描述（.*?）：\n(.*?)(?=\n【待記錄】)", block, re.S)
     if not visual_match:
         issues.append(f"{date} 缺少視覺分鏡區塊。")
@@ -721,17 +743,10 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
             value = slot["text"]
             if slot.get("maximum_cjk") is not None and cjk_count(value) > slot["maximum_cjk"]:
                 issues.append(f"{date} {slot['id']} 超過 {slot['maximum_cjk']} 字。")
-            if re.search(PRECISE_ANCHOR_PATTERN, value):
-                issues.append(f"{date} {slot['id']} 使用精準風格錨定。")
-            issues.extend(f"{date} {slot['id']} 可讀性問題：{issue}" for issue in readability_issues(value))
-            issues.extend(f"{date} {slot['id']} 文案治理問題：{issue}" for issue in writing_logic_issues(value))
+            issues.extend(f"{date} {slot['id']} 句法品質問題：{issue}" for issue in sentence_quality_issues(value))
+            issues.extend(f"{date} {slot['id']} 語意邊界問題：{issue}" for issue in semantic_boundary_issues(value))
     except ValueError as exc:
         issues.append(f"{date} 新版欄位稽核失敗：{exc}")
-    body_for_voice = section(block, "正文：\n", "\n\nHashtags：")
-    if kind != "型式五下集":
-        if "你" not in body_for_voice:
-            issues.append(f"{date} 正文未維持第二人稱對話感。")
-
     if kind == "型式一":
         if len(re.findall(r"(?m)^🔮 [A-F]\. ", block)) != 6:
             issues.append(f"{date} 缺少 A–F 圖騰。")
@@ -832,13 +847,13 @@ def write_rule_map() -> None:
                 "2026-09-17": {"data_file": "engines/diagnosis_router_module_v1.json", "intent": "career", "palaces": ["官祿宮", "財帛宮"]},
             },
         },
-        "writing_logic": {
-            "version": "2.1",
+        "sentence_quality": {
+            "version": "3.0",
             "scope": "僅 Hook、正文、置頂解答、完整解讀與視覺卡中的可變文案；固定模板不適用。",
-            "architecture": ["共感", "重述", "賦權", "互動"],
-            "reframe": "以承接前文困擾的對照式重述取代結果承諾。",
-            "agency": "行動只能是讀者可自行完成的一至兩項低門檻行動，不保證外部結果。",
-            "language_boundary": "高我、宇宙、能量、順流與磁場是品牌語彙，不得冒充心理、醫療、法律或財務專業判斷。",
+            "categories": ["成分殘缺", "搭配不當", "用詞不當", "語序混亂", "前後矛盾", "邏輯混亂"],
+            "review_order": ["受保護內容", "成分與標點", "搭配與用詞", "語序與指涉", "前後一致", "因果與推論"],
+            "automatic_gate": "只攔截高信心格式與句法風險；語意、搭配與邏輯由模型逐句複核。",
+            "minimum_edit": "校正不得改變事實、日期、數字、否定詞、已驗證命理資料或固定文字。",
             "fixed_template_exclusion": "五大型式文案排版輸出標準規範的固定模板及其固定字句、CTA、卡數、順序、媒介、秒數、色碼與視覺結構不得修改。"
         },
         "forms": {
@@ -852,8 +867,8 @@ def write_rule_map() -> None:
             "五大型式固定模板、CTA、Hashtags、日期、型式、媒介、卡數、色碼與已發布內容不變。",
             "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
             "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
-            "保留第二人稱；型式一／五短解答 35–50 字、型式五問題聚焦 15 字內、貼士 50 字內，且可變解讀使用概括與投射留白。",
-            "所有可變文案遵循共感→重述→賦權→互動；重述不承諾外部結果，行動只指向讀者可自行完成的低門檻下一步。",
+            "型式一／五短解答維持 35–50 字；型式五問題聚焦維持 15 字內；貼士維持 50 字內。",
+            "所有可變文案均通過成分、搭配、用詞、語序、前後一致與邏輯關係的逐句複核；自動閘門只攔截高信心句法風險。",
             "五大型式文案排版輸出標準規範的區段 SHA-256 維持 16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0。",
         ],
     }
@@ -882,7 +897,7 @@ def migrate_registry(args) -> int:
 
 def sync(args) -> int:
     if args.dry_run:
-        print(json.dumps({"playbook_contract": {"playbook": PLAYBOOK_SHA256, "standard": STANDARD_SHA256, "guide": GUIDE_SHA256}, "writing_logic": "共感→重述→賦權→互動（可變文案專用）", "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": len(list(unpublished_blocks()))}, ensure_ascii=False))
+        print(json.dumps({"playbook_contract": {"playbook": PLAYBOOK_SHA256, "standard": STANDARD_SHA256, "guide": GUIDE_SHA256}, "sentence_quality": "成分、搭配、用詞、語序、前後一致、邏輯（可變文案專用）", "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": len(list(unpublished_blocks()))}, ensure_ascii=False))
         return 0
     write_rule_map()
     print(json.dumps({"synced": True, "changed_files": [str(RULE_MAP_FILE.relative_to(ROOT))], "fixed_template_mutation": False}, ensure_ascii=False))
@@ -903,13 +918,14 @@ def rewrite(args) -> int:
     if len(posts) != 22:
         raise ValueError(f"Expected 22 unpublished posts, got {len(posts)}")
     rules, registry = load_rules(), load_json(REGISTRY_FILE)
-    assignments = dynamic_assignments(posts, registry, rules, persist=True)
+    assignments = dynamic_assignments(posts, registry, rules, persist=False)
     blocks_by_date = {date: block for _, date, _, block in posts}
     lower_to_upper = pair_map(posts)
     replacements: dict[Path, list[tuple[str, str]]] = {path: [] for path in FILES}
     audit_rows = []
-    for path, date, header, block in posts:
+    for path, date, header, original_block in posts:
         kind = form(header)
+        block = repair_three_field_boundaries(original_block, kind)
         slots = slots_for(block, kind)
         add_dynamic_requirements(slots, date, kind, assignments)
         if kind == "型式五下集":
@@ -932,12 +948,12 @@ def rewrite(args) -> int:
             raise error
         revised = apply_slots(block, slots, rewrites)
         blocks_by_date[date] = revised
-        replacements[path].append((block, revised))
+        replacements[path].append((original_block, revised))
         audit_rows.append({
             "date": date, "form": kind, "dynamic_panxiang": {label: assignments[date][label] for label in assignments.get(date, {})},
             "changed_slots": [slot["id"] for slot in slots],
             "slot_sha256": [{"id": slot["id"], "before": sha(slot["text"]), "after": sha(rewrites[slot["id"]])} for slot in slots],
-            "before_sha256": sha(block), "after_sha256": sha(revised),
+            "before_sha256": sha(original_block), "after_sha256": sha(revised),
         })
     for path, items in replacements.items():
         text = path.read_text(encoding="utf-8")

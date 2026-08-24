@@ -22,9 +22,12 @@ class GovernanceContractV2Test(unittest.TestCase):
 
         self.assertEqual(rule_map["playbook_sha256"], GOVERNANCE.PLAYBOOK_SHA256)
         self.assertEqual(rule_map["dynamic_panxiang"]["source_sha256"], GOVERNANCE.DYNAMIC_RULES_SHA256)
-        self.assertEqual(rule_map["writing_logic"]["version"], "2.1")
-        self.assertEqual(rule_map["writing_logic"]["architecture"], ["共感", "重述", "賦權", "互動"])
-        self.assertIn("固定模板", rule_map["writing_logic"]["fixed_template_exclusion"])
+        self.assertEqual(rule_map["sentence_quality"]["version"], "3.0")
+        self.assertEqual(
+            rule_map["sentence_quality"]["categories"],
+            ["成分殘缺", "搭配不當", "用詞不當", "語序混亂", "前後矛盾", "邏輯混亂"],
+        )
+        self.assertIn("固定模板", rule_map["sentence_quality"]["fixed_template_exclusion"])
         self.assertEqual(rule_map["dynamic_panxiang"]["input"], ["九星", "八門", "八神", "奇儀", "時辰"])
         self.assertIn("八神不由星或門推導", rule_map["dynamic_panxiang"]["sampling_rule"])
         self.assertEqual(registry["schema_version"], "2.0")
@@ -39,24 +42,23 @@ class GovernanceContractV2Test(unittest.TestCase):
 
         self.assertEqual(GOVERNANCE.current_contract_issues(), [])
         self.assertEqual(GOVERNANCE.STANDARD_SHA256, "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0")
-        self.assertIn(GOVERNANCE.WRITING_LOGIC_TITLE, playbook)
-        self.assertIn("共感—重述—賦權—互動", playbook)
+        self.assertIn(GOVERNANCE.SENTENCE_QUALITY_TITLE, playbook)
+        self.assertIn("成分殘缺、搭配不當、用詞不當、語序混亂、前後矛盾與邏輯混亂", playbook)
         self.assertIn("五組，五值均為獨立隨機抽樣輸入", playbook)
         self.assertIn("八神不由九星、八門、宮位或陰陽遁方向推導", playbook)
         self.assertEqual(combo["spirit"], "白虎")
         self.assertEqual(combo["key"], "天心星|開門|白虎|乙|子")
         self.assertNotIn("spirit_placement", combo)
 
-    def test_writing_logic_rejects_guarantees_but_keeps_reader_agency(self) -> None:
+    def test_sentence_quality_detects_high_confidence_grammar_risks(self) -> None:
         self.assertEqual(
-            GOVERNANCE.writing_logic_issues("你可能還在猶豫。先把最急的一件事說清楚。"),
+            GOVERNANCE.sentence_quality_issues("你先確認資料。再安排下一步。"),
             [],
         )
-        self.assertIn("含外部結果承諾", GOVERNANCE.writing_logic_issues("你一定會得到想要的答案。"))
-        self.assertIn(
-            "含不支援的專業權威詞：心理諮商",
-            GOVERNANCE.writing_logic_issues("這是一套心理諮商方法。"),
-        )
+        self.assertIn("句尾懸空連詞", GOVERNANCE.sentence_quality_issues("你先確認資料，而且"))
+        self.assertIn("關聯詞未配對：不但……而且／也", GOVERNANCE.sentence_quality_issues("不但先確認資料。"))
+        self.assertIn("中文句內混用半形逗號", GOVERNANCE.sentence_quality_issues("你先確認資料,再安排下一步。"))
+        self.assertIn("含外部結果承諾", GOVERNANCE.semantic_boundary_issues("你一定會得到想要的答案。"))
 
 
 if __name__ == "__main__":
