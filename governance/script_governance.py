@@ -41,9 +41,10 @@ TYPE3_SSOT_TERMS = {
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
 GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
+WRITING_LOGIC_TITLE = "### 7. 共感—重述—賦權—互動寫作規則（可變文案專用）"
 STANDARD_SHA256 = "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0"
-GUIDE_SHA256 = "137abee479ab42eaa8f275f25239b1297de404240ce278a9fe5d0026bb99a1d2"
-PLAYBOOK_SHA256 = "4cdf6c5a275d2d3ace3d2cc1d953f3fe947822537c134c1c698539fecc2bfcd9"
+GUIDE_SHA256 = "b97bbeeca9843468b9e5f56577462a4706387dad04676ea076bf441173545a03"
+PLAYBOOK_SHA256 = "882d6576cc586b78bad1ebda557694c48a7c56d6dad0fd26dc61f68859e76afc"
 DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
@@ -73,6 +74,8 @@ SOFTENERS = ("可能", "也許", "看起來", "未必")
 READABILITY_BLOCKED = ("正處於", "若有若無", "進退兩難", "心有不甘", "牽動", "軸線", "收斂", "承接空缺", "補位", "判斷權", "推演", "脈絡", "能量狀態", "可落實", "局面", "不替沉默加上意思", "把空下來的事接走", "替別人的沉默找理由", "把事情想得更遠")
 SIMPLIFIED_CHARS = "个这时后里么说给动过还"
 TYPOGRAPHIC_BLOCKED = ("不子是", "占住")
+OUTCOME_GUARANTEE_PATTERN = r"你(?:注定|必然|一定會|百分之百)|保證(?:你|會|得到)|只要[^。！？\n]{0,30}就會"
+UNSUPPORTED_AUTHORITY_TERMS = ("心理諮商", "療癒技術", "臨床診斷", "投資保證")
 
 def sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
@@ -99,6 +102,15 @@ def readability_issues(text: str) -> list[str]:
         for sentence in re.split(r"[。！？；]", line):
             if cjk_count(sentence) > 36:
                 issues.append("句子超過 36 個中文字")
+    return issues
+
+
+def writing_logic_issues(text: str) -> list[str]:
+    """Reject outcome guarantees or unsupported professional authority in variable copy."""
+    issues = []
+    if re.search(OUTCOME_GUARANTEE_PATTERN, text):
+        issues.append("含外部結果承諾")
+    issues.extend(f"含不支援的專業權威詞：{term}" for term in UNSUPPORTED_AUTHORITY_TERMS if term in text)
     return issues
 
 
@@ -484,7 +496,9 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
         payload_slots.append(item)
     system = """你是繁體中文（台灣）IG 文案主筆。只能重寫給定的可變欄位。若 payload 內含 id 為 `hook` 的欄位，該 Hook 是可變欄位，必須重寫並輸出；其他未列入 payload 的 Hook、Hashtags、CTA、卡片標題、視覺模板、圖騰、日期、型式、色碼與固定文字不得輸出或改動。
 
-用冷靜、清楚、像直接跟人說話的繁體中文。讀者不懂奇門也要第一次就聽懂。全文保留第二人稱「你」，但每句只講一件事：先說發生什麼，再說你可以做什麼。使用日常詞，例如「先看已發生的事」、「把問題問清楚」、「先做最急的一件」；避免「進退兩難、若有若無、牽動、收斂、補位、局面、脈絡、推演」等抽象詞。避免心理治癒腔、客服腔、命定論、假深刻、空泛雞湯、術語堆砌、無源歸因、微觀動作與道具鏡頭。不得寫免責、邊界澄清、個人起局說明、資料不足或公開資料等句子。
+用冷靜、清楚、像直接跟人說話的繁體中文。讀者不懂奇門也要第一次就聽懂。全文保留第二人稱「你」，但每句只講一件事：先說發生什麼，再說你可以做什麼。使用日常詞，例如「先看已發生的事」、「把問題問清楚」、「先做最急的一件」；避免「進退兩難、若有若無、牽動、收斂、補位、局面、脈絡、推演」等抽象詞。避免把文案寫成心理諮商、客服腔、命定論、假深刻、空泛雞湯、術語堆砌、無源歸因、微觀動作與道具鏡頭。不得寫免責、邊界澄清、個人起局說明、資料不足或公開資料等句子。
+
+所有可變文案依「共感 → 重述 → 賦權 → 互動」執行：先命名一個讀者可辨識的生活拉扯；再用「不是……而是……」「先不用急著把它當成……」等句式重述，但不得否定讀者感受或承諾結果；接著給一至兩個低門檻、可由讀者自己完成的行動；最後用短句收束，並讓固定 CTA 前的文字說清楚讀者要帶走什麼。共感只可使用一至兩個生活領域，例如關係、工作、等待、選擇或日常節奏；可保留少量「可能、也許、看起來、未必」，但不可每句都用。道路、門、種子、節奏與流動等意象只可協助理解，不得取代盤象、SSOT 或行動說明。不得把高我、宇宙、能量、順流、磁場寫成心理、醫療、法律或財務專業判斷，也不得使用「保證、注定、一定會、只要……就會……」等外部結果承諾。
 
 只有 slot 有 must_include 時，才逐字保留每項術語。這些是動態盤象已推導結果，不得新增其他星、門、神、奇儀、方位、時辰、吉凶、公式或個人結論。型式一與型式五上集的短解答不向讀者塞入完整術語清單，只需用簡單生活語言承接該選項。只在 slot 標記 five_layer 時，才使用下列五層格式，並以換行分隔：
 **選項 X：一句明確但非命定的主軸結論**
@@ -590,6 +604,9 @@ def validate_rewrites(slots: list[dict], rewrites: dict[str, str]) -> None:
         readable = readability_issues(value)
         if readable:
             raise ValueError(f"欄位可讀性不足：{slot['id']}（{'；'.join(readable)}）")
+        logic_issues = writing_logic_issues(value)
+        if logic_issues:
+            raise ValueError(f"欄位不符合文案治理：{slot['id']}（{'；'.join(logic_issues)}）")
         if slot.get("five_layer"):
             issues = five_layer_issues("重寫輸出", value, slot["label"], slot["combo"], slot["id"].startswith("card_"))
             if issues:
@@ -639,6 +656,8 @@ def current_contract_issues() -> list[str]:
         issues.append("固定模板合約雜湊不符。")
     if sha(text[guide:]) != GUIDE_SHA256:
         issues.append("規則庫合約雜湊不符。")
+    if WRITING_LOGIC_TITLE not in text[guide:]:
+        issues.append("找不到可變文案的共感—重述—賦權—互動規則。")
     if not RULES_FILE.is_file() or sha(RULES_FILE.read_text(encoding="utf-8")) != DYNAMIC_RULES_SHA256:
         issues.append("動態盤象規則檔缺失或來源雜湊不符。")
     return issues
@@ -705,6 +724,7 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
             if re.search(PRECISE_ANCHOR_PATTERN, value):
                 issues.append(f"{date} {slot['id']} 使用精準風格錨定。")
             issues.extend(f"{date} {slot['id']} 可讀性問題：{issue}" for issue in readability_issues(value))
+            issues.extend(f"{date} {slot['id']} 文案治理問題：{issue}" for issue in writing_logic_issues(value))
     except ValueError as exc:
         issues.append(f"{date} 新版欄位稽核失敗：{exc}")
     body_for_voice = section(block, "正文：\n", "\n\nHashtags：")
@@ -812,6 +832,15 @@ def write_rule_map() -> None:
                 "2026-09-17": {"data_file": "engines/diagnosis_router_module_v1.json", "intent": "career", "palaces": ["官祿宮", "財帛宮"]},
             },
         },
+        "writing_logic": {
+            "version": "2.1",
+            "scope": "僅 Hook、正文、置頂解答、完整解讀與視覺卡中的可變文案；固定模板不適用。",
+            "architecture": ["共感", "重述", "賦權", "互動"],
+            "reframe": "以承接前文困擾的對照式重述取代結果承諾。",
+            "agency": "行動只能是讀者可自行完成的一至兩項低門檻行動，不保證外部結果。",
+            "language_boundary": "高我、宇宙、能量、順流與磁場是品牌語彙，不得冒充心理、醫療、法律或財務專業判斷。",
+            "fixed_template_exclusion": "五大型式文案排版輸出標準規範的固定模板及其固定字句、CTA、卡數、順序、媒介、秒數、色碼與視覺結構不得修改。"
+        },
         "forms": {
             "型式一": {"dynamic_options": "A–F", "option_format": "約 50 字動態盤象短解答（35–50 字）"},
             "型式五上集": {"dynamic_options": "A–C", "option_format": "問題聚焦 15 字內、貼士 50 字內、約 50 字短解答（35–50 字）"},
@@ -824,6 +853,8 @@ def write_rule_map() -> None:
             "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
             "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
             "保留第二人稱；型式一／五短解答 35–50 字、型式五問題聚焦 15 字內、貼士 50 字內，且可變解讀使用概括與投射留白。",
+            "所有可變文案遵循共感→重述→賦權→互動；重述不承諾外部結果，行動只指向讀者可自行完成的低門檻下一步。",
+            "五大型式文案排版輸出標準規範的區段 SHA-256 維持 16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0。",
         ],
     }
     RULE_MAP_FILE.write_text(json.dumps(rule_map, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -851,11 +882,10 @@ def migrate_registry(args) -> int:
 
 def sync(args) -> int:
     if args.dry_run:
-        print(json.dumps({"playbook_contract": {"playbook": PLAYBOOK_SHA256, "standard": STANDARD_SHA256, "guide": GUIDE_SHA256}, "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": len(list(unpublished_blocks()))}, ensure_ascii=False))
+        print(json.dumps({"playbook_contract": {"playbook": PLAYBOOK_SHA256, "standard": STANDARD_SHA256, "guide": GUIDE_SHA256}, "writing_logic": "共感→重述→賦權→互動（可變文案專用）", "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": len(list(unpublished_blocks()))}, ensure_ascii=False))
         return 0
     write_rule_map()
-    result = synchronize_fixed_typography()
-    print(json.dumps({"synced": True, **result}, ensure_ascii=False))
+    print(json.dumps({"synced": True, "changed_files": [str(RULE_MAP_FILE.relative_to(ROOT))], "fixed_template_mutation": False}, ensure_ascii=False))
     return 0
 
 
@@ -869,7 +899,6 @@ def rewrite(args) -> int:
         print(json.dumps({"posts": len(summary), "dry_run": True, "audit": str(args.audit)}, ensure_ascii=False))
         return 0
     write_rule_map()
-    synchronize_fixed_typography()
     posts = list(unpublished_blocks())
     if len(posts) != 22:
         raise ValueError(f"Expected 22 unpublished posts, got {len(posts)}")

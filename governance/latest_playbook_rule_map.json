@@ -1,6 +1,6 @@
 {
   "playbook_source": "lunas_astral_code_master_playbook.md",
-  "playbook_sha256": "4cdf6c5a275d2d3ace3d2cc1d953f3fe947822537c134c1c698539fecc2bfcd9",
+  "playbook_sha256": "882d6576cc586b78bad1ebda557694c48a7c56d6dad0fd26dc61f68859e76afc",
   "fixed_template_policy": "Only [ ] or ［］ variables may change. Fixed wording, punctuation, CTA, cards, media, seconds, colors, visual structure and order are immutable.",
   "dynamic_panxiang": {
     "source": "governance/dynamic_panxiang_rules.json",
@@ -43,6 +43,20 @@
       }
     }
   },
+  "writing_logic": {
+    "version": "2.1",
+    "scope": "僅 Hook、正文、置頂解答、完整解讀與視覺卡中的可變文案；固定模板不適用。",
+    "architecture": [
+      "共感",
+      "重述",
+      "賦權",
+      "互動"
+    ],
+    "reframe": "以承接前文困擾的對照式重述取代結果承諾。",
+    "agency": "行動只能是讀者可自行完成的一至兩項低門檻行動，不保證外部結果。",
+    "language_boundary": "高我、宇宙、能量、順流與磁場是品牌語彙，不得冒充心理、醫療、法律或財務專業判斷。",
+    "fixed_template_exclusion": "五大型式文案排版輸出標準規範的固定模板及其固定字句、CTA、卡數、順序、媒介、秒數、色碼與視覺結構不得修改。"
+  },
   "forms": {
     "型式一": {
       "dynamic_options": "A–F",
@@ -65,6 +79,8 @@
     "五大型式固定模板、CTA、Hashtags、日期、型式、媒介、卡數、色碼與已發布內容不變。",
     "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
     "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
-    "保留第二人稱；型式一／五短解答 35–50 字、型式五問題聚焦 15 字內、貼士 50 字內，且可變解讀使用概括與投射留白。"
+    "保留第二人稱；型式一／五短解答 35–50 字、型式五問題聚焦 15 字內、貼士 50 字內，且可變解讀使用概括與投射留白。",
+    "所有可變文案遵循共感→重述→賦權→互動；重述不承諾外部結果，行動只指向讀者可自行完成的低門檻下一步。",
+    "五大型式文案排版輸出標準規範的區段 SHA-256 維持 16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0。"
   ]
 }
