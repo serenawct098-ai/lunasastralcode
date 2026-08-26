@@ -1,0 +1,53 @@
+{
+  "audit_id": "social_divination_style_profile_v33_2026-08-26",
+  "change_type": "design_rule_documentation_update",
+  "source_scope": "使用者於本任務提供的占卜／療癒型社群貼文截圖與其質性文風分析；只提取可變文案的語氣、節奏、修辭、句型與情感推進。",
+  "source_type": "user_provided_style_reference",
+  "verification_status": "verified_as_style_scope",
+  "target_files": [
+    "governance/social_divination_style_profile_v33.md",
+    "governance/style_source_provenance.md",
+    "lunas_astral_code_master_playbook.md",
+    "scripts/60day_scripts_INDEX.md"
+  ],
+  "non_targets": [
+    "五大型式文案排版輸出標準規範的固定文字、CTA、卡數、媒介、秒數、色碼與視覺結構",
+    "型式三與型式四的 SSOT 資料、命理術語、公式、引文與 canonical_locks",
+    "型式一與型式五已登錄的動態盤象五元組及其歷史紀錄",
+    "已發布腳本內容"
+  ],
+  "changes": [
+    {
+      "file": "governance/social_divination_style_profile_v33.md",
+      "summary": "新增可執行文風規則：代入、拉扯、轉述、低風險行動與自主收束；並加入術語白話轉譯、第三人斷言限制、標點節奏與型式邊界。"
+    },
+    {
+      "file": "lunas_astral_code_master_playbook.md",
+      "summary": "將既有第 7.6 節升版為 v3.3，連結新規則檔並新增版本紀錄；不變更固定模板章節。"
+    },
+    {
+      "file": "governance/style_source_provenance.md",
+      "summary": "更新文風來源定位，明確標示原始截圖不存入倉庫，且文風規則為 design_rule。"
+    },
+    {
+      "file": "scripts/60day_scripts_INDEX.md",
+      "summary": "同步未發布腳本的 v3.3 執行提示與驗收敘述。"
+    }
+  ],
+  "acceptance_criteria": [
+    "v3.3 規則只適用可變文案，且所有引用檔案存在。",
+    "固定模板與命理真值不在差異範圍內。",
+    "Markdown 差異通過 git diff --check。",
+    "JSON 稽核檔可由標準 JSON parser 讀取。",
+    "所有 v3.3 指引均保留讀者自主權，不保證外部結果，且不替第三人下定論。"
+  ],
+  "verification_commands": [
+    "git diff --check",
+    "git diff --name-only",
+    "grep -F 'social_divination_style_profile_v33.md' lunas_astral_code_master_playbook.md governance/style_source_provenance.md scripts/60day_scripts_INDEX.md",
+    "node tools/verify_style_v33_audit.mjs"
+  ],
+  "canonical_locks_changes": [],
+  "halt_events": [],
+  "rollback": "以單一 Git commit 回退本次四個文件的變更；尚未進行 commit 或 push。"
+}
