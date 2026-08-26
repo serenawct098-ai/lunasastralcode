@@ -63,6 +63,32 @@ class GovernanceContractV2Test(unittest.TestCase):
         self.assertEqual(combo["key"], "天心星|開門|白虎|乙|子")
         self.assertNotIn("spirit_placement", combo)
 
+    def test_aug25_theme_plan_covers_every_affected_post_with_traceable_type3_sources(self) -> None:
+        posts = list(GOVERNANCE.unpublished_blocks())
+        affected = [(date, header, block) for _, date, header, block in posts if date >= "2026-08-25"]
+        self.assertEqual(set(GOVERNANCE.THEME_PLANS), {date for date, _, _ in affected})
+
+        by_date = {date: (header, block) for date, header, block in affected}
+        for date, header, block in affected:
+            plan = GOVERNANCE.THEME_PLANS[date]
+            self.assertTrue(plan["topic"])
+            self.assertTrue(plan["hook"])
+            self.assertEqual(plan["hook"], GOVERNANCE.hook_slot(block)["text"])
+            if GOVERNANCE.form(header) == "型式三":
+                self.assertIn("data_file", plan["ssot"])
+                self.assertIn("source_locator", plan["ssot"])
+            if GOVERNANCE.form(header) == "型式五下集":
+                upper = GOVERNANCE.pair_map(posts)[date]
+                self.assertEqual(plan["topic"], GOVERNANCE.THEME_PLANS[upper]["topic"])
+
+    def test_lower_cards_have_one_option_heading(self) -> None:
+        for _, date, header, block in GOVERNANCE.unpublished_blocks():
+            if date < "2026-08-25" or GOVERNANCE.form(header) != "型式五下集":
+                continue
+            for label in "ABC":
+                card = GOVERNANCE.lower_card(block, label)
+                self.assertEqual(card.count(f"**選項 {label}："), 1, f"{date} {label} has duplicated option headings")
+
     def test_sentence_quality_detects_high_confidence_grammar_risks(self) -> None:
         self.assertEqual(
             GOVERNANCE.sentence_quality_issues("你先確認資料。再安排下一步。"),

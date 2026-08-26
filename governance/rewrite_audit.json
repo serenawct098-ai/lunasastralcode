@@ -1,6 +1,7 @@
 {
-  "playbook_sha256": "5e0a75bf1a033259c7aec1e0b9181bd5c9eafde9622638cc510e52ee4fdda794",
+  "playbook_sha256": "7b6be6172d8d035b42a2fcbb9a3888bea1dba1991d2a4d9453e67dfe4b854f0b",
   "dynamic_rules_sha256": "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5",
+  "theme_rewrite_from": "2026-08-25",
   "posts": [
     {
       "date": "2026-08-20",
@@ -172,6 +173,18 @@
     {
       "date": "2026-08-26",
       "form": "型式一",
+      "theme": {
+        "topic": "九月人際節奏",
+        "hook": "9 月人際節奏｜哪一種互動最值得你先回覆？",
+        "totems": {
+          "A": "紙飛機圖騰",
+          "B": "耳機圖騰",
+          "C": "咖啡杯圖騰",
+          "D": "空椅圖騰",
+          "E": "窗框圖騰",
+          "F": "書頁圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天心星",
@@ -264,46 +277,50 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "cd179a21dff093188650312fc01d41540c843543919a490c3d6abd41d052034a",
-          "after": "f617458c123f41c8d48fc6c8af72566ee0cddb24c8f53a52370f38943afeec38"
+          "before": "c97342dd460113bf97d2cb1cf3bd2606d1f3c561d95f745dc63b5cfc1cc4efca",
+          "after": "3faf967f6047c49ad01d44dfdeda22f478e3d9e3203d959bd8184781eac00bff"
         },
         {
           "id": "answer_A",
-          "before": "db0b7936b489cd708b21f896849e6392b9f1cf2185d14556e2e43bb99aff515a",
-          "after": "ff74efac9b84cba5a8570bfe855d25dd7bd4e1159f2328b5e176830ed8271b89"
+          "before": "797ea386f5e2aaa3cec9b4b60c8da155023057a813858b5dd9943076626921b6",
+          "after": "a3227ffc3c369400823e639a96d8ede62c5229660bf8d565913a770e2d635ef9"
         },
         {
           "id": "answer_B",
-          "before": "7341b6c0863dcd83ab589923d6d8872424a8c945ff0c90af77be009373ca5247",
-          "after": "fb1e04f0680b775f005e026fe531647db3ac2967e9ccdd8e826f4a09047ba732"
+          "before": "146da934d13de2f36151b660e9c169686a767be3e680962fbb6d90f342cdd3d7",
+          "after": "023c9f4e59cab405048fe141e99f2799fb8b011d05e1531a94b8f48bd5b47564"
         },
         {
           "id": "answer_C",
-          "before": "e996617560721b7b9ea93119761be122a24198a0910b0ecea69e1b4ec7188c18",
-          "after": "ddb4d7386ee9ef1e97e9d34f626c37f72bd6998e579c9d9e601b6be1fc8724ee"
+          "before": "8137612e55839ed078ff04eea45892c5182e8dadd1aefc11de49291ea087c3e5",
+          "after": "acd7bedb259520026f325baa1bc7f2f6522cbd887207049782f7380b19ab29a2"
         },
         {
           "id": "answer_D",
-          "before": "be04b148a0e9bc626bf8027cddc3d36e8b277cd2f3e2b7ec310305046bad893f",
-          "after": "23c0026afad10ea575acac5ff15bdbe204301abdca608c9b16d85e3c5e8042d3"
+          "before": "5bdf42da47d02c86edbc178e1e11f82beb680f5e1d09898e5435af0ccaa402d8",
+          "after": "f10a1de5b88da0b7a22c50be4f67d74918389f10c60d9bdec30098d2b390e440"
         },
         {
           "id": "answer_E",
-          "before": "2eb7df37e72ad2b94f8228adf45c8238e1dc04f6442a6de05fd11ab9e0040325",
-          "after": "689698e537373a67d678f7ef7ff63e90f3d63fee72be11ede6311ae40512d828"
+          "before": "5f1c0a652aea1db76bd7903e225c9fffcb1d7163ebea1f7ff08600595786a5a4",
+          "after": "fb9fc666e62516a096df3c2c44a8011a61c0f05bab142158960d50b21b8d47b3"
         },
         {
           "id": "answer_F",
-          "before": "45a2404a9f66abff226ecd81097b439bebb547954c21fb482e973eea776c8641",
-          "after": "76e3e31f5437784c1273c2574ef3e8eeae7672fa99e448de177ef99018a3703d"
+          "before": "4dd796c21699df9e9a7807418dae0244e9a013aa6e9a2ebeaaf8e3d666ae7dbf",
+          "after": "3e5ae42d4601ac8e4a631e13627aa5c069255b8219acb5e4e5901f4d001eccd5"
         }
       ],
-      "before_sha256": "92a3a8e08ba9c02b243ee688dc083ce334f8bb8291244e98952bb397eec56bda",
-      "after_sha256": "d735f26e9a92a1fd15ab1237236003b8ba1c5d4cc05d773da4fade2d93d2dbb6"
+      "before_sha256": "4d5dc74ba98607222735b9e17b2fb741e9d46d24998cf04a685cf0f1216a3b61",
+      "after_sha256": "ac30556a6ff14af2d0eae67a822b80ba8ab489ce1f9076b0889ad19a58ed5493"
     },
     {
       "date": "2026-08-27",
       "form": "型式四",
+      "theme": {
+        "topic": "時間留給誰",
+        "hook": "有些邀約不是現在不想去，只是你還沒決定要把時間留給誰。"
+      },
       "dynamic_panxiang": {},
       "changed_slots": [
         "hook",
@@ -314,31 +331,41 @@
       "slot_sha256": [
         {
           "id": "hook",
-          "before": "d39b363d701fdcd2cf5c738906d86110827c6ec56dbf7d4f056cf93bbc2ed328",
-          "after": "31c1b64fe15e8caea1c132d097e7693d01ac593bd4b593d4f9282ad17bd84956"
+          "before": "6c2295252aabf16f8e2f7085a09d0f720ab19f718b5b11a841f42587894b8a11",
+          "after": "ad8e6a350d09ffee1d572da294d493955b14e1bc8a0da59a134f74ea48efa337"
         },
         {
           "id": "scene",
-          "before": "3958f24d398200c298bf26343b0f0a8ecb696d1c442ba202bd125112a73faa1f",
-          "after": "e97d1f5f7e775249bba116d8e5e8c908593087b3e3a6b83fa5d6154c1c38f277"
+          "before": "541fd53bb062f1f8a3a20b2da8df886069df973430e0ab37609f8ef9631bffce",
+          "after": "d2293136a8e1dab65d666f1b622a05861ac6d857dc3656e00a6f13ebdf2a125f"
         },
         {
           "id": "check",
-          "before": "24666731e3eee813e9097d75e832a367b7d8507f4b517ec2e26d859cb6ffaf8b",
-          "after": "6475eca3529c8ad092b863d1cc3c7118380757548a941d2f01a0d6b2d49b9388"
+          "before": "a7baf1cd6d34004dd9b297b042fa70658705373339aacf023476999c2edcba30",
+          "after": "67aff41b41e96b3165e9c363f61c4525216a0458c7b6ebbcda420c826b65e190"
         },
         {
           "id": "action",
-          "before": "b0c8a29f37657318e4a333f148bc63d7cfbf474ab70a42ec234d549d7f3e0953",
-          "after": "71e6989ba0947689d6a2b813cb5ecf9da75f210555e722ed8dffebef4b9c1a84"
+          "before": "35478ed98cd2a5fbf9dcfc102a198788a5ba2983c726aaa798d21e5421c115e1",
+          "after": "acf6a2f6ee110ef80e10f7e7b96504824f626487825e20a0f3618dd0287971e6"
         }
       ],
-      "before_sha256": "221d3b48cb0d27cd31b2e64901cd33ff4e1e4ec8c59962befb3b25c8fe5c51d9",
-      "after_sha256": "d938a4ad84e2b9df0b2d3e435ced6b7a6bcac8e89b95e1a92072eb903741a3e4"
+      "before_sha256": "071b70f009d62464baf9f9e94ae540f8347b071124c704ca17e3148ca04416c3",
+      "after_sha256": "94a4f38c483b352e5c67ac57f83fd8df2a6b1d5cf8f02d9ee886ef6136626c03"
     },
     {
       "date": "2026-08-29",
       "form": "型式五上集",
+      "theme": {
+        "topic": "重新安排界線、步調與承諾",
+        "hook": "大眾奇門占卜｜接下來一個月，你最需要重新安排的是界線、步調，還是承諾？",
+        "scene": "接下來一個月，先重整甚麼？",
+        "totems": {
+          "A": "門檻圖騰",
+          "B": "時鐘圖騰",
+          "C": "繩結圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天心星",
@@ -381,7 +408,6 @@
         }
       },
       "changed_slots": [
-        "scene",
         "tip",
         "answer_A",
         "answer_B",
@@ -389,37 +415,41 @@
       ],
       "slot_sha256": [
         {
-          "id": "scene",
-          "before": "9c7109d01c73293586c79af5c6c50c5d1f7a4c8a1c27db285d523b10a715f596",
-          "after": "aa0b68be7d469dd2a5e53231a70302ce6bd54f9e25ab7a299540f4627819fec9"
-        },
-        {
           "id": "tip",
-          "before": "b3ebc3a5a7a5d0e879057f30d36b5560e7ca78a9679e554f6ea6956cde30c1be",
-          "after": "b6c1c681ec0abf400e0461d29afbdde3d18b6639c0fa02ee9aa37c78829eb351"
+          "before": "8d614bc9e6e12d08df0e115cd01f7b63ce8c18552845d0a1dd77984b334af200",
+          "after": "c7393457515916a44dba5c03de6651f2d4ec11ccdd1bfe47250f03407ddf41b3"
         },
         {
           "id": "answer_A",
-          "before": "1bac7ef61301970b8676b0a34000d312bb591aa0eae4ca903a8418b664f8b6a4",
-          "after": "8c23ca35ed3aeebd540a87e066f2c596526d2df7f8d83f8ee75dddb100ed89f2"
+          "before": "ca76b2779495bd6bf9b02effb88d32a73419c6fa9708497b2f07ffdd278765d5",
+          "after": "1f3bf2c0bbc832cda3b890db0694a161ddad3eb0e84e1da688852f442221b6c1"
         },
         {
           "id": "answer_B",
-          "before": "4997aec87339927a27b0a1c044fe698225517fe721b984d7852aaf58d5664d27",
-          "after": "69ddc5eeb53282bcfc1521692fc27cb10902debe85022d41ea2a1d19797f2302"
+          "before": "e154331b6c7042553a3d3e6506361a0d6b21e01105fcdcefd3c5b2b013c2d172",
+          "after": "350d59bc3b84e13d76a1ef56435a6270aed39cb1b6f1c55f419fc65babf937ef"
         },
         {
           "id": "answer_C",
-          "before": "706a5df38066f10d2c2f93e08cb8e2d724c66b8b92fd87208f9535094a5e4a79",
-          "after": "502a59287e33dee3252e117feae1d2d6cd6bae229ab17851b615b57b5e7bc868"
+          "before": "29577169d23d2368454b77b8830a24c9c77e86e556b9bf8526155a25e06e1997",
+          "after": "2f69b810c5754dac397c0d23eb9734fd2293ebccda86fa8234f962ec690d7400"
         }
       ],
-      "before_sha256": "13981c4826bcec52e52531931500ccc818b8520a4a5c7dc5850322ffa50ce5aa",
-      "after_sha256": "a3e207fdb83e406186222b5415094bfe19c50e3021fbf64c5aefcc350064cce7"
+      "before_sha256": "3c7582f3c161d6b7cf6e1427ef99b437241088a7b76c6dc9eccb8d6601e24b84",
+      "after_sha256": "90b3d055dbabcf4bce07485c9ba10ed1aefee33a0add12ba99dfb906a47d379a"
     },
     {
       "date": "2026-08-31",
       "form": "型式五下集",
+      "theme": {
+        "topic": "重新安排界線、步調與承諾",
+        "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要重新安排的是界線、步調，還是承諾？",
+        "totems": {
+          "A": "門檻圖騰",
+          "B": "時鐘圖騰",
+          "C": "繩結圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天心星",
@@ -469,26 +499,30 @@
       "slot_sha256": [
         {
           "id": "card_A",
-          "before": "fb8ecd56c61a56a6522650b8b821cf7674a620dc2f61321a863db721e509b791",
-          "after": "5f6685c20dfe56a4e1e5269364b63e6d5e2a1d154f756550df835ab212c879cb"
+          "before": "1ae75b85dfc10d9698bfe4605bfac623b44603c8423efc097f07b872c5ff4e6e",
+          "after": "403e215baaf3cbbb9dc52b87177143d869c4d0159c40b1709e81ffa5de0b73ab"
         },
         {
           "id": "card_B",
-          "before": "48cac8ec57dc3aa07f5682b6a0443f6b1d5b46f7dce48af7c3cde33c7af3a198",
-          "after": "7174a3339ca441de698c3881b5e991e59426d4a4e32a798727d36932d48f57c1"
+          "before": "32f1dc9fe9436f346c1eb4562b9764824ea0b278674139cda33d10facccba2a7",
+          "after": "5e808cd17c05414db85484022005a94be9a538133201ab88b965337a6038690b"
         },
         {
           "id": "card_C",
-          "before": "88ce1d82f873c14583ad031e49ac965df83a5ef8c686d5b1fc84eb795e9131e7",
-          "after": "2153e3b94552ff33b921ce9f991a024035464585861352020fed00dc319e952e"
+          "before": "5d4912a51ab191e338d49ab068e5be3484ba326406745ccf91056bb8e3ad95d0",
+          "after": "69bb5b14d2429a6fba68827e66d074b1f20ac99f87094ab0a2a928da24d71cec"
         }
       ],
-      "before_sha256": "31088ac599f4686f0213e89e042a002fa3cedfac07241608e55d27bb85fbf100",
-      "after_sha256": "5b737586f350916b9ae5dc9ab959ab928920166b6d0a4cd96c3167ece9fedeac"
+      "before_sha256": "799cf1c1c702324683d068741b1e36b081b329228bcd98e9ec42778ac211d0dc",
+      "after_sha256": "e28f3fa03ac20ed986e9ca630e3a1db9e79087b2cfb751fbf731945354234b2d"
     },
     {
       "date": "2026-09-02",
       "form": "型式二",
+      "theme": {
+        "topic": "把疲憊留在事情之外",
+        "hook": "有些疲憊不是事情太多，是每一件事都還留在你心裡。"
+      },
       "dynamic_panxiang": {},
       "changed_slots": [
         "hook",
@@ -499,31 +533,43 @@
       "slot_sha256": [
         {
           "id": "hook",
-          "before": "b1968a4b9856cdfd4abfd904b95ceeb94ae8d9146303b0cb034a897c234af7f2",
-          "after": "211467becd26b388083e7f54ce6888e6d995935fbbf93c545f5b1fb4e21f44f6"
+          "before": "861b52ae8e81475f7541a1888b508159ab787cf09660b2cbbd1b915ac3b1baa8",
+          "after": "80bf50fe85462c241f86a7854e5acb69820dcfea404e8c2293bd6188c837b32c"
         },
         {
           "id": "scene",
-          "before": "5f221a4738379e9a5fbd082fdd66ac24b442db22be5211d1ac11642bf44dbaa2",
-          "after": "6382e15e0c1923edc0c2c0a1782f18094ab11d172f77ef3f7be42043921c082d"
+          "before": "570ad96cd07f058ebe187dfb59d0f7e0078fdd7403a7873c0ba13d45e1240210",
+          "after": "543e9ead0cf00b5f718ece0a2369df9ed24f7552ff01baab2bff103df166c45b"
         },
         {
           "id": "reflection",
-          "before": "8778792971ba3f0cde4a8cb875f68e42868ec9c4e94135f5419eaa65d18e94b8",
-          "after": "db73b62e95ff0f63949269920d790309f78e05a2bb4851c3e73e066c6d28d8f2"
+          "before": "fec11751c358bf42636a4cd8d90514513dab2260ee8e9d8c62f459e96f8fcd31",
+          "after": "682f031237bc890e3718da847ff7138110016677dcbf43f2a54639966f654d3d"
         },
         {
           "id": "action",
-          "before": "dd32d0654191f34ff753b523cad12f35bc1499f04f7f6e9e6c6e7c1be2023008",
-          "after": "8f117fc51a6d121639ce4512787338e74b93f36b18a6b8083c5dcb734d105c3f"
+          "before": "a16d091fe3239bc77c45961e67abf0244a55dbf874dc5143a1d8ecb59f04c2cf",
+          "after": "8f774cb5df3179688f54f6fc110a315543156b2674f0dc8ab2d9e49352eab765"
         }
       ],
-      "before_sha256": "c5e93f82a332260b2db9166a2e0f27e0b831f16dcfa3cc93c56bcd36727b1ee6",
-      "after_sha256": "0168cdc9676713f446ed68ea23fb595a6b8961050ac00c8b4e846cff4450bd5a"
+      "before_sha256": "ea3b2e3ed335cca6302e5bc7cc8885682765607a5484811295b537f4e1ea8a29",
+      "after_sha256": "8b479d663b68600aceffc5b414ede95e46e50afff5167c196b6227b15f0db02e"
     },
     {
       "date": "2026-09-03",
       "form": "型式三",
+      "theme": {
+        "topic": "福德宮與心裡的聲音",
+        "hook": "30 秒帶你看懂福德宮｜先把心裡的聲音分開看",
+        "ssot": {
+          "data_file": "engines/diagnosis_router_module_v1.json",
+          "source_locator": "routing_rules[4].palace_priority[0] = 福德宮",
+          "intent": "inner_spirit_resilience",
+          "palaces": [
+            "福德宮"
+          ]
+        }
+      },
       "dynamic_panxiang": {},
       "changed_slots": [
         "explain"
@@ -531,16 +577,26 @@
       "slot_sha256": [
         {
           "id": "explain",
-          "before": "86eb937ea0c1fe3dc980d44f2ff2595b707d1434a813f12f9e13ac2f7df736e8",
-          "after": "8102ad7985eef24879cbebccf86a7f893f03ef901a9a2b372ab834bc421ef87a"
+          "before": "843e85f251132b09c18fcf53033c201fe75cb4b484e3cbf5078648f108b22ff1",
+          "after": "275709699339ee5f43e7e2d086b33c219de7c145f2c70f4d67b146873be75bd5"
         }
       ],
-      "before_sha256": "f7fbd07d4d203d77e59efac75adc160cdec2f250782bd48ee351a042a39b66cc",
-      "after_sha256": "c7e2325192ebb63d4e7995bba9b48d6f30eda5ded64b4b698bbd36796260b671"
+      "before_sha256": "ce256bf07e0f0b9b1257088a29191ed1994c70e36fec1776a09d32093f1d58cb",
+      "after_sha256": "b5936727712753fdf9d0370f8a7146892c37afbe3e950b44965d599f20c6eaa7"
     },
     {
       "date": "2026-09-05",
       "form": "型式五上集",
+      "theme": {
+        "topic": "說清楚需求、界線與期待",
+        "hook": "大眾奇門占卜｜接下來一個月，你最需要說清楚的是需求、界線，還是期待？",
+        "scene": "接下來一個月，先說清甚麼？",
+        "totems": {
+          "A": "話框圖騰",
+          "B": "尺線圖騰",
+          "C": "信封圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天芮星",
@@ -583,7 +639,6 @@
         }
       },
       "changed_slots": [
-        "scene",
         "tip",
         "answer_A",
         "answer_B",
@@ -591,37 +646,41 @@
       ],
       "slot_sha256": [
         {
-          "id": "scene",
-          "before": "cfe9cad477bc02b3e1088e4f0f9a3466ab8b5c2d48ff217de13be842ac77734c",
-          "after": "c08ccc8a87b1fdbae8cd4a2352a0862277318edeaa3b6ef20e7198f37e068b80"
-        },
-        {
           "id": "tip",
-          "before": "cae4eedeaed00c43479cbe5d5f9b7bb7e0c7a342391a4384f2babe1699f0d1e3",
-          "after": "85cddd90d0477e4bbec7e15ab7003d2c91171850cd72fc8cc531a391db11b8ee"
+          "before": "05831ddd3b626d1b6e35000ea312db16faf49f7cf6775132bf7dad63cb0e2aac",
+          "after": "2860884eb795c193c191c98ee56f064576a88b40a77f83c020021524a5497d74"
         },
         {
           "id": "answer_A",
-          "before": "1f4d89759a7973613b74691ada0c5f7eba152c4adebae95d178a2a3311596841",
-          "after": "d85b726d09d2dfc2544dca990811b838240cbc80a77a4aca61c1428f4eb93b31"
+          "before": "5b0904fce8372ee5824c87d4c33b1efe82146f66fb486035a72f449172f2b6dc",
+          "after": "89bb265d011db57003d0826466a2e8d9080a6b274c6e986766c9b2b0dd50d867"
         },
         {
           "id": "answer_B",
-          "before": "82c3089672b3378d92a50b5af801c61a5cf41e4c00e793834cb03360dcb29754",
-          "after": "c1c953fa15c96dceeb86be9a5ecfa80c14631016ee980e07865e5404f71ad842"
+          "before": "888302be82a023b3070598dabcd70fe20bcb02d040b99185746d2d63984d91d3",
+          "after": "4ae4621d499c9f498a537c52cb6314a82132be4fb038bb0c39bc7bb09a3089d1"
         },
         {
           "id": "answer_C",
-          "before": "0ef98b6db444f5c508e620dd436a002c4f60e37d5a481a5d8dbef7134fa593fc",
-          "after": "5b9e1505b120f6660f727e994faec773b6637d2ccd20c66d58ec66d8b010096d"
+          "before": "677abd10f826182ab0bb7f64150f5107fcc2bec123ef58df0380fd2964f554c4",
+          "after": "9a96083d7a0d7f698b1d4de3dc210e89707ca4ae51eb9c00ec63a4c4103a9a84"
         }
       ],
-      "before_sha256": "5a73a5a6fa8aeab3a31e9dd2c4036e9006d66b962bceec1c84c90ff7c5b1f955",
-      "after_sha256": "2958650d6ce83feeb01403be0d9f4ddc983b72eb32dcbfd06c6d7bd96cbdee4b"
+      "before_sha256": "115f91862a81eb652244be6788a98c6dd3a3858f1ff8033d02c316f2bf51f4e5",
+      "after_sha256": "a521015f89058448bd59f52d3abcd8857c925188efaa7584eeb0e88d1df43cf4"
     },
     {
       "date": "2026-09-07",
       "form": "型式五下集",
+      "theme": {
+        "topic": "說清楚需求、界線與期待",
+        "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要說清楚的是需求、界線，還是期待？",
+        "totems": {
+          "A": "話框圖騰",
+          "B": "尺線圖騰",
+          "C": "信封圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天芮星",
@@ -671,26 +730,38 @@
       "slot_sha256": [
         {
           "id": "card_A",
-          "before": "71fbabc6ea8b212cdf6dd10b7e0311bdc69b8c6e4dac32d0a715597b42761df1",
-          "after": "18eaa1fe8fa8d015eee8569afe44eb6a14e1e374a7936b5ea39ca166cacb7f34"
+          "before": "a3d2a919ff3d928eda2d5695ad5e04ebd993e9b0296602fc53c22ca10b948944",
+          "after": "c0a1bd4a033754188352c18d343316adf1b1f376d1d9c25712b8e3458ab1122d"
         },
         {
           "id": "card_B",
-          "before": "a7656e501a2d0abadc486f0724cf12df79a72bd49bd1a6fd320a8af8b6324b7c",
-          "after": "5d6d91702893d5284dccb148c581a43c413adb7d1ac314c406977c0ea42c80e2"
+          "before": "c1edacc237a8c2a7f12619db86c4934a3b25725665dc6791ed117c30c9bf3f03",
+          "after": "34c1aae0b88b17f3df6f3d7614e4a38850f1cd4b129ffd3174b1e042f3285ee8"
         },
         {
           "id": "card_C",
-          "before": "87a811962565cc976eef29ba345c99a071a02308a8765d8728bd8fd0f3061726",
-          "after": "461646da7841b9e1d21b5010758af391c11c9537ffe9d7405844da8c2fbd66b2"
+          "before": "d4c623f418086a93f182c4db2a9f9147abef613e49dccbffd3f0d3fc5976b097",
+          "after": "8e77b85d489107c25409c3c6c576fa0877743aa62b3d80afc1bb9164954d5d8a"
         }
       ],
-      "before_sha256": "7137f5b908656f7787dbe6025858ec42d6ecfe7cfa82c7db44c3d649a81969c7",
-      "after_sha256": "17a8c26a72f0b1794cf40c53a9bf4f6b285c40e270a864c8204e91e79e65d354"
+      "before_sha256": "ead5b68b9e2c0ff3f381ad69d693072e8662914473afebfb3975292edc05304e",
+      "after_sha256": "f71b0d8e1b264f898879bf981f2dd087ff630b9b8da46cd21b6bcdc2ee99f52b"
     },
     {
       "date": "2026-09-09",
       "form": "型式一",
+      "theme": {
+        "topic": "九月生活留白",
+        "hook": "9 月生活留白｜哪一個畫面最提醒你先留點空間？",
+        "totems": {
+          "A": "雨傘圖騰",
+          "B": "窗戶圖騰",
+          "C": "杯子圖騰",
+          "D": "空椅圖騰",
+          "E": "地圖圖騰",
+          "F": "雲朵圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天禽星",
@@ -783,46 +854,50 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "8c7547fda392b9ae2143a24a1ecb99ce8a1533d343e3b3d687ecf4a2bf8d2d48",
-          "after": "89a51f8e29da5ce30cccc546ba57664e7cedf2add1fe5229f86080ce8e219e87"
+          "before": "e0ae752cd0e187ade2257cf411a292e9a7bd4735a85964bc84d292f02e39491a",
+          "after": "d98c56ef4d8b9683aef655f03f899c9f6c69df4210376109f37593b2c7e19ce1"
         },
         {
           "id": "answer_A",
-          "before": "4a87fe46c6ffaa629a31efd17ffc2bf4dce84d42a86cdd77e8844eeb0b0b26f2",
-          "after": "9cd31ec38c38dec15d19204a8ff60697e92ca8c4e9738147acf7008afd5b0a6e"
+          "before": "b8e5cfe6ac56f00ffb552cad005e09c44bd7d4871d5d30e158edcd3760dd280d",
+          "after": "62c4d7f74986a30e7ccdad3e7d4654b10a84fbd46c8c976522103ed53e634f8a"
         },
         {
           "id": "answer_B",
-          "before": "137d2cb5059caad399d07e384d34fbb55e71aa34bb14cc86c082c7c50adbeadc",
-          "after": "e8fdf88686b5def7652ea99a92ae95455f52adbf8aba9d30bb7d591aa2d7ea2a"
+          "before": "2fe4e4d0da8c67985f1542a68bf5295995bf1965d7253106b917578209e62b3e",
+          "after": "ebd18fbd5cf3b0a8410f7f2729de0a04850a95180a4e0f3110f623e5f608f71c"
         },
         {
           "id": "answer_C",
-          "before": "8b2591b815cda1e0fe1b252dc7c9c3eecbcddf5122ebdb52e2d3eeb992b0b5f3",
-          "after": "1141d894061f5e201c2e83b6e1f1f4830f1d5266d7cb2d784daaf9aebae879b9"
+          "before": "1d5e444aa66d627ce73965e308397c00aac69f53e0c218c183b4df1c4a6f24eb",
+          "after": "9cb35b34c11a0173826e18ac7d3ab2cdc993630e5f79d1bfc831c84bd755be26"
         },
         {
           "id": "answer_D",
-          "before": "3f7f302b2f0a8fa9c9a9ddb91d55fef2bc7e16ccfdb825d570ad3356b9f3a122",
-          "after": "61befe55ce2f09bfef06f8326141e063565c9cca76827e566f9a0410956b3766"
+          "before": "83eeabf89f7d406fede84a904bf16c1f60568b894796b8d351af0afab00dfd96",
+          "after": "f5a1b0a924a185c77de1ad4939aafa5ff2dd0e8dd2bf0c6280df06d9c99a7dd8"
         },
         {
           "id": "answer_E",
-          "before": "dd8b6f42170010279e16edc19807fe05f05b29c9de3f5836f6e3e301c055c489",
-          "after": "e71a91638b9c30ae7310be5fb7d48be23364c20fe1fe7525609f254d20c99076"
+          "before": "eaebec72573320f2ca6b1ab8e314c50255c307f54453ad2574b16ef3ad8febff",
+          "after": "5522c56eff4078347d4741cdc552a6bd893bcdd16bb14abca09ad62544d251e0"
         },
         {
           "id": "answer_F",
-          "before": "a3702dac995610c66c92df2743eb8ecdded4699d4e92b64ef216adea4239338c",
-          "after": "9abe1915c061bae7cc5501492f72d011c076843e4ec427dd668cdcd517d8b46b"
+          "before": "39c835185a3f50b24e98080cef6ab370453438a6d1306b92d0d3765832157233",
+          "after": "1a53acf3ad3db74a201391e0bb4374400d5243a2e42af224bd2d1111e943b4d3"
         }
       ],
-      "before_sha256": "c4324337091866f8ef13b79ac5e6247b71ba333c03da7001f306a7bbd40574cb",
-      "after_sha256": "59feb6d63c6882d3a3da0e380ddf6c236aebf91a808a48b28829d891873c2e8c"
+      "before_sha256": "e2ff582c27a41d10ed0c953fdb1e81d02b9eef007e5a9f4e8328d3482d064b43",
+      "after_sha256": "4a46029105e67fe016cd712bf7f507e8ab3b30007ab3d80cc363bddab8d15a2e"
     },
     {
       "date": "2026-09-10",
       "form": "型式四",
+      "theme": {
+        "topic": "把自己排回生活裡",
+        "hook": "你想把生活過得更有餘裕，卻總是先把自己排到最後。"
+      },
       "dynamic_panxiang": {},
       "changed_slots": [
         "hook",
@@ -833,31 +908,41 @@
       "slot_sha256": [
         {
           "id": "hook",
-          "before": "e24f79435d7b659a423928779adeb36ca8ee1eb92cbc335a5cd8ca76270e888a",
-          "after": "0ab2131ad9e473f1d09cb6b6300dcd777b833a1983c4bdab3d22debbf6d53b84"
+          "before": "77ba8b24f6e7932d37134f24ad4c679bc6cfb477b9e80968f351fa12cbf15d1e",
+          "after": "3699f3bf94d568a34179df10cdad5ac45114d6189cabbecba4b28af7fbe9221c"
         },
         {
           "id": "scene",
-          "before": "88e0b4011ead8e582fa88ae1375cfdf28bb84d2dcfb244fdd5001cf7df0c28a5",
-          "after": "2d71a3bca8f56af5efdb287e4c5169534ae2032925250354fa09f5647ba4e0e7"
+          "before": "d6d10ac1c90bce289c9530b5e09738075af4c3560e0f2903f267e985bce5d26a",
+          "after": "9329d800fd10da3caebf1bb4a83e2b7e64e091c317006693a4092271e9b9b586"
         },
         {
           "id": "check",
-          "before": "cdff6206c0f4c11cbbc9479040361ff0316e757d2390163d9bcf15fc3942390b",
-          "after": "327febac580b6ee566a577873384cf3e0f2c7490a10ba98039732fc55829acbc"
+          "before": "3d50b499949caa0e35ea538f72cf59f975ac38b69a01c495f289100b1ce48240",
+          "after": "c2af1d8ed8a95dbeef78d55823a1cb16506f0c3a4216b95006632c86ce62624c"
         },
         {
           "id": "action",
-          "before": "577c4840ebbcdcbe6a22d3808dab16097860ce4b9b2ad0d18c374426bbf7a2aa",
-          "after": "104a61fc53193e7fd8831b6acec9b8d07941992c16b89e5d1bc1a459f97b1a93"
+          "before": "4793821e9c5d350c7d059eadee1066837ef34d14a7edb649d5ccb6a8b4a31d54",
+          "after": "69d38e491db83cf8c0c503a81142be14300ae938453958d379b163206a39a1b9"
         }
       ],
-      "before_sha256": "595ccd28a6b243b2e6aaff7c6d95e05a5e47f24702cf1b202e669d5af635458f",
-      "after_sha256": "514c7e755a68103b62aa03c464ad5060900da4a17b4cb8599e03fe871078ccbc"
+      "before_sha256": "1365fefa519bf8b74a33476dd6b6627b0628a639b37bdd93a2134e75c2be052b",
+      "after_sha256": "a051841c86ffaa57781b988dd7a16277a34e0bcf560248c05cde6861a92830e1"
     },
     {
       "date": "2026-09-12",
       "form": "型式五上集",
+      "theme": {
+        "topic": "練習拒絕、交付與停下來",
+        "hook": "大眾奇門占卜｜接下來一個月，你最需要練習的是拒絕、交付，還是停下來？",
+        "scene": "接下來一個月，先練習甚麼？",
+        "totems": {
+          "A": "門把圖騰",
+          "B": "紙箱圖騰",
+          "C": "月亮圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天輔星",
@@ -900,7 +985,6 @@
         }
       },
       "changed_slots": [
-        "scene",
         "tip",
         "answer_A",
         "answer_B",
@@ -908,37 +992,41 @@
       ],
       "slot_sha256": [
         {
-          "id": "scene",
-          "before": "beeda1b98b6620fb4c22cade36ab0e1cac0ef5625637c0536b4a13922bb11845",
-          "after": "c91aa26d8bd77d03f66b15885d4b44c7336c6f9a8da1f42facec3772abd4275b"
-        },
-        {
           "id": "tip",
-          "before": "04191347b4ecc0918ac385f9b85ddffb597af1cd3273d18460ae98353076db34",
-          "after": "ca6a8321be7a4b4055cb0f6ba0aa431a949cbe55a5fae48a7064c47f3761176d"
+          "before": "e4a4df0a09a3f7257d2d94ebeba5b720a83133fe5ad595316b3fd36dd957b716",
+          "after": "80fded546318d680f09a951fabaddd677d4e1c974d7fce3d14cbb9a12b47f06e"
         },
         {
           "id": "answer_A",
-          "before": "ed618469b3164a62e9d34db863d86d39e8e6f91c6b39a63a82e377c38e55e568",
-          "after": "f0250140fd241e316226e5128a17a8befad0dd93421d843975418320770d4771"
+          "before": "7f52755968e549398357aa0f40d6881883b2c707ba579d31d196362c8d869756",
+          "after": "cf8b107c04374786d937c759691f0b7b59ae6254ef88903ef55ba379574703a8"
         },
         {
           "id": "answer_B",
-          "before": "a5bb1f021527a15781398ded08152365a143107701d5e972dcc23b005b9f48f7",
-          "after": "62e637be142d52604d8d6f3721fb89373c5e84a01b70a2da2c4695c11827115b"
+          "before": "218aa51ee2e13f1891da7f49c0b2588d08ea709873cfaa41c04a4feacdb76c6d",
+          "after": "2131627587eeedfc0c987da84e16fcf4ac303db4c08a2d8bb5bd155750a08593"
         },
         {
           "id": "answer_C",
-          "before": "d90bb1c3a4cbac4c031387c50829e1499c8474d85055e506483b25f94c359219",
-          "after": "385bcdd7ee8aefafbad24a0a20bd50d732746bbd13d83b5afe2785c1cb8a027e"
+          "before": "b4fd83cac0f8bc5fe7ca751b6f33918c426ef70e43a65fe8d357829be55af68f",
+          "after": "165068f5c16c9bcd243836486569ce596b7a403e3a58b6f9baf8ed446ad0a918"
         }
       ],
-      "before_sha256": "90e197d069b2aea1a6764f673729f043ab43f8aa9aa1ff50bef86807d3cd5169",
-      "after_sha256": "39d0d64a64faca3d75dda48691d958c4d0ba62eadefd763495f95db58666b614"
+      "before_sha256": "c0c367c8f479e07dc3290eade1a2486bcd347e1f6e68184a03848d5fcf71603b",
+      "after_sha256": "27cb366ad459e4ae6df8bb1080f90e949119b906c377fc92bc03cbf17416b16e"
     },
     {
       "date": "2026-09-14",
       "form": "型式五下集",
+      "theme": {
+        "topic": "練習拒絕、交付與停下來",
+        "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要練習的是拒絕、交付，還是停下來？",
+        "totems": {
+          "A": "門把圖騰",
+          "B": "紙箱圖騰",
+          "C": "月亮圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天輔星",
@@ -988,26 +1076,30 @@
       "slot_sha256": [
         {
           "id": "card_A",
-          "before": "1ca950bd55923befdc2d0295b4435ddd6a7a53d794696af7938b46eb814a1546",
-          "after": "9a2d975c1642e4aa596f38306b4773d1fcc81a34f11af9168ec25eb98175ca9e"
+          "before": "e6d78e34f888cecb8fd785bc47f683969d80dd4e5e0f50779b5ab516b271fbac",
+          "after": "87476645dfa5cfa1279191135e96855a8708301ac8ffb3f0a2d352aaf8e33d36"
         },
         {
           "id": "card_B",
-          "before": "5f0ada5065fc7d71b1a36adaaa03f5968f227325ced53caba998245516af07fd",
-          "after": "0e1f5de2ecca15aac48ee007a642412d125c2fdb7b8be7b7eeff1f295ee6382f"
+          "before": "31e642883ff04d44c4e91ebd48fc1f762499017bc12708ae7c062c57fd9a6da7",
+          "after": "1801f4d5a78c9d6400c97d6d0463567f2c333693b375b9940895868b4df69a82"
         },
         {
           "id": "card_C",
-          "before": "173fc6b05ae99504e0a29ff252b8ebc045ed1239889bca0552eac0b9e439de7e",
-          "after": "40f2f870c7eef2e69d614df1184495b62d2deb5405d9b59037d7a8a7901fa840"
+          "before": "8a5c7996b56bcf4acda9a34c394a2aeaa25d9a2950f4a0870a715451c11e1e30",
+          "after": "ed745b1e3c6a634faeec136ed42015bcee22952677b1e1e40852352015feb6bb"
         }
       ],
-      "before_sha256": "ac81b6084d9a327ccddf5153974d2bdebdb689bc200a953030c3d8487d84db67",
-      "after_sha256": "9a8fe91b4abe9c5733de36364d12c932955be4c602b203403933dcbe2778d81a"
+      "before_sha256": "81419493fcead36f58b73551927dc0bfa9114d417cbe2159dd8930495d2dbdd9",
+      "after_sha256": "7e313091cfa339d48b03b651c9ba3a636a6f569130ad27bf1796da4b710d8ba0"
     },
     {
       "date": "2026-09-16",
       "form": "型式二",
+      "theme": {
+        "topic": "做得夠好與留有空間",
+        "hook": "你一直想把事情做到最好，卻很少問自己：這樣下去，還有沒有空間呼吸？"
+      },
       "dynamic_panxiang": {},
       "changed_slots": [
         "hook",
@@ -1018,31 +1110,43 @@
       "slot_sha256": [
         {
           "id": "hook",
-          "before": "0c95589724bf08bc15ade7c6e2603a0e06d0cb4dea5de0b289aac5bef2e4d077",
-          "after": "fae95b1ec1a342d079b150b60d2879fb3364d8b59c4db06ba6b3a180be25aed7"
+          "before": "05aec9bb91f8fa441a368e7065ac48c74e5c16c5c18020e63e4a6b8f1f0d0b68",
+          "after": "a505d74c75391ff1e62c37055de8a295ee1c9b281bb06a28662fc9c0c63e6177"
         },
         {
           "id": "scene",
-          "before": "2d7e8cc8c3b679a3c670b9bc0d0ef967d4376b9f52011bd98637fe541f0af8af",
-          "after": "51ded054c5e1f7b74148232f264c61729c768693ead6785e35ab524196bcd0bc"
+          "before": "66615672d8c73106cd69c61d9b045d2de13ac1fbd95007ac4409c894df6eb531",
+          "after": "865fe381b6f69ba90ece9d26cac2adc20b2634d813a467f52bbbf107c7feb948"
         },
         {
           "id": "reflection",
-          "before": "fe304510a428659c15a673c2b90ae8ffa0adcbcd8bf4c2f622c1da00f6e4f69b",
-          "after": "d14d135d49bc1a5639a3c94d1d11db57ae481fa12cea0fc6c06861c91d11c615"
+          "before": "71f1ed7d33c454d4f8a9b4b49282fe94d6e1fad40357a0c9170519e201ba0134",
+          "after": "bc2edced3ff7cb9fca974bdf4fa295b675b793329845e685c322bbd44a699501"
         },
         {
           "id": "action",
-          "before": "a75e624c5851f5ee2b8340aff946e05fd58397ac7f482176fd20cc1933888c23",
-          "after": "08e4f92fc07f15e5174bcd2df44e739efcf0616159bad3c2dcc61be8617cf244"
+          "before": "c3fcbb138c61c724e97dcb460a060c60d155f7411633882f3f71815e3f737725",
+          "after": "5c21cb6f6bab4886e8900b9085516f3a66178951017e8f7327f13a993a8fbe0f"
         }
       ],
-      "before_sha256": "81ff2da8b3b43f576dfe3e288b7365664f605a187e0a8867652e1079da8df169",
-      "after_sha256": "ed96d5a016494280cfb0affe7064ebc47c10924d0f00ee0d2035187149b8c8fc"
+      "before_sha256": "e696bfdbf2938fe48177e7dc6f9d3c48a00a0f63c0c21901ef1bd10670cf0efc",
+      "after_sha256": "e90d1824a432bf57ec816f66c83c8d7621de4df9757acfbde7f1b8b87d6d1664"
     },
     {
       "date": "2026-09-17",
       "form": "型式三",
+      "theme": {
+        "topic": "遷移宮與外在節奏",
+        "hook": "30 秒帶你看懂遷移宮｜從你走出去的方式，看外在節奏",
+        "ssot": {
+          "data_file": "engines/diagnosis_router_module_v1.json",
+          "source_locator": "routing_rules[7].palace_priority[0] = 遷移宮",
+          "intent": "outer_image_mobility",
+          "palaces": [
+            "遷移宮"
+          ]
+        }
+      },
       "dynamic_panxiang": {},
       "changed_slots": [
         "explain"
@@ -1050,16 +1154,26 @@
       "slot_sha256": [
         {
           "id": "explain",
-          "before": "8fb5e24f1951e87e6dfcbf98829cae649b9a10e438d2130100e23d5058c239d3",
-          "after": "17eda14191de8ba822bf9dd8cd766ef4a59a4991c235d9ee11d500b3b9bb203c"
+          "before": "b3f94ef8bc6184bb11f67165a9b92edccd298ebdc50e56de36437050a0b3fa7d",
+          "after": "8e64689f6a52ac9c8fd80ceaae6288a51f75ddf72606ab03a1d09c2f5f4f7f57"
         }
       ],
-      "before_sha256": "81f2e2c33a5b08d9ddecd816c9489237f892bae749b5f667f089b7a3c9188513",
-      "after_sha256": "3134d9f50cfae2b155da4b4d2316e893cbd839cde8baed511c267188aeee787e"
+      "before_sha256": "69b613743afda156eac9885db23aaeba85e464899b05ee27145dca56de66b5fe",
+      "after_sha256": "cbdd7af36e0cef3c2e5b292d83715b454dbc6332702cd34c263c6333327c4edf"
     },
     {
       "date": "2026-09-19",
       "form": "型式五上集",
+      "theme": {
+        "topic": "辨認合作訊號",
+        "hook": "大眾奇門占卜｜接下來一個月，你最需要辨認的是哪一種合作訊號？",
+        "scene": "接下來一個月，先辨認甚麼？",
+        "totems": {
+          "A": "拼圖圖騰",
+          "B": "門票圖騰",
+          "C": "指南針圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天禽星",
@@ -1102,7 +1216,6 @@
         }
       },
       "changed_slots": [
-        "scene",
         "tip",
         "answer_A",
         "answer_B",
@@ -1110,37 +1223,41 @@
       ],
       "slot_sha256": [
         {
-          "id": "scene",
-          "before": "4a1676962cd9680267bce740dbd21430d83300f10ff4860bf672c7c25bcbd5ee",
-          "after": "433ad1d7e0dafe2fe65beee7ee2716a0b271657e45d7049601c3e9ea889fb589"
-        },
-        {
           "id": "tip",
-          "before": "938fe9e734ce088c03cb8f48acfb9214dd34234dd33a92819077b49186995be7",
-          "after": "c3bf30fcaa2cdcc3609dfce9c5fb458032ea5ce8b582c5bca6657c4109bd6573"
+          "before": "a416e1afea67196c27bd2ed5ccb2f4598d589181ae553a75d598e4043e0813a9",
+          "after": "1b285019ebf23bfbe8cd24df6599c2e3f69bd281e1a9d4b313344fcc412b886e"
         },
         {
           "id": "answer_A",
-          "before": "717425a3ba26e0e0a31fd5e6aeed0ff26f729d3686202364e6a7b835ea364cf7",
-          "after": "e23870ece6d6fbc1a20021d587fd7ebc69dcd8ce6ec198a63ef41894184b4cb4"
+          "before": "035f12903df6ca8d548b58d361136247bd8e9cadae086d3793408135bf6a3a14",
+          "after": "03481f5318d47c607a34a0f2ae016757afc3ee9fbba6e97fd398ff2d062d52c9"
         },
         {
           "id": "answer_B",
-          "before": "688e9ab9f20d073f208e14d730f6c9d91e533ac50059ac87732f3854d4d61cde",
-          "after": "2841257691b9754c6dda20d315dc6afc0936ee7faac66fc06054ae26c094cb3c"
+          "before": "c773a15e75ef116f335dd5e4c1e84229c731c53b4ba8a553f9fb34e72f05734d",
+          "after": "f89566ce903fb3049355f4eb36bf71fe5a673c187ae22583c6f94f8d19169697"
         },
         {
           "id": "answer_C",
-          "before": "84dfd52022390e2f8360a71316415729afbfba8b70618455bbadf9cbe776fb2e",
-          "after": "47de4f65a9261a48821bf0ee638b1a7965da410cb9eabbe919751ac86cb4a11e"
+          "before": "bfc977a4131a6a02f80e38c5773b3a5314f704bc79aad9ef9f89c6451c9bbfff",
+          "after": "591d2b484060ed20cc20775448d962f7a2e9341923f5d6a1ebead067feb4816e"
         }
       ],
-      "before_sha256": "1a17793ed5d8ea792a782648f13e361c2aee763360fb0b79ea9916e518db2ca2",
-      "after_sha256": "6147c52b3d2f9b59695f18c3668af09dfe89f0f4a41a6ec730f7f5a686a622e2"
+      "before_sha256": "c14d54ee0bcbe12da30e1f2b9662a2a8b52942388bed8fc0fbf8a2730a8b3a49",
+      "after_sha256": "6bcc19e3f53d5e08de359dc20aec41fe592cc847bfff2eb1ee8572ee53a8ed70"
     },
     {
       "date": "2026-09-21",
       "form": "型式五下集",
+      "theme": {
+        "topic": "辨認合作訊號",
+        "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要辨認的是哪一種合作訊號？",
+        "totems": {
+          "A": "拼圖圖騰",
+          "B": "門票圖騰",
+          "C": "指南針圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天禽星",
@@ -1190,26 +1307,38 @@
       "slot_sha256": [
         {
           "id": "card_A",
-          "before": "f93a47e8640d548f1ea83618d321abd104cda1c7d62c5f80e11b26b2c617433e",
-          "after": "3ab33cd2d5ebf163de074c86e00b035cd5cd9980351f7e5a786451495f549d16"
+          "before": "30d64ac41e8b5341f572899fc6cc9634a91b34e21a4572cd9f567d768e9d5f91",
+          "after": "030d61e6d5ba3a9a8da5d3d1d2b8b30b0f8f00d74c39273a2e858255bba491a3"
         },
         {
           "id": "card_B",
-          "before": "2646ae3f79a4be72afbb7edccd8507e02c809ac1ecf8e2225a95948ab8313adb",
-          "after": "6bf3d32353942cde4b8cf5177691c990fbddfab912c246d0b91163dcb616499c"
+          "before": "cc4e7e0f29f7096e890582242e16de8cf0c544d2266bc6531b7e285f239ffba8",
+          "after": "68b968af66f17de4ae6b6a59a42c2f77c27faab42fc88b556a035198d01576ad"
         },
         {
           "id": "card_C",
-          "before": "2722d12d9bd1534ee942f882d4a3b969f6e1621ba190921263b0741fe5a876a7",
-          "after": "bab3350a3289dbfc3d22049d70aa347e42731fa9a023b66aa3b4d89473d715c3"
+          "before": "668a18bcfa79da6cd19e12c15161c5dee96fbef8f81e1dc8e2c7ece758bcf430",
+          "after": "6c26fd46849e39f4792e3e70109c95595c44dd18e3e73c816e91e2fe114afc21"
         }
       ],
-      "before_sha256": "815e89cbd0a706bf2991aaffad4989936e73b508de205efddc6384cae67aa213",
-      "after_sha256": "b037650c5e230000edf86ce438516d70a55583c7f9e12ea2f0fa763694452b98"
+      "before_sha256": "a0bc70ad7459d979057adfced039c8812b40714ac7bb0b66be3f84b4894f2aa7",
+      "after_sha256": "ccf39c2e6e9f8cfd8cd58e831c94fccd6a5ccefc2d6b2e974ea2e4125875a24b"
     },
     {
       "date": "2026-09-23",
       "form": "型式一",
+      "theme": {
+        "topic": "九月收尾整理",
+        "hook": "9 月收尾整理｜哪一個角落最值得你先清出位置？",
+        "totems": {
+          "A": "抽屜圖騰",
+          "B": "桌燈圖騰",
+          "C": "鑰匙圖騰",
+          "D": "書籤圖騰",
+          "E": "空盒圖騰",
+          "F": "盆栽圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天英星",
@@ -1302,46 +1431,50 @@
       "slot_sha256": [
         {
           "id": "scene",
-          "before": "8ceb168eb73f3264e3c06222f6afa1af474870f3e01d204f3f3934dd7c00d1a6",
-          "after": "4f2e16bcd89556cfb00a81ab6587c869ff4480612386d63db8e2f9bac5423f78"
+          "before": "a9a5e1e248ae3dc1a2957b08fb94ed009328754dc8523f73187104b5ef70434c",
+          "after": "1e56b43ccb131e8043970bba5a09dfe5ef2c78b2052bceff072764b3ff17ece2"
         },
         {
           "id": "answer_A",
-          "before": "8b864660e4069518edb3903d28d4b6dd4b7e72fd1c028436f6eb4f9230f9d570",
-          "after": "6d5f0a1c205046555798e435b59e53a27a3c971b956c198d8990ca6cb62a5322"
+          "before": "6205ba77498888bb2e98181ae22701c336774848905b808cfb9947029ec2fa22",
+          "after": "524860c8480194c19978217537ac7a03a53d1e815b48ed2bf1996ae220dcca26"
         },
         {
           "id": "answer_B",
-          "before": "efcd47d37a90fa79c455a869ce7212332484b814e7efa071a471ccfa8a912ffd",
-          "after": "780f72af2857b33b050c3121967f31d27ca4194914fff09eced5456915dc6582"
+          "before": "624e39554321a0a4b58a8023a39e891068a3cdfd22ebf11ce09f8a90a2dfad30",
+          "after": "89b7c814456a47a5878592230b9c5d98590bb5ff82bac5dcd63d01b9566ca08a"
         },
         {
           "id": "answer_C",
-          "before": "b922fa3529751c84d7ff102a80513021e08c5fbcab1b6081424943a5565a509f",
-          "after": "fe78b9ca7e6053266319b5464f2eeb6791f78fa85c450f21fa20ed88badbdab4"
+          "before": "66f022e2be273c68f20154e7d9e6e4541f069ff24aedc1c14377d780f054e4b0",
+          "after": "10806cf7a9d36c447fc999c8fb41550e7bd9e22cbe3cc4a425a12a96e33e6881"
         },
         {
           "id": "answer_D",
-          "before": "1578459b406396ca8c7dacab35be1cae0052f1cb8aba97b209142219c4d65f4e",
-          "after": "e7410f9022c32e1d23b06397323c104a0e0c190918b716a432046662b531fbd4"
+          "before": "85c152bfbdbc604249f46f4e7542ff256c24a8b33cbda6f0beef5f494060cf3f",
+          "after": "f38d99ac6749da6550a711513e9d76f823c7586517537578916214f8c60bcc76"
         },
         {
           "id": "answer_E",
-          "before": "d66d725b2caa72ff1e46e3b944074931dbcb9573f0ddcb2c190899f00afee0cb",
-          "after": "3a04ea2713ef49dabd5431c5b20b7420a154a0a185f97492b606ba153719e735"
+          "before": "795d8a6893693f4395443ed0ccf8c0aafdbba5e8a402595f829b150d377f6a70",
+          "after": "bdc7aa0f6265a98bcb42ea5a62bddd7cbfa196515fdb4a135a05b343e6cedde7"
         },
         {
           "id": "answer_F",
-          "before": "b5df040fe60f8c52468473e8b7632c5b6af45a898f8cdedd0f4c38708043de5f",
-          "after": "b2c98b6e102faf43f45801de39380da2ba5f27a9d9acf8cb61964a6c5caf475d"
+          "before": "2239cb27480b0b40bf17b926230e4bb9a9d1b2255cdde1cdbbab0fe608e0f900",
+          "after": "36c9d9e8f91e5bc4b71b298faf571e13c5fe42b26b8c609ffa8afb5aa09ae4ef"
         }
       ],
-      "before_sha256": "53ab2443b1e6e7742e6929dea27fa879f5d1afc5c6a73681d41bedfdafae18fd",
-      "after_sha256": "f40a77af165392f2819352a3e349a6ec42c8ebf5ccc5a985dfa12900d959329d"
+      "before_sha256": "7cdff0a58af3b43a9f96434b552bba3123fe5ed1f6320d99be1bc7ec77331c18",
+      "after_sha256": "2213df5461ec4c096206d6ac49bb2038383bde91b517ef91a58a2a27f7f68bb2"
     },
     {
       "date": "2026-09-24",
       "form": "型式四",
+      "theme": {
+        "topic": "辨認不再適合的停留",
+        "hook": "有些地方讓你一直待著，不一定是因為舒服，只是還沒想好怎麼離開。"
+      },
       "dynamic_panxiang": {},
       "changed_slots": [
         "hook",
@@ -1355,46 +1488,56 @@
       "slot_sha256": [
         {
           "id": "hook",
-          "before": "4fef485d19b6cc992cc7e6dd7aca7eb04cd694f71c3d163b9204aa6d6adb7667",
-          "after": "80695952b49fed86d24c5b3590bf2ce87ae672facaf75f35951c6520a9d8205c"
+          "before": "e444e4afcb43c62796ee2b69f2f5a3282c2c2c02a2d671182e99573b8f9afe60",
+          "after": "eaae2e66816904a3b17d73216a3226a89ccff430406db6930905399eb036632a"
         },
         {
           "id": "scene_1",
-          "before": "bdb1020f60c79c4085b6872514fce0b2a6220c83a5ab5ba73794a32aef5ae327",
-          "after": "3e4579ae10ac63ba02dc0dd71e8c06914e49bdd0d4a5cad50e69513b6f64bc61"
+          "before": "f6aaac6f3206382570c52baa398ba5474b717f2919942fc79a42afafd4abf3d7",
+          "after": "5f47b0e1cd1fe110309705354a8f6705039ca67f1c7097d27573bcafa877757b"
         },
         {
           "id": "scene_2",
-          "before": "838645220fa10bec815e9e5efe37af21ede7fdbf4d1051409f0466e56faca17f",
-          "after": "5c75c65afc1f62f0f859ea05f8870fb7ce9fe1a592f39f5b042f2eb419cb0aa1"
+          "before": "083355adad58a1dd8fdafafa4028e8a6305e8cc404417a50caadc68d045edf80",
+          "after": "5ca58e311aaef90fb22c7fdd550f2a74e2a87d08c3cb33fd066dff0f9ef072c6"
         },
         {
           "id": "check_1",
-          "before": "4c28f5e8784405ad8d0cbe69ccd785616cc734a6026108f5804902410de10228",
-          "after": "4e8e90d6302c9a61963788448cb5a737e975f85dbc4b0cb48a0ff10b5bc4e8c2"
+          "before": "df2f67385b0d49a2ee1eab281de6b6c0e351a86a69358a60b9726d9f5e0b9634",
+          "after": "ff18c75d3f37d63e23f9b3d6b2e109004bc55fa30a6cc4c56b36c0f5755c7237"
         },
         {
           "id": "check_2",
-          "before": "df5c403b4d925227992318e89dc493737acfeb551044ec96c4066025196c1b82",
-          "after": "637289fa0bfbb116ea2587fe312ad4a309e1d1b59527177fe5ba2e0606879aed"
+          "before": "68672578959dec4873f1b3d1b96a2798dd2e875360944de320e225eb46a7806f",
+          "after": "c3718fa0fbd85cfb065eea9f6e53dfbca090cc546a53be4a7ca90d0671a210be"
         },
         {
           "id": "action_1",
-          "before": "9f78ac483066e1f56327e858ba177ca646913e89025bef41e520e11e00f91e33",
-          "after": "02348bd72e86bb9e4e098e184b25245fa0ac24f7bb0311c54c679940f644ba38"
+          "before": "928790e785e500b822b99cbd18db58bbe1ed5aa0471c13b2ac081419d7bad39c",
+          "after": "b4afd0c54ea500f0c5ec39666003fc57af35a0aacb8320f7d7c31c2b4e08a1d5"
         },
         {
           "id": "action_2",
-          "before": "1295aa482f3a28be099e3c130d323026dc2b04abd0fa174db95dcfd1e64b98fb",
-          "after": "9e9f4bd945f4ea0de1848974c064d772dd5363a5552b22ffdb948c5cafe1c541"
+          "before": "3c67a05da0daad566aab908aefc0cedec9533a0bd35a893ab00203ced68e03c7",
+          "after": "f419368065601187b2b34d24400d147bbee32b549b07ade659debb20a7956488"
         }
       ],
-      "before_sha256": "d52122997259fa76f126c571ad4477e295af5868d072cdc502830a3e1aa51a2e",
-      "after_sha256": "1466e094b09b4dd3df9dba945ea3b7dfe5fa904b8e39a5ca0455fdcfda2e07d4"
+      "before_sha256": "58f83a975f5dbc86281b8e17c2dc3163086f199c6e4092ce129184d272a7c4e9",
+      "after_sha256": "68542383f5724bdcee7dcfb91d52a5f237aa1ff2b6fbcff7f6cd2f695049ca8b"
     },
     {
       "date": "2026-09-26",
       "form": "型式五上集",
+      "theme": {
+        "topic": "年底前練習開口、取捨與放慢",
+        "hook": "大眾奇門占卜｜年底前，你最需要練習的是開口、取捨，還是放慢？",
+        "scene": "接下來，先練習甚麼？",
+        "totems": {
+          "A": "麥克風圖騰",
+          "B": "岔路圖騰",
+          "C": "沙發圖騰"
+        }
+      },
       "dynamic_panxiang": {
         "A": {
           "star": "天任星",
@@ -1437,7 +1580,6 @@
         }
       },
       "changed_slots": [
-        "scene",
         "tip",
         "answer_A",
         "answer_B",
@@ -1445,33 +1587,28 @@
       ],
       "slot_sha256": [
         {
-          "id": "scene",
-          "before": "245b7f77ff1edbd679fa32e422f69e29f6fdf5d84d644055cc88112c50570082",
-          "after": "8518c8ecc6c9d9e733914bcc1fb8c14fece06fe477da8b3e9bf367403bcaf5a0"
-        },
-        {
           "id": "tip",
-          "before": "fc3b34abed2c47e0d62727138661d7d914188cbffe636e637d24ee6e8b663d62",
-          "after": "b49e70af4b0ba9012e71a5747e1b1b9692b06a446c529a8363b7637bff6b05ef"
+          "before": "b0cc5f989689f4c4028e6fbed1f632a96865494ebd40d134ef64401fcd67fa1d",
+          "after": "cf91674798a644d40c668cf56622a576283f9976635b0cd769ea57443604b81a"
         },
         {
           "id": "answer_A",
-          "before": "f8a43afb673d6116f92e277d3b4b52350f07c7d7251dc9b6af0834fea3ed9d76",
-          "after": "2113e4418301c28ca8e12d49353df8981e08d4dbdff3250c0e5b3dba21abcfb7"
+          "before": "5b5c0eb122fe8b93d86771010633bb61ed5c862f8079ee1de4d9ed408c8f3d23",
+          "after": "d7c895251f2a3e508d1e266c80c98265c0de68392940139dcc5dedcc83761cf9"
         },
         {
           "id": "answer_B",
-          "before": "e8f4d3ce34a0e32512a55097f484d672c7b8d8746f64f942a277a7d03fe5762b",
-          "after": "68bbaad3d3344ad23729934acf18802f2d7cca7322279d2cc83e3c25873ca8a0"
+          "before": "c0bf933d41e51c63a0dc6c3b33bd8fea032201d30862032fc49f3500035f5ca5",
+          "after": "2b24d44e0bcbb88a12717f5a8f7a8188bc7f1fe8dd8135eb99cd84d00e76f088"
         },
         {
           "id": "answer_C",
-          "before": "7dec7dcadb372dc7efde9aa39860e4f12e4abc6906d82c7a966ee023069d772a",
-          "after": "0739251f8aab46865d308aae1b3c607cb70b654bb6c2d406e3b54b49c9553266"
+          "before": "6b6dd0ef4290b9acc4eadb5d5b91f965fe3fc8398da122cffe129b92a1975f45",
+          "after": "44baf81ea1ac7143f7aaa886f7caf16510414d38cec561843b1ee123c1c143f2"
         }
       ],
-      "before_sha256": "bd86418e6aab980f7ee17573802f695eb8a738a58499a29d02e6c1c5fa27babb",
-      "after_sha256": "15bd962ad1a3c56c799fb1ecf63b4c85a74d5cff12cafe75a8a5ffbafcd73fb0"
+      "before_sha256": "cc68950f7a0ff325e7a42a4036e57bf7be9db624e425b1c3b4ebc0743f979acb",
+      "after_sha256": "59594d2b534290de9f21c7c331c1c62cdb7ddfed134195340d9de03a8160feb5"
     }
   ]
 }

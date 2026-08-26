@@ -27,18 +27,18 @@
       },
       "2026-09-03": {
         "data_file": "engines/diagnosis_router_module_v1.json",
-        "intent": "relationship",
+        "source_locator": "routing_rules[4].palace_priority[0] = 福德宮",
+        "intent": "inner_spirit_resilience",
         "palaces": [
-          "夫妻宮",
-          "交友宮"
+          "福德宮"
         ]
       },
       "2026-09-17": {
         "data_file": "engines/diagnosis_router_module_v1.json",
-        "intent": "career",
+        "source_locator": "routing_rules[7].palace_priority[0] = 遷移宮",
+        "intent": "outer_image_mobility",
         "palaces": [
-          "官祿宮",
-          "財帛宮"
+          "遷移宮"
         ]
       }
     }

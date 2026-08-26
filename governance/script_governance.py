@@ -33,11 +33,34 @@ FILES = (
 )
 MODEL = "claude-sonnet-4-6"
 PUBLISHED = {"2026-08-17", "2026-08-18"}
-TYPE3_SSOT_TERMS = {
-    "2026-08-20": "四化標記",
-    "2026-09-03": "夫妻宮與交友宮",
-    "2026-09-17": "官祿宮與財帛宮",
+THEME_START = "2026-08-25"
+TYPE3_SSOT = {
+    "2026-08-20": {"data_file": "data/ZWQS_Juan2_Consolidated.json", "source_locator": "ZWQS_Juan2_AnSihua_L002", "intent": "sihua", "palaces": []},
+    "2026-09-03": {"data_file": "engines/diagnosis_router_module_v1.json", "source_locator": "routing_rules[4].palace_priority[0] = 福德宮", "intent": "inner_spirit_resilience", "palaces": ["福德宮"]},
+    "2026-09-17": {"data_file": "engines/diagnosis_router_module_v1.json", "source_locator": "routing_rules[7].palace_priority[0] = 遷移宮", "intent": "outer_image_mobility", "palaces": ["遷移宮"]},
 }
+THEME_PLANS = {
+    "2026-08-26": {"topic": "九月人際節奏", "hook": "9 月人際節奏｜哪一種互動最值得你先回覆？", "totems": {"A": "紙飛機圖騰", "B": "耳機圖騰", "C": "咖啡杯圖騰", "D": "空椅圖騰", "E": "窗框圖騰", "F": "書頁圖騰"}},
+    "2026-08-27": {"topic": "時間留給誰", "hook": "有些邀約不是現在不想去，只是你還沒決定要把時間留給誰。"},
+    "2026-08-29": {"topic": "重新安排界線、步調與承諾", "hook": "大眾奇門占卜｜接下來一個月，你最需要重新安排的是界線、步調，還是承諾？", "scene": "接下來一個月，先重整甚麼？", "totems": {"A": "門檻圖騰", "B": "時鐘圖騰", "C": "繩結圖騰"}},
+    "2026-08-31": {"topic": "重新安排界線、步調與承諾", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要重新安排的是界線、步調，還是承諾？", "totems": {"A": "門檻圖騰", "B": "時鐘圖騰", "C": "繩結圖騰"}},
+    "2026-09-02": {"topic": "把疲憊留在事情之外", "hook": "有些疲憊不是事情太多，是每一件事都還留在你心裡。"},
+    "2026-09-03": {"topic": "福德宮與心裡的聲音", "hook": "30 秒帶你看懂福德宮｜先把心裡的聲音分開看", "ssot": TYPE3_SSOT["2026-09-03"]},
+    "2026-09-05": {"topic": "說清楚需求、界線與期待", "hook": "大眾奇門占卜｜接下來一個月，你最需要說清楚的是需求、界線，還是期待？", "scene": "接下來一個月，先說清甚麼？", "totems": {"A": "話框圖騰", "B": "尺線圖騰", "C": "信封圖騰"}},
+    "2026-09-07": {"topic": "說清楚需求、界線與期待", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要說清楚的是需求、界線，還是期待？", "totems": {"A": "話框圖騰", "B": "尺線圖騰", "C": "信封圖騰"}},
+    "2026-09-09": {"topic": "九月生活留白", "hook": "9 月生活留白｜哪一個畫面最提醒你先留點空間？", "totems": {"A": "雨傘圖騰", "B": "窗戶圖騰", "C": "杯子圖騰", "D": "空椅圖騰", "E": "地圖圖騰", "F": "雲朵圖騰"}},
+    "2026-09-10": {"topic": "把自己排回生活裡", "hook": "你想把生活過得更有餘裕，卻總是先把自己排到最後。"},
+    "2026-09-12": {"topic": "練習拒絕、交付與停下來", "hook": "大眾奇門占卜｜接下來一個月，你最需要練習的是拒絕、交付，還是停下來？", "scene": "接下來一個月，先練習甚麼？", "totems": {"A": "門把圖騰", "B": "紙箱圖騰", "C": "月亮圖騰"}},
+    "2026-09-14": {"topic": "練習拒絕、交付與停下來", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要練習的是拒絕、交付，還是停下來？", "totems": {"A": "門把圖騰", "B": "紙箱圖騰", "C": "月亮圖騰"}},
+    "2026-09-16": {"topic": "做得夠好與留有空間", "hook": "你一直想把事情做到最好，卻很少問自己：這樣下去，還有沒有空間呼吸？"},
+    "2026-09-17": {"topic": "遷移宮與外在節奏", "hook": "30 秒帶你看懂遷移宮｜從你走出去的方式，看外在節奏", "ssot": TYPE3_SSOT["2026-09-17"]},
+    "2026-09-19": {"topic": "辨認合作訊號", "hook": "大眾奇門占卜｜接下來一個月，你最需要辨認的是哪一種合作訊號？", "scene": "接下來一個月，先辨認甚麼？", "totems": {"A": "拼圖圖騰", "B": "門票圖騰", "C": "指南針圖騰"}},
+    "2026-09-21": {"topic": "辨認合作訊號", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要辨認的是哪一種合作訊號？", "totems": {"A": "拼圖圖騰", "B": "門票圖騰", "C": "指南針圖騰"}},
+    "2026-09-23": {"topic": "九月收尾整理", "hook": "9 月收尾整理｜哪一個角落最值得你先清出位置？", "totems": {"A": "抽屜圖騰", "B": "桌燈圖騰", "C": "鑰匙圖騰", "D": "書籤圖騰", "E": "空盒圖騰", "F": "盆栽圖騰"}},
+    "2026-09-24": {"topic": "辨認不再適合的停留", "hook": "有些地方讓你一直待著，不一定是因為舒服，只是還沒想好怎麼離開。"},
+    "2026-09-26": {"topic": "年底前練習開口、取捨與放慢", "hook": "大眾奇門占卜｜年底前，你最需要練習的是開口、取捨，還是放慢？", "scene": "接下來，先練習甚麼？", "totems": {"A": "麥克風圖騰", "B": "岔路圖騰", "C": "沙發圖騰"}},
+}
+TYPE3_SSOT_TERMS = {date: plan["hook"].split("｜", 1)[0].replace("30 秒帶你看懂", "") for date, plan in THEME_PLANS.items() if "ssot" in plan}
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
 GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
@@ -248,6 +271,13 @@ def hook_slot(block: str) -> dict:
     if not match:
         raise ValueError("Hook absent")
     return {"id": "hook", "text": match.group(1).strip(), "minimum_cjk": 1}
+
+
+def themed_slots(block: str, kind: str, date: str) -> list[dict]:
+    slots = slots_for(block, kind)
+    if kind == "型式五上集" and THEME_PLANS.get(date, {}).get("scene"):
+        return [slot for slot in slots if slot["id"] != "scene"]
+    return slots
 
 
 def slots_for(block: str, kind: str) -> list[dict]:
@@ -491,6 +521,7 @@ def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]
         if slot.get("upper_answer"):
             conclusion = re.sub(rf"^\*\*選項 {label}[：:]\s*|\*\*$", "", slot["upper_answer"]).replace("**", "").strip()
             lines[0] = f"**選項 {label}：{conclusion}**"
+            lines = [lines[0]] + [line for line in lines[1:] if not re.match(rf"^\*\*選項 {label}[：:]", line)]
         else:
             match = re.match(rf"^\*\*選項 {label}(?:\*\*)?[：:](.*?)(?:\*\*)?$|^選項 {label}[：:](.*)$", first)
             if match:
@@ -500,7 +531,7 @@ def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]
     return rewrites
 
 
-def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry: bool = False, feedback: str = "") -> dict[str, str]:
+def request_rewrite(date: str, kind: str, header: str, slots: list[dict], theme: dict | None = None, retry: bool = False, feedback: str = "") -> dict[str, str]:
     payload_slots = []
     for slot in slots:
         item = {key: slot[key] for key in ("id", "text", "minimum_cjk")}
@@ -518,7 +549,7 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
         if slot.get("hook_context"):
             item["hook_context"] = slot["hook_context"]
         payload_slots.append(item)
-    system = """你是繁體中文（臺灣）IG 奇門文案主筆。只能重寫 payload 內的可變欄位；未列入 payload 的 Hook、Hashtags、固定 CTA、卡片標題、視覺模板、圖騰、日期、色碼與固定文字不得輸出或改動。
+    system = """你是繁體中文（臺灣）IG 奇門文案主筆。只能重寫 payload 內的可變欄位。Hook 與圖騰會由題材矩陣同步，請依 target_theme 的主題重寫其餘可變文案；未列入 payload 的 Hashtags、固定 CTA、卡片標題、視覺模板、日期、色碼與固定文字不得輸出或改動。
 
 必須以使用者上載文章的語氣、用詞、句長與節奏寫作。它是唯一聲音基準。用第二人稱直接說話，像替讀者把心裡卡住的事說出來：先留白、再命名拉扯、再作有邏輯的重述，最後放回讀者能決定的一步。不要把它機械化成步驟，也不要把原有語感刪成制式心理雞湯。
 
@@ -547,6 +578,7 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], retry:
         "date": date,
         "form": kind,
         "header_context": header,
+        "target_theme": theme or {},
         "slots": payload_slots,
         "task": "逐一重寫全部 slot。輸出 JSON，rewrites 必須恰好各含一次 id。" + (f" 上次輸出未通過，請只修正以下驗收問題，其他欄位仍需完整輸出：{feedback}" if retry else ""),
     }
@@ -641,6 +673,49 @@ def validate_rewrites(slots: list[dict], rewrites: dict[str, str]) -> None:
             issues = short_dynamic_issues("重寫輸出", value, slot["label"], slot["combo"])
             if issues:
                 raise ValueError(" | ".join(issues) + f"；輸出開頭：{value[:180]!r}")
+
+
+def apply_theme_metadata(block: str, date: str, kind: str) -> str:
+    plan = THEME_PLANS.get(date)
+    if not plan:
+        return block
+    changed = block
+    old_hook = hook_slot(block)["text"]
+    changed = changed.replace(old_hook, plan["hook"])
+    if "｜" in old_hook and "｜" in plan["hook"]:
+        old_question, new_question = old_hook.rsplit("：", 1)[-1].split("｜", 1)[-1], plan["hook"].rsplit("：", 1)[-1].split("｜", 1)[-1]
+        changed = changed.replace(old_question, new_question)
+    totems = plan.get("totems", {})
+    if kind in {"型式一", "型式五上集"}:
+        for label, totem in totems.items():
+            changed = re.sub(rf"(?m)^🔮 {label}\. [^\n]+$", f"🔮 {label}. {totem}", changed)
+    if kind == "型式一" and totems:
+        colors = {"A": "霧玫瑰金", "B": "月白銀", "C": "霧玫瑰金", "D": "月白銀", "E": "霧玫瑰金", "F": "月白銀"}
+        for label, totem in totems.items():
+            changed = re.sub(rf"(?m)^- {label}：.*$", f"- {label}：{colors[label]}{totem} + 暖米白{totem}", changed)
+    if kind == "型式五上集" and plan.get("scene"):
+        scene = plan["scene"]
+        changed, body_count = re.subn(r"(?ms)(^心裡默念：).*?(\n\n憑第一眼直覺)", lambda match: match.group(1) + scene + match.group(2), changed, count=1)
+        changed, visual_count = re.subn(r"(（2）問題聚焦卡（3–9 秒）：閉上眼深呼吸三次\+ 心裡默念：)(?s:.*?)(\+ 憑第一眼直覺)", lambda match: match.group(1) + scene + match.group(2), changed, count=1)
+        if body_count != 1 or visual_count != 1:
+            raise ValueError(f"{date} 型式五上集問題聚焦無法同步")
+    if kind == "型式五上集" and totems:
+        visual = "／".join(f"{label}{totem}" for label, totem in totems.items())
+        changed, count = re.subn(r"(（3）三選項圖卡（9–18 秒）：).*?(｜深海軍藍)", lambda match: match.group(1) + visual + match.group(2), changed, count=1)
+        if count != 1:
+            raise ValueError(f"{date} 型式五上集圖騰視覺卡無法同步")
+    if kind == "型式五下集" and totems:
+        for label, totem in totems.items():
+            changed = re.sub(rf"({label} 選項完整解讀卡（)[^）]+(）)", rf"\1{totem}\2", changed)
+    if kind == "型式三":
+        ssot = plan.get("ssot")
+        if not ssot:
+            raise ValueError(f"{date} 型式三缺少 SSOT 題材來源")
+        citation = f"已驗證補充資料：SSOT 定位：`{ssot['data_file']}`，`{ssot['source_locator']}`。"
+        changed, count = re.subn(r"已驗證補充資料：[^\n｜]+", citation, changed)
+        if count != 2:
+            raise ValueError(f"{date} 型式三 SSOT 引文無法同步")
+    return changed
 
 
 def apply_slots(block: str, slots: list[dict], rewrites: dict[str, str]) -> str:
@@ -770,6 +845,25 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
     if kind == "型式五下集":
         for label in "ABC":
             issues.extend(five_layer_issues(date, lower_card(block, label), label, assignments[date][label], True))
+    if date >= THEME_START:
+        plan = THEME_PLANS.get(date)
+        if not plan:
+            issues.append(f"{date} 缺少新題材計畫。")
+        else:
+            try:
+                if hook_slot(block)["text"] != plan["hook"]:
+                    issues.append(f"{date} Hook 未套用題材計畫。")
+            except ValueError as exc:
+                issues.append(f"{date} Hook 驗證失敗：{exc}")
+            for label, totem in plan.get("totems", {}).items():
+                if kind in {"型式一", "型式五上集"} and f"🔮 {label}. {totem}" not in block:
+                    issues.append(f"{date} {label} 圖騰未套用題材計畫。")
+                if kind == "型式五下集" and f"{label} 選項完整解讀卡（{totem}）" not in block:
+                    issues.append(f"{date} {label} 下集圖騰未承接題材計畫。")
+            if kind == "型式三":
+                ssot = plan.get("ssot", {})
+                if not ssot or ssot["data_file"] not in block or ssot["source_locator"] not in block:
+                    issues.append(f"{date} 型式三 SSOT 引文未套用題材計畫。")
     return issues
 
 
@@ -844,8 +938,8 @@ def write_rule_map() -> None:
             "verified_commit": "ac8f093f76a6dbcf459eca0075a33828aa47ef7e",
             "type3": {
                 "2026-08-20": {"data_file": "data/ZWQS_Juan2_Consolidated.json", "line_id": "ZWQS_Juan2_AnSihua_L002"},
-                "2026-09-03": {"data_file": "engines/diagnosis_router_module_v1.json", "intent": "relationship", "palaces": ["夫妻宮", "交友宮"]},
-                "2026-09-17": {"data_file": "engines/diagnosis_router_module_v1.json", "intent": "career", "palaces": ["官祿宮", "財帛宮"]},
+                "2026-09-03": TYPE3_SSOT["2026-09-03"],
+                "2026-09-17": TYPE3_SSOT["2026-09-17"],
             },
         },
         "sentence_quality": {
@@ -931,7 +1025,9 @@ def rewrite(args) -> int:
     for path, date, header, original_block in posts:
         kind = form(header)
         block = repair_three_field_boundaries(original_block, kind)
-        slots = slots_for(block, kind)
+        if date < args.from_date:
+            continue
+        slots = themed_slots(block, kind, date)
         add_dynamic_requirements(slots, date, kind, assignments)
         if kind == "型式五下集":
             upper_block = blocks_by_date[lower_to_upper[date]]
@@ -941,7 +1037,7 @@ def rewrite(args) -> int:
         error = None
         feedback = ""
         for attempt in range(5):
-            rewrites = request_rewrite(date, kind, header, slots, retry=attempt > 0, feedback=feedback)
+            rewrites = request_rewrite(date, kind, header, slots, THEME_PLANS.get(date), retry=attempt > 0, feedback=feedback)
             try:
                 validate_rewrites(slots, rewrites)
                 error = None
@@ -951,11 +1047,11 @@ def rewrite(args) -> int:
                 feedback = str(exc)
         if error:
             raise error
-        revised = apply_slots(block, slots, rewrites)
+        revised = apply_theme_metadata(apply_slots(block, slots, rewrites), date, kind)
         blocks_by_date[date] = revised
         replacements[path].append((original_block, revised))
         audit_rows.append({
-            "date": date, "form": kind, "dynamic_panxiang": {label: assignments[date][label] for label in assignments.get(date, {})},
+            "date": date, "form": kind, "theme": THEME_PLANS.get(date), "dynamic_panxiang": {label: assignments[date][label] for label in assignments.get(date, {})},
             "changed_slots": [slot["id"] for slot in slots],
             "slot_sha256": [{"id": slot["id"], "before": sha(slot["text"]), "after": sha(rewrites[slot["id"]])} for slot in slots],
             "before_sha256": sha(original_block), "after_sha256": sha(revised),
@@ -967,7 +1063,10 @@ def rewrite(args) -> int:
                 raise ValueError(f"Ambiguous replacement in {path.name}")
             text = text.replace(old, new, 1)
         path.write_text(text, encoding="utf-8")
-    args.audit.write_text(json.dumps({"playbook_sha256": PLAYBOOK_SHA256, "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": audit_rows}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    prior = load_json(args.audit) if args.audit.is_file() else {}
+    preserved = {item["date"]: item for item in prior.get("posts", []) if item.get("date") < args.from_date}
+    preserved.update({item["date"]: item for item in audit_rows})
+    args.audit.write_text(json.dumps({"playbook_sha256": PLAYBOOK_SHA256, "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "theme_rewrite_from": args.from_date, "posts": [preserved[date] for date in sorted(preserved)]}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"posts": len(audit_rows), "model": MODEL, "audit": str(args.audit)}, ensure_ascii=False))
     return 0
 
@@ -982,6 +1081,7 @@ def main() -> int:
     rewrite_parser = sub.add_parser("rewrite", help="Rewrite registered variable prose for every unpublished post.")
     rewrite_parser.add_argument("--dry-run", action="store_true")
     rewrite_parser.add_argument("--audit", type=Path, default=AUDIT_FILE)
+    rewrite_parser.add_argument("--from-date", default=THEME_START)
     sub.add_parser("audit", help="Audit Playbook contract, dynamic panxiang and 22 scripts.")
     args = parser.parse_args()
     if args.command == "sync":
