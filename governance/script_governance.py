@@ -41,10 +41,10 @@ TYPE3_SSOT_TERMS = {
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
 GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
-SENTENCE_QUALITY_TITLE = "#### 7.6 使用者文章風格與自然中文（v3.2）"
+SENTENCE_QUALITY_TITLE = "#### 7.6 使用者文章風格與自然中文（v3.3，全局唯一文風規範）"
 STANDARD_SHA256 = "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0"
-GUIDE_SHA256 = "f55705f4a2cde89886c7edf71c09dc6be96e9981d8fdb25051d2131b5ac53b09"
-PLAYBOOK_SHA256 = "d6e82bbce21e89e1c50d380f114bf0deeb680c65923f724ed6a01b9da1ea46d1"
+GUIDE_SHA256 = "0e818049c812c1ab85cdd9914c5a5f917f0fb38d6ec8a6b536b02e1fae331077"
+PLAYBOOK_SHA256 = "7b6be6172d8d035b42a2fcbb9a3888bea1dba1991d2a4d9453e67dfe4b854f0b"
 DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
@@ -683,7 +683,7 @@ def current_contract_issues() -> list[str]:
     if sha(text[guide:]) != GUIDE_SHA256:
         issues.append("規則庫合約雜湊不符。")
     if SENTENCE_QUALITY_TITLE not in text[guide:] or "病句檢查是底線" not in text[guide:]:
-        issues.append("找不到原版規則庫的 v3.1 文章風格與病句增補。")
+        issues.append("找不到全局唯一的 v3.3 文章風格與病句規範。")
     if not RULES_FILE.is_file() or sha(RULES_FILE.read_text(encoding="utf-8")) != DYNAMIC_RULES_SHA256:
         issues.append("動態盤象規則檔缺失或來源雜湊不符。")
     return issues
@@ -849,11 +849,11 @@ def write_rule_map() -> None:
             },
         },
         "sentence_quality": {
-            "version": "3.2",
-            "scope": "僅 Hook、正文、置頂解答、完整解讀與視覺卡中的可變文案；固定模板不適用。",
-            "style_source": "使用者上載文章的語氣、用詞、句長與節奏",
-            "style_application": ["第二人稱直呼", "留白→命名→重述→安置", "長句辨識、短句收束", "簡單直白的臺灣中文", "內心故事而非外在事件"],
-            "abstraction_boundary": "保留關係、選擇、等待、界線等可投射狀態；不得捏造精準情景、人物行為、感官畫面、數量、日期、次數、件數或未提供的經歷。",
+            "version": "3.3",
+            "scope": "僅 Hook、正文、置頂解答、完整解讀與視覺卡中的可變文案；固定模板、CTA、版面與命理真值不適用。",
+            "style_source": "使用者上載的占卜／療癒型社群貼文截圖及其質性分析",
+            "style_application": ["第二人稱直接說話", "代入→拉扯→轉述→低風險行動→自主收束", "長句辨識、短句收束", "簡單直白的臺灣中文", "術語後接白話轉譯", "內心故事而非外在事件"],
+            "abstraction_boundary": "保留關係、選擇、等待、界線等可投射狀態；不得捏造精準情景、人物行為、感官畫面、數量、日期、次數、件數或未提供的經歷；不得替第三人下定論、把解讀寫成事實或保證外部結果。",
             "ai_style_exclusions": list(AI_STYLE_TELLS) + ["官樣話", "行業黑話", "翻譯腔", "空洞形容詞", "金句公式", "短句連發"],
             "categories": ["成分殘缺", "搭配不當", "用詞不當", "語序混亂", "前後矛盾", "邏輯混亂"],
             "review_order": ["受保護內容", "原版文風與抽象邊界", "成分與標點", "搭配與用詞", "語序與指涉", "前後一致", "因果與推論"],
