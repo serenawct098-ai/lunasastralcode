@@ -1,0 +1,65 @@
+{
+  "audit_id": "lunas-2026-08-27-playbook-v3.4",
+  "target_files": [
+    "lunas_astral_code_master_playbook.md",
+    "governance/script_governance.py",
+    "governance/latest_playbook_rule_map.json",
+    "governance/test_governance_contract_v2.py",
+    "tools/verify_global_style_v33.mjs",
+    "scripts/60day_scripts_INDEX.md",
+    "scripts/60day_scripts_W4-W9_20260817-20260925.md",
+    "scripts/60day_scripts_W7-W9_20260905-20260926.md"
+  ],
+  "missing_value_policy_applied": "not_applicable",
+  "scope": "僅更新可變文案的文風治理與稽核；固定模板、CTA、卡數、版面、已登錄五元組、SSOT 術語、公式與引文不在變更範圍。",
+  "evidence_sources": [
+    {
+      "source": "https://www.bnext.com.tw/article/89827/ai-writing-style-unique-features-avoiding-tips",
+      "used_for": "整理假真誠、諮商腔、偏好詞、過度引導、視覺格式化及動詞化等寫作檢查項。"
+    },
+    {
+      "source": "https://www.pnas.org/doi/10.1073/pnas.2422455122",
+      "used_for": "僅作英文 LLM 文體差異的研究背景；未把單一特徵作為作者身分判定。"
+    },
+    {
+      "source": "local skills: humanizer-tw, good-writing-tw, authentic-voice-editing, speak-human-tw, direct-chinese-writing, chinese-copywriting-guidelines",
+      "used_for": "整合去 AI 味、節奏、聲音保真、直接中文與繁中排版規則。"
+    }
+  ],
+  "verification_steps": [
+    {
+      "command": "python3 -m unittest governance/test_governance_contract_v2.py",
+      "result": "passed: 5 tests"
+    },
+    {
+      "command": "node tools/verify_global_style_v33.mjs",
+      "result": "passed: playbook、規則映射與腳本索引同步"
+    },
+    {
+      "command": "python3 governance/script_governance.py audit",
+      "result": "passed: 22 unpublished posts checked, no issues"
+    },
+    {
+      "command": "git diff --check",
+      "result": "passed: no whitespace errors"
+    }
+  ],
+  "verification_status_changes": [],
+  "canonical_locks_changes": [],
+  "changes": [
+    "新增 v3.4 的「狀態 → 接住 → 轉向 → 留白」可變文案鏈，取代強制五步推進。",
+    "新增假真誠、諮商腔、偏好大詞、過度路標、過度排版、微觀感官場景、過度量化及精雕金句的禁止規則。",
+    "以「不用怕沒人懂，你可以的！」示範直接鼓勵，禁止「你不是……只是……」式替讀者判因的假共感。",
+    "將高信心的假共感原因改寫與微觀感官場景加入自動稽核，並新增對應回歸測試。",
+    "只修正四個稽核命中的可變文案位置及其視覺同步內容，未變更命理資料或固定模板。"
+  ],
+  "contract_hashes": {
+    "playbook_sha256": "d2d5cad2e2c5494502be470a50a43f471c226ec7915aa247868f66fbbbb76c62",
+    "guide_sha256": "6f36bf719c5eef3640b49129960e9ba18e85047b873e96e95abc23108bec9081",
+    "standard_sha256": "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0"
+  },
+  "halt_events": [],
+  "deferred_items": [
+    "未全面改寫其餘未發布腳本；本次僅修正新規則自動稽核命中的可變文案。"
+  ]
+}

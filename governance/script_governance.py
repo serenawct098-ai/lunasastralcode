@@ -64,10 +64,10 @@ TYPE3_SSOT_TERMS = {date: plan["hook"].split("｜", 1)[0].replace("30 秒帶你�
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
 GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
-SENTENCE_QUALITY_TITLE = "#### 7.6 使用者文章風格與自然中文（v3.3，全局唯一文風規範）"
+SENTENCE_QUALITY_TITLE = "#### 7.6 使用者文章風格與自然中文（v3.4，全局唯一文風規範）"
 STANDARD_SHA256 = "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0"
-GUIDE_SHA256 = "0e818049c812c1ab85cdd9914c5a5f917f0fb38d6ec8a6b536b02e1fae331077"
-PLAYBOOK_SHA256 = "7b6be6172d8d035b42a2fcbb9a3888bea1dba1991d2a4d9453e67dfe4b854f0b"
+GUIDE_SHA256 = "6f36bf719c5eef3640b49129960e9ba18e85047b873e96e95abc23108bec9081"
+PLAYBOOK_SHA256 = "d2d5cad2e2c5494502be470a50a43f471c226ec7915aa247868f66fbbbb76c62"
 DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
@@ -92,8 +92,10 @@ TYPOGRAPHIC_BLOCKED = ("不子是", "占住")
 DANGLING_CONNECTIVES = ("而且", "並且", "以及", "或者", "或", "但是", "所以", "因此", "從而")
 RELATIONAL_PAIRS = (("不但", ("而且", "也")), ("不僅", ("也", "還")))
 OUTCOME_GUARANTEE_PATTERN = r"你(?:注定|必然|一定會|百分之百)|保證(?:你|會|得到)|只要[^。！？\n]{0,30}就會"
+FAKE_EMPATHY_REFRAME_PATTERN = r"你不是[^。！？\n]{1,24}[，,]?\s*(?:只是|而是)[^。！？\n]{1,32}"
+MICRO_SCENE_PATTERN = r"(?=[^。！？\n]*(?:深夜|房間|床上|咖啡|天花板|螢幕|手機|窗外|光線|燈光|雨聲))(?=[^。！？\n]*(?:坐著|躺著|站著|看著|拿著|滑著|盯著|發呆))"
 UNSUPPORTED_AUTHORITY_TERMS = ("心理諮商", "療癒技術", "臨床診斷", "投資保證")
-AI_STYLE_TELLS = ("真正的問題是", "本質上", "防護機制", "靜默力量", "底層邏輯", "賦能", "生命路徑", "能量消耗", "共振")
+AI_STYLE_TELLS = ("真正的問題是", "本質上", "防護機制", "靜默力量", "底層邏輯", "賦能", "生命路徑", "能量消耗", "共振", "典範轉移", "改寫一切")
 
 def sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
@@ -147,6 +149,10 @@ def semantic_boundary_issues(text: str) -> list[str]:
     issues = []
     if re.search(OUTCOME_GUARANTEE_PATTERN, text):
         issues.append("含外部結果承諾")
+    if re.search(FAKE_EMPATHY_REFRAME_PATTERN, text):
+        issues.append("含假共感原因改寫")
+    if re.search(MICRO_SCENE_PATTERN, text):
+        issues.append("含微觀感官場景")
     issues.extend(f"含不支援的專業權威詞：{term}" for term in UNSUPPORTED_AUTHORITY_TERMS if term in text)
     issues.extend(f"含常見 AI 腔：{term}" for term in AI_STYLE_TELLS if term in text)
     return issues
@@ -758,7 +764,7 @@ def current_contract_issues() -> list[str]:
     if sha(text[guide:]) != GUIDE_SHA256:
         issues.append("規則庫合約雜湊不符。")
     if SENTENCE_QUALITY_TITLE not in text[guide:] or "病句檢查是底線" not in text[guide:]:
-        issues.append("找不到全局唯一的 v3.3 文章風格與病句規範。")
+        issues.append("找不到全局唯一的 v3.4 文章風格與病句規範。")
     if not RULES_FILE.is_file() or sha(RULES_FILE.read_text(encoding="utf-8")) != DYNAMIC_RULES_SHA256:
         issues.append("動態盤象規則檔缺失或來源雜湊不符。")
     return issues
@@ -943,12 +949,12 @@ def write_rule_map() -> None:
             },
         },
         "sentence_quality": {
-            "version": "3.3",
+            "version": "3.4",
             "scope": "僅 Hook、正文、置頂解答、完整解讀與視覺卡中的可變文案；固定模板、CTA、版面與命理真值不適用。",
             "style_source": "使用者上載的占卜／療癒型社群貼文截圖及其質性分析",
-            "style_application": ["第二人稱直接說話", "代入→拉扯→轉述→低風險行動→自主收束", "長句辨識、短句收束", "簡單直白的臺灣中文", "術語後接白話轉譯", "內心故事而非外在事件"],
-            "abstraction_boundary": "保留關係、選擇、等待、界線等可投射狀態；不得捏造精準情景、人物行為、感官畫面、數量、日期、次數、件數或未提供的經歷；不得替第三人下定論、把解讀寫成事實或保證外部結果。",
-            "ai_style_exclusions": list(AI_STYLE_TELLS) + ["官樣話", "行業黑話", "翻譯腔", "空洞形容詞", "金句公式", "短句連發"],
+            "style_application": ["第二人稱直接說話", "狀態→接住→轉向→留白", "自然句長與直接動詞", "簡單直白的臺灣中文", "術語後接白話轉譯", "禁止假共感與過度場景化"],
+            "abstraction_boundary": "保留關係、選擇、等待、界線等可投射狀態；不得捏造精準情景、人物行為、感官畫面、數量、日期、次數、件數或未提供的經歷；不加深夜、房間、咖啡、光線、聲音、身體反應、分鐘、步數、次數或鏡頭畫面；不得替第三人下定論、把解讀寫成事實或保證外部結果。",
+            "ai_style_exclusions": list(AI_STYLE_TELLS) + ["官樣話", "行業黑話", "翻譯腔", "空洞形容詞", "金句公式", "短句連發", "假共感原因改寫", "微觀感官場景", "過度量化"],
             "categories": ["成分殘缺", "搭配不當", "用詞不當", "語序混亂", "前後矛盾", "邏輯混亂"],
             "review_order": ["受保護內容", "原版文風與抽象邊界", "成分與標點", "搭配與用詞", "語序與指涉", "前後一致", "因果與推論"],
             "automatic_gate": "只攔截高信心格式與句法風險；文風、語意、搭配、假對比與邏輯由模型逐句複核。",
@@ -958,7 +964,7 @@ def write_rule_map() -> None:
         "forms": {
             "型式一": {"dynamic_options": "A–F", "option_format": "約 50 字動態盤象短解答（35–50 字）"},
             "型式五上集": {"dynamic_options": "A–C", "option_format": "問題聚焦 15 字內、貼士 50 字內、約 50 字短解答（35–50 字）"},
-            "型式五下集": {"pairing": "承接上集同題、同圖騰、同五元組", "option_format": "五層完整解讀，每卡至少 300 字；使用感官錨定與概括描繪"},
+            "型式五下集": {"pairing": "承接上集同題、同圖騰、同五元組", "option_format": "五層完整解讀，每卡至少 300 字；使用狀態留白，不新增感官錨定"},
             "型式三四": {"data_boundary": "涉及命理資料必須先查 SSOT；不得套用動態盤象。"},
         },
         "acceptance": [
@@ -967,7 +973,7 @@ def write_rule_map() -> None:
             "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
             "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
             "型式一／五短解答維持 35–50 字；型式五問題聚焦維持 15 字內；貼士維持 50 字內。",
-            "所有可變文案均遵循使用者文章的第二人稱、自然邏輯、長短句節奏、直白用詞與抽象投射邊界，並通過 AI 腔、成分、搭配、用詞、語序、前後一致與邏輯關係的逐句複核。",
+            "所有可變文案均遵循 v3.4 的狀態→接住→轉向→留白、直接臺灣中文與抽象投射邊界；沒有假共感、過度量化或微觀感官場景，並通過 AI 腔、成分、搭配、用詞、語序、前後一致與邏輯關係的逐句複核。",
             "五大型式文案排版輸出標準規範的區段 SHA-256 維持 16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0。",
         ],
     }
@@ -996,7 +1002,8 @@ def migrate_registry(args) -> int:
 
 def sync(args) -> int:
     if args.dry_run:
-        print(json.dumps({"playbook_contract": {"playbook": PLAYBOOK_SHA256, "standard": STANDARD_SHA256, "guide": GUIDE_SHA256}, "sentence_quality": "成分、搭配、用詞、語序、前後一致、邏輯（可變文案專用）", "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": len(list(unpublished_blocks()))}, ensure_ascii=False))
+        print(json.dumps({"playbook_contract": {"playbook": PLAYBOOK_SHA256, "standard": STANDARD_SHA256, "guide": GUIDE_SHA256},         "sentence_quality": "狀態、接住、轉向、留白與句法底線（可變文案專用）",
+ "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": len(list(unpublished_blocks()))}, ensure_ascii=False))
         return 0
     write_rule_map()
     print(json.dumps({"synced": True, "changed_files": [str(RULE_MAP_FILE.relative_to(ROOT))], "fixed_template_mutation": False}, ensure_ascii=False))

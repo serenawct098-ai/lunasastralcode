@@ -22,14 +22,16 @@ class GovernanceContractV2Test(unittest.TestCase):
 
         self.assertEqual(rule_map["playbook_sha256"], GOVERNANCE.PLAYBOOK_SHA256)
         self.assertEqual(rule_map["dynamic_panxiang"]["source_sha256"], GOVERNANCE.DYNAMIC_RULES_SHA256)
-        self.assertEqual(rule_map["sentence_quality"]["version"], "3.3")
+        self.assertEqual(rule_map["sentence_quality"]["version"], "3.4")
         self.assertEqual(rule_map["sentence_quality"]["style_source"], "使用者上載的占卜／療癒型社群貼文截圖及其質性分析")
         self.assertIn("第二人稱直接說話", rule_map["sentence_quality"]["style_application"])
-        self.assertIn("代入→拉扯→轉述→低風險行動→自主收束", rule_map["sentence_quality"]["style_application"])
-        self.assertIn("術語後接白話轉譯", rule_map["sentence_quality"]["style_application"])
+        self.assertIn("狀態→接住→轉向→留白", rule_map["sentence_quality"]["style_application"])
+        self.assertIn("禁止假共感與過度場景化", rule_map["sentence_quality"]["style_application"])
         self.assertIn("不得捏造精準情景", rule_map["sentence_quality"]["abstraction_boundary"])
+        self.assertIn("不加深夜、房間、咖啡", rule_map["sentence_quality"]["abstraction_boundary"])
         self.assertIn("不得替第三人下定論", rule_map["sentence_quality"]["abstraction_boundary"])
         self.assertIn("本質上", rule_map["sentence_quality"]["ai_style_exclusions"])
+        self.assertIn("假共感原因改寫", rule_map["sentence_quality"]["ai_style_exclusions"])
         self.assertEqual(
             rule_map["sentence_quality"]["categories"],
             ["成分殘缺", "搭配不當", "用詞不當", "語序混亂", "前後矛盾", "邏輯混亂"],
@@ -50,12 +52,13 @@ class GovernanceContractV2Test(unittest.TestCase):
         self.assertEqual(GOVERNANCE.current_contract_issues(), [])
         self.assertEqual(GOVERNANCE.STANDARD_SHA256, "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0")
         self.assertIn(GOVERNANCE.SENTENCE_QUALITY_TITLE, playbook)
-        self.assertIn("代入 → 拉扯 → 轉述 → 低風險行動 → 自主收束", playbook)
+        self.assertIn("狀態 → 接住 → 轉向 → 留白", playbook)
         self.assertIn("術語後接白話", playbook)
         self.assertIn("IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫", playbook)
         self.assertIn("共感—重述—賦權—互動", playbook)
-        self.assertIn("使用者上載的占卜／療癒型社群貼文截圖及其質性分析，是可變文案唯一的聲音基準", playbook)
-        self.assertIn("常見 AI 口頭禪", playbook)
+        self.assertIn("本次核對的 AI 寫作特徵與繁中寫作技能", playbook)
+        self.assertIn("不做假真誠或諮商口吻", playbook)
+        self.assertIn("不用怕沒人懂，你可以的！", playbook)
         self.assertIn("病句檢查是底線", playbook)
         self.assertIn("五組，五值均為獨立隨機抽樣輸入", playbook)
         self.assertIn("八神不由九星、八門、宮位或陰陽遁方向推導", playbook)
@@ -98,6 +101,9 @@ class GovernanceContractV2Test(unittest.TestCase):
         self.assertIn("關聯詞未配對：不但……而且／也", GOVERNANCE.sentence_quality_issues("不但先確認資料。"))
         self.assertIn("中文句內混用半形逗號", GOVERNANCE.sentence_quality_issues("你先確認資料,再安排下一步。"))
         self.assertIn("含外部結果承諾", GOVERNANCE.semantic_boundary_issues("你一定會得到想要的答案。"))
+        self.assertIn("含假共感原因改寫", GOVERNANCE.semantic_boundary_issues("你不是不行，只是沒有人懂你。"))
+        self.assertIn("含微觀感官場景", GOVERNANCE.semantic_boundary_issues("你深夜躺在床上看著天花板滑手機。"))
+        self.assertEqual(GOVERNANCE.semantic_boundary_issues("不用怕沒人懂，你可以的！"), [])
 
 
 if __name__ == "__main__":

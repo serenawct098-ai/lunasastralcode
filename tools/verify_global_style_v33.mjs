@@ -49,24 +49,24 @@ const styleApplication = ruleMap?.sentence_quality?.style_application ?? [];
 const checks = [
   [
     'Master Playbook 是唯一全局文風規範',
-    playbook.includes('使用者文章風格與自然中文（v3.3，全局唯一文風規範）') &&
+    playbook.includes('使用者文章風格與自然中文（v3.4，全局唯一文風規範）') &&
       playbook.includes('本節是唯一可編輯的全局文風規範'),
   ],
   [
-    '完整五步文風鏈已收斂至 Master Playbook',
-    playbook.includes('代入 → 拉扯 → 轉述 → 低風險行動 → 自主收束'),
+    '新版四步文風鏈已收斂至 Master Playbook',
+    playbook.includes('狀態 → 接住 → 轉向 → 留白'),
   ],
   [
     'Master Playbook 不再依賴獨立文風檔',
     !playbook.includes('social_divination_style_profile_v33.md'),
   ],
   [
-    '規則映射已更新為 v3.3',
-    ruleMap?.sentence_quality?.version === '3.3',
+    '規則映射已更新為 v3.4',
+    ruleMap?.sentence_quality?.version === '3.4',
   ],
   [
-    '規則映射包含五步文風鏈',
-    styleApplication.includes('代入→拉扯→轉述→低風險行動→自主收束'),
+    '規則映射包含四步文風鏈',
+    styleApplication.includes('狀態→接住→轉向→留白'),
   ],
   [
     '規則映射包含第三人斷言限制',
@@ -74,7 +74,7 @@ const checks = [
   ],
   [
     '腳本索引已同步且不再引用獨立文風檔',
-    index.includes('使用者文章風格 v3.3') &&
+    index.includes('使用者文章風格 v3.4') &&
       !index.includes('social_divination_style_profile_v33.md'),
   ],
 ];
