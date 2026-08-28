@@ -1,0 +1,45 @@
+{
+  "audit_id": "post-rewrite-normalization-v3.4-2026-08-28",
+  "target_files": [
+    "scripts/60day_scripts_W4-W9_20260817-20260925.md",
+    "scripts/60day_scripts_W7-W9_20260905-20260926.md",
+    "governance/script_governance.py",
+    "governance/test_governance_contract_v2.py"
+  ],
+  "scope": "移除 6 個重複的選項標題，並防止未來重寫再次產生相同格式瑕疵。",
+  "protected_content": {
+    "canonical_locks_changes": [],
+    "fixed_template_mutation": false,
+    "classical_quote_changes": [],
+    "dynamic_panxiang_changes": []
+  },
+  "changes": {
+    "script_heading_corrections": 6,
+    "normalizer_regression_test_added": true,
+    "rewrite_batch_posts": 22,
+    "approved_short_answer_cjk_range": "30–50",
+    "approved_full_interpretation_cjk_range": "220–300"
+  },
+  "verification_steps": [
+    "python3 governance/script_governance.py audit",
+    "python3 -m unittest governance/test_governance_contract_v2.py",
+    "node tools/verify_global_style_v33.mjs",
+    "grep 重複選項標題檢查：0 筆",
+    "grep 禁用 AI 句型檢查：0 筆",
+    "python3 -m json.tool governance/rewrite_audit.json",
+    "git diff --check"
+  ],
+  "verification_result": {
+    "posts_checked": 22,
+    "governance_audit": "passed",
+    "unit_tests": "9 passed",
+    "global_style_check": "passed",
+    "json_parse": "passed",
+    "diff_check": "passed"
+  },
+  "halt_events": [
+    "初次短解答 33 字低於舊規則 35 字；經使用者同意後改為 30–50 字。",
+    "完整解讀 282 字高於自訂 280 字；經使用者同意後改為 220–300 字。"
+  ],
+  "verification_status": "verified"
+}

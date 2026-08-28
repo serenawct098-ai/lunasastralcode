@@ -1,6 +1,6 @@
 {
   "playbook_source": "lunas_astral_code_master_playbook.md",
-  "playbook_sha256": "d2d5cad2e2c5494502be470a50a43f471c226ec7915aa247868f66fbbbb76c62",
+  "playbook_sha256": "ef5de5923f392e412e3dd40218efc21d2b52c6f3f185e67bd1b1fe0a89c35522",
   "fixed_template_policy": "Only [ ] or ［］ variables may change. Fixed wording, punctuation, CTA, cards, media, seconds, colors, visual structure and order are immutable.",
   "dynamic_panxiang": {
     "source": "governance/dynamic_panxiang_rules.json",
@@ -102,15 +102,15 @@
   "forms": {
     "型式一": {
       "dynamic_options": "A–F",
-      "option_format": "約 50 字動態盤象短解答（35–50 字）"
+      "option_format": "30–50 字動態盤象短解答"
     },
     "型式五上集": {
       "dynamic_options": "A–C",
-      "option_format": "問題聚焦 15 字內、貼士 50 字內、約 50 字短解答（35–50 字）"
+      "option_format": "問題聚焦 15 字內、貼士 50 字內、30–50 字短解答"
     },
     "型式五下集": {
       "pairing": "承接上集同題、同圖騰、同五元組",
-      "option_format": "五層完整解讀，每卡至少 300 字；使用狀態留白，不新增感官錨定"
+      "option_format": "五層完整解讀，每卡 220–300 字；使用狀態留白，不新增感官錨定"
     },
     "型式三四": {
       "data_boundary": "涉及命理資料必須先查 SSOT；不得套用動態盤象。"
@@ -121,7 +121,7 @@
     "五大型式固定模板、CTA、Hashtags、日期、型式、媒介、卡數、色碼與已發布內容不變。",
     "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
     "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
-    "型式一／五短解答維持 35–50 字；型式五問題聚焦維持 15 字內；貼士維持 50 字內。",
+    "型式一／五短解答維持 30–50 字；型式五問題聚焦維持 15 字內；貼士維持 50 字內；型式五下集完整解讀維持 220–300 字。",
     "所有可變文案均遵循 v3.4 的狀態→接住→轉向→留白、直接臺灣中文與抽象投射邊界；沒有假共感、過度量化或微觀感官場景，並通過 AI 腔、成分、搭配、用詞、語序、前後一致與邏輯關係的逐句複核。",
     "五大型式文案排版輸出標準規範的區段 SHA-256 維持 16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0。"
   ]

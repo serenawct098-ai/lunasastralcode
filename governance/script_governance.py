@@ -31,7 +31,7 @@ FILES = (
     ROOT / "scripts/60day_scripts_W4-W9_20260817-20260925.md",
     ROOT / "scripts/60day_scripts_W7-W9_20260905-20260926.md",
 )
-MODEL = "claude-sonnet-4-6"
+MODEL = "gpt-5-mini"
 PUBLISHED = {"2026-08-17", "2026-08-18"}
 THEME_START = "2026-08-25"
 TYPE3_SSOT = {
@@ -66,8 +66,8 @@ STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
 GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
 SENTENCE_QUALITY_TITLE = "#### 7.6 使用者文章風格與自然中文（v3.4，全局唯一文風規範）"
 STANDARD_SHA256 = "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0"
-GUIDE_SHA256 = "6f36bf719c5eef3640b49129960e9ba18e85047b873e96e95abc23108bec9081"
-PLAYBOOK_SHA256 = "d2d5cad2e2c5494502be470a50a43f471c226ec7915aa247868f66fbbbb76c62"
+GUIDE_SHA256 = "27b40a46030defae0896f99a328687ab01ef0d97db0e9f00f670e47c8ac598c4"
+PLAYBOOK_SHA256 = "ef5de5923f392e412e3dd40218efc21d2b52c6f3f185e67bd1b1fe0a89c35522"
 DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
@@ -255,7 +255,7 @@ def answer_slots(block: str, labels: str) -> list[dict]:
         match = re.search(rf"(?ms)^{label}：(.*?)(?=\n\n[{'|'.join(labels)}]：|\Z)", region)
         if not match:
             raise ValueError(f"Missing pinned answer {label}")
-        slots.append({"id": f"answer_{label}", "text": match.group(1).strip(), "minimum_cjk": 35, "maximum_cjk": 50, "short_dynamic": True})
+        slots.append({"id": f"answer_{label}", "text": match.group(1).strip(), "minimum_cjk": 30, "maximum_cjk": 50, "short_dynamic": True})
     return slots
 
 
@@ -268,7 +268,7 @@ def lower_cards(block: str) -> list[dict]:
         )
         if not match:
             raise ValueError(f"Missing latest-template lower card {label}")
-        slots.append({"id": f"card_{label}", "text": match.group(1).strip(), "minimum_cjk": 300})
+        slots.append({"id": f"card_{label}", "text": match.group(1).strip(), "minimum_cjk": 220, "maximum_cjk": 300})
     return slots
 
 
@@ -532,6 +532,7 @@ def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]
             match = re.match(rf"^\*\*選項 {label}(?:\*\*)?[：:](.*?)(?:\*\*)?$|^選項 {label}[：:](.*)$", first)
             if match:
                 conclusion = (match.group(1) if match.group(1) is not None else match.group(2)).strip()
+                conclusion = re.sub(rf"^選項 {label}[：:]\s*", "", conclusion)
                 lines[0] = f"**選項 {label}：{conclusion}**"
         rewrites[slot["id"]] = "\n".join(lines).strip()
     return rewrites
@@ -548,8 +549,6 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], theme:
             item["combo"] = slot["combo"]
             item["five_layer"] = bool(slot.get("five_layer"))
             item["short_dynamic"] = bool(slot.get("short_dynamic"))
-        if slot.get("five_layer"):
-            item["generation_target_cjk"] = 430
         if slot.get("upper_answer"):
             item["upper_answer"] = slot["upper_answer"]
         if slot.get("hook_context"):
@@ -557,17 +556,17 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], theme:
         payload_slots.append(item)
     system = """你是繁體中文（臺灣）IG 奇門文案主筆。只能重寫 payload 內的可變欄位。Hook 與圖騰會由題材矩陣同步，請依 target_theme 的主題重寫其餘可變文案；未列入 payload 的 Hashtags、固定 CTA、卡片標題、視覺模板、日期、色碼與固定文字不得輸出或改動。
 
-必須以使用者上載文章的語氣、用詞、句長與節奏寫作。它是唯一聲音基準。用第二人稱直接說話，像替讀者把心裡卡住的事說出來：先留白、再命名拉扯、再作有邏輯的重述，最後放回讀者能決定的一步。不要把它機械化成步驟，也不要把原有語感刪成制式心理雞湯。
+必須依 v3.4 文風重寫，四步鏈為「狀態 → 接住 → 轉向 → 留白」：先說一個可投射的狀態，再直接接住，必要時輕輕轉向，最後留白。這是取捨工具，不是每段必填公式；短文可只寫狀態加一句接住。用親近、直接、帶一點鼓勵的臺灣中文，不扮演高人，不做心理諮商，也不替讀者找原因。鼓勵要直接，例如「不用怕沒人懂，你可以的！」；不得寫「你不是……只是……」這類先替讀者判因、再翻轉的假共感。
 
 先保護所有日期、數字、固定 CTA、圖騰、星、門、神、奇儀、方位、時辰、吉凶、公式、SSOT 術語、五層標題與既有欄位結構。塔羅的牌名、牌義、牌陣、宇宙授權或命定結論不得寫入，也不得自動映射成奇門術語；只可遷移文章的句法、節奏、情感推進與自然表達。
 
-回到簡單、直白、日常的臺灣中文，優先使用「想、等、問、停、看、分清、放回、決定」等動詞。長句只承接一個狀態；短句只作收束。句長要錯落，不能每句同長，也不能用短句連發造勢。剝離官樣話、行業黑話、翻譯腔、假深刻與常見 AI 口頭禪；不要寫「真正的問題是」「本質上」「防護機制」「靜默力量」「底層邏輯」「賦能」「生命路徑」「能量消耗」「共振」。少用過度華麗或空洞形容詞。
+回到簡單、直白、日常的臺灣中文，優先使用「想、等、問、停、看、分清、放回、決定」等動詞。一句只承接一個狀態或方向；句長自然錯落，不把每句修成同一個節拍，也不用短句連發造勢。剝離官樣話、行業黑話、翻譯腔、假深刻與常見 AI 口頭禪；不要寫「真正的問題是」「本質上」「防護機制」「靜默力量」「底層邏輯」「賦能」「生命路徑」「能量消耗」「共振」。少用華麗或空洞形容詞。
 
-文案可有內心故事，卻只寫關係、選擇、等待、界線、方向、心意與猶豫等可投射狀態。不得捏造職業、地點、訊息往返、對話記錄、精準動作、身體反應、感官畫面、日期、次數、件數、步數、分鐘、具體事件或讀者未提供的經歷。可用「你可能」「也許」「有些事」留白，但每段最多一至兩次。抽象不等於含混：每句都要有可理解的主語、動詞、對象和因果。
+文案只寫關係、選擇、等待、界線、方向、心意與猶豫等可投射狀態。**不演場景，不補數字。** 不得捏造職業、地點、訊息往返、對話記錄、精準動作、身體反應、感官畫面、日期、次數、件數、步數、分鐘、具體事件或讀者未提供的經歷。可用「你可能」「也許」「有些事」留白，但每段最多一至兩次。抽象不等於含混：每句都要有可理解的主語、動詞、對象和因果。
 
 「不是……而是……」只能用於前後在同一判準下真正形成對照的情況。不得寫「不是沒有機會，而是你沒問清楚」一類假對比；改成完整推進，例如「你可能很在意這段關係還有沒有機會。現在不必急著替它下結論；先弄清楚自己想知道甚麼，再決定要不要開口。」提問、行動或盤象不得被寫成保證外部結果的原因。
 
-避免心理諮商腔、命定論、假深刻、客服腔、翻譯腔、短句連發、金句公式、靈性名詞堆砌與中國用語。不要寫「你不是不夠好，你只是……」「真正的問題是」「本質上」「宇宙正在替你安排」「一切都會變好」。不要以「能量、頻率、課題、療癒、顯化」取代主語、動詞或因果。使用自然、精確、完整的臺灣繁體中文；長句只承接一個狀態，短句只作收束，不得把關聯詞拆成片段來假裝節奏。
+避免心理諮商腔、命定論、假深刻、客服腔、翻譯腔、短句連發、金句公式、靈性名詞堆砌與中國用語。不要寫「你不是不夠好，你只是……」「真正的問題是」「本質上」「宇宙正在替你安排」「一切都會變好」「你很敏銳」「你並不孤單」。不要以「能量、頻率、課題、療癒、顯化」取代主語、動詞或因果。使用自然、完整的臺灣繁體中文；不以畫面、感官、量化細節、對比句或排比替內容加戲。
 
 型式一與型式五上集的短解答，只用抽象生活語言承接對應盤象，不塞入完整術語清單。只有 five_layer=true 才使用五層格式並換行：
 **選項 X：一句明確但非命定的主軸結論**
@@ -579,7 +578,7 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], theme:
 【奇門行為改運】
 ‧ 一至兩項低風險、讀者可決定的行動；不承諾對方反應或外部結果。
 
-型式一與型式五上集短解答需 35–50 個中文字；型式五上集問題聚焦保留既有 Hook 的時間窗且 15 字內；貼士 50 字內。型式五下集至少 300 個中文字；有 generation_target_cjk: 430 時，每張完整解讀為 400–460 個中文字，每模組最多兩句。若有 upper_answer，下集第一行必須逐字沿用該答案的主軸。型式二、三、四維持原有欄位數；型式三／四不得改 SSOT 資料、公式、術語或來源。所有句子都要檢查成分、搭配、用詞、語序、前後一致和因果；不確定時保留原意，不自行補造結論。"""
+型式一與型式五上集短解答需 30–50 個中文字；型式五上集問題聚焦保留既有 Hook 的時間窗且 15 字內；貼士 50 字內。型式五下集每張完整解讀為 220–300 個中文字，每個模組至多兩句，內容以狀態、白話與一個低風險提醒為主，不能為湊字數增加情節。若有 upper_answer，下集第一行必須逐字沿用該答案的主軸。型式二、三、四維持原有欄位數；型式三／四不得改 SSOT 資料、公式、術語或來源。所有句子都要檢查成分、搭配、用詞、語序、前後一致和因果；不確定時保留原意，不自行補造結論。"""
     user = {
         "date": date,
         "form": kind,
@@ -596,9 +595,8 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], theme:
     request = {
         "model": MODEL,
         "messages": [{"role": "system", "content": system}, {"role": "user", "content": json.dumps(user, ensure_ascii=False)}],
-        "max_tokens": 16000,
+        "max_completion_tokens": 4096,
         "response_format": {"type": "json_schema", "json_schema": {"name": "slot_rewrites", "strict": True, "schema": schema}},
-        "thinking": {"type": "enabled", "budget_tokens": 2048},
     }
     errors = []
     for attempt in range(3):
@@ -618,7 +616,7 @@ def five_layer_issues(date: str, text: str, label: str, combo: dict, lower: bool
     required = (f"**選項 {label}：", "【盤象：", "‧ 表面現象：", "‧ 盤象真相：", "【時空與感官錨定】", "【奇門行為改運】")
     issues = [f"{date} {label} 缺少五層模組：{value}" for value in required if value not in text]
     issues.extend(f"{date} {label} 缺少動態盤象值：{term}" for term in combo_terms(combo) if term not in text)
-    if cjk_count(text) < 300:
+    if cjk_count(text) < 220:
         issues.append(f"{date} {label} 文字長度不足。")
     if "白話來說" not in text and "簡單說" not in text:
         issues.append(f"{date} {label} 缺少術語白話轉譯。")
@@ -641,8 +639,8 @@ def five_layer_issues(date: str, text: str, label: str, combo: dict, lower: bool
 
 def short_dynamic_issues(date: str, text: str, label: str, combo: dict) -> list[str]:
     issues = []
-    if not 35 <= cjk_count(text) <= 50:
-        issues.append(f"{date} {label} 短解答未落在 35–50 字。")
+    if not 30 <= cjk_count(text) <= 50:
+        issues.append(f"{date} {label} 短解答未落在 30–50 字。")
     issues.extend(f"{date} {label} 句法品質問題：{issue}" for issue in sentence_quality_issues(text))
     issues.extend(f"{date} {label} 語意邊界問題：{issue}" for issue in semantic_boundary_issues(text))
     return issues
@@ -962,9 +960,9 @@ def write_rule_map() -> None:
             "fixed_template_exclusion": "五大型式文案排版輸出標準規範的固定模板及其固定字句、CTA、卡數、順序、媒介、秒數、色碼與視覺結構不得修改。"
         },
         "forms": {
-            "型式一": {"dynamic_options": "A–F", "option_format": "約 50 字動態盤象短解答（35–50 字）"},
-            "型式五上集": {"dynamic_options": "A–C", "option_format": "問題聚焦 15 字內、貼士 50 字內、約 50 字短解答（35–50 字）"},
-            "型式五下集": {"pairing": "承接上集同題、同圖騰、同五元組", "option_format": "五層完整解讀，每卡至少 300 字；使用狀態留白，不新增感官錨定"},
+            "型式一": {"dynamic_options": "A–F", "option_format": "30–50 字動態盤象短解答"},
+            "型式五上集": {"dynamic_options": "A–C", "option_format": "問題聚焦 15 字內、貼士 50 字內、30–50 字短解答"},
+            "型式五下集": {"pairing": "承接上集同題、同圖騰、同五元組", "option_format": "五層完整解讀，每卡 220–300 字；使用狀態留白，不新增感官錨定"},
             "型式三四": {"data_boundary": "涉及命理資料必須先查 SSOT；不得套用動態盤象。"},
         },
         "acceptance": [
@@ -972,7 +970,7 @@ def write_rule_map() -> None:
             "五大型式固定模板、CTA、Hashtags、日期、型式、媒介、卡數、色碼與已發布內容不變。",
             "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
             "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
-            "型式一／五短解答維持 35–50 字；型式五問題聚焦維持 15 字內；貼士維持 50 字內。",
+            "型式一／五短解答維持 30–50 字；型式五問題聚焦維持 15 字內；貼士維持 50 字內；型式五下集完整解讀維持 220–300 字。",
             "所有可變文案均遵循 v3.4 的狀態→接住→轉向→留白、直接臺灣中文與抽象投射邊界；沒有假共感、過度量化或微觀感官場景，並通過 AI 腔、成分、搭配、用詞、語序、前後一致與邏輯關係的逐句複核。",
             "五大型式文案排版輸出標準規範的區段 SHA-256 維持 16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0。",
         ],
@@ -1031,6 +1029,7 @@ def rewrite(args) -> int:
     audit_rows = []
     for path, date, header, original_block in posts:
         kind = form(header)
+        print(json.dumps({"stage": "rewrite", "date": date, "form": kind}, ensure_ascii=False), flush=True)
         block = repair_three_field_boundaries(original_block, kind)
         if date < args.from_date:
             continue
@@ -1043,7 +1042,8 @@ def rewrite(args) -> int:
                 slot["upper_answer"] = pinned_answer(upper_block, label, "ABC")
         error = None
         feedback = ""
-        for attempt in range(5):
+        for attempt in range(3):
+            print(json.dumps({"stage": "request", "date": date, "attempt": attempt + 1, "slot_count": len(slots)}, ensure_ascii=False), flush=True)
             rewrites = request_rewrite(date, kind, header, slots, THEME_PLANS.get(date), retry=attempt > 0, feedback=feedback)
             try:
                 validate_rewrites(slots, rewrites)

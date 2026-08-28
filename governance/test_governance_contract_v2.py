@@ -92,6 +92,32 @@ class GovernanceContractV2Test(unittest.TestCase):
                 card = GOVERNANCE.lower_card(block, label)
                 self.assertEqual(card.count(f"**選項 {label}："), 1, f"{date} {label} has duplicated option headings")
 
+    def test_rewrite_prompt_uses_v34_rules_and_available_bulk_model(self) -> None:
+        source = MODULE_PATH.read_text(encoding="utf-8")
+        self.assertIn('MODEL = "gpt-5-mini"', source)
+        self.assertIn("狀態 → 接住 → 轉向 → 留白", source)
+        self.assertIn("不演場景，不補數字", source)
+        self.assertNotIn("它是唯一聲音基準", source)
+
+    def test_normalize_dynamic_option_heading_removes_repeated_label(self) -> None:
+        slots = [{"id": "card_A", "label": "A", "five_layer": True}]
+        rewrites = {"card_A": "選項 A：選項 A：先把想做的事放回自己手上。\n【盤象：天心星｜開門｜值符｜乙】"}
+        normalized = GOVERNANCE.normalize_dynamic_option_heading(slots, rewrites)
+        self.assertTrue(normalized["card_A"].startswith("**選項 A：先把想做的事放回自己手上。**"))
+        self.assertNotIn("選項 A：選項 A：", normalized["card_A"])
+
+    def test_lower_card_uses_the_approved_220_to_300_cjk_range(self) -> None:
+        path, _, _, block = next(item for item in GOVERNANCE.unpublished_blocks() if GOVERNANCE.form(item[2]) == "型式五下集")
+        slots = GOVERNANCE.lower_cards(block)
+        self.assertEqual(path.name, "60day_scripts_W4-W9_20260817-20260925.md")
+        self.assertTrue(all(slot["minimum_cjk"] == 220 for slot in slots))
+        self.assertTrue(all(slot["maximum_cjk"] == 300 for slot in slots))
+
+    def test_short_dynamic_answer_accepts_the_approved_30_to_50_cjk_range(self) -> None:
+        text = "你還想問下去，但不想把心說滿。先回那個讓你想多問的人，慢慢接著把話聊下去。"
+        self.assertEqual(GOVERNANCE.cjk_count(text), 33)
+        self.assertEqual(GOVERNANCE.short_dynamic_issues("測試", text, "A", {}), [])
+
     def test_sentence_quality_detects_high_confidence_grammar_risks(self) -> None:
         self.assertEqual(
             GOVERNANCE.sentence_quality_issues("你先確認資料。再安排下一步。"),
