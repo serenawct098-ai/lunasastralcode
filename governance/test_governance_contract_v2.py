@@ -84,6 +84,21 @@ class GovernanceContractV2Test(unittest.TestCase):
                 upper = GOVERNANCE.pair_map(posts)[date]
                 self.assertEqual(plan["topic"], GOVERNANCE.THEME_PLANS[upper]["topic"])
 
+    def test_type4_is_traceable_qimen_knowledge(self) -> None:
+        posts = list(GOVERNANCE.unpublished_blocks())
+        type4_posts = [(date, header, block) for _, date, header, block in posts if GOVERNANCE.form(header) == "型式四"]
+        self.assertEqual({date for date, _, _ in type4_posts}, set(GOVERNANCE.TYPE4_QIMEN_SSOT))
+        for date, _, block in type4_posts:
+            source = GOVERNANCE.TYPE4_QIMEN_SSOT[date]
+            self.assertEqual(GOVERNANCE.THEME_PLANS[date]["topic"], source["topic"])
+            self.assertEqual(GOVERNANCE.THEME_PLANS[date]["hook"], source["hook"])
+            self.assertEqual(source["source_type"], "classical_text")
+            self.assertEqual(source["verification_status"], "verified")
+            self.assertIn(source["data_file"], block)
+            self.assertIn(source["system_line_id"], block)
+            self.assertIn(source["source_locator"], block)
+            self.assertIn(source["original_quote"], block)
+
     def test_lower_cards_have_one_option_heading(self) -> None:
         for _, date, header, block in GOVERNANCE.unpublished_blocks():
             if date < "2026-08-25" or GOVERNANCE.form(header) != "型式五下集":

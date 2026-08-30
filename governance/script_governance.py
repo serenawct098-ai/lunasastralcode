@@ -39,9 +39,32 @@ TYPE3_SSOT = {
     "2026-09-03": {"data_file": "engines/diagnosis_router_module_v1.json", "source_locator": "routing_rules[4].palace_priority[0] = 福德宮", "intent": "inner_spirit_resilience", "palaces": ["福德宮"]},
     "2026-09-17": {"data_file": "engines/diagnosis_router_module_v1.json", "source_locator": "routing_rules[7].palace_priority[0] = 遷移宮", "intent": "outer_image_mobility", "palaces": ["遷移宮"]},
 }
+TYPE4_QIMEN_SSOT = {
+    "2026-08-27": {
+        "topic": "奇門為什麼重視時間", "hook": "奇門不是只看方位，也看你問的是哪個時刻。",
+        "data_file": "data/QMDJ_XiaJuan_Consolidated.json", "system_line_id": "QMDJ_Juan30_L011",
+        "source_locator": "entries[line_id=QMDJ_Juan30_L011]；《奇門遁甲秘笈大全》下卷·卷30，段落11",
+        "original_quote": "此地盤一定不易者也。所謂地主靜也，五日換一元。天盤則時時不同，所謂天主動也。如乙丑時則以休門加天盤坤為值使，以值符天蓬星甲子戊加離九為值符，諸照此例。",
+        "source_type": "classical_text", "verification_status": "verified", "school_tag": "source_text_only",
+    },
+    "2026-09-10": {
+        "topic": "奇門八門：門各有本位", "hook": "奇門的八門，不是八種個性。它們各有本來的位置。",
+        "data_file": "data/QMDJ_ShangJuan_Consolidated.json", "system_line_id": "QMDJ_Auto_01345",
+        "source_locator": "entries[line_id=QMDJ_Auto_01345]；《奇門遁甲秘笈大全》上卷·卷13，段落35",
+        "original_quote": "休，坎宅門路。生，艮宅門路。傷，震宅門路。杜，巽宅門路。景，離宅門路。死，坤宅門路。驚，兌宅門路。開，乾宅門路。",
+        "source_type": "classical_text", "verification_status": "verified", "school_tag": "source_text_only",
+    },
+    "2026-09-24": {
+        "topic": "值符與值使：一個看星，一個看門", "hook": "看到值符、值使先不用怕，它們不是同一件事。",
+        "data_file": "data/QMDJ_XiaJuan_Consolidated.json", "system_line_id": "QMDJ_Juan30_L011",
+        "source_locator": "entries[line_id=QMDJ_Juan30_L011]；《奇門遁甲秘笈大全》下卷·卷30，段落11",
+        "original_quote": "此地盤一定不易者也。所謂地主靜也，五日換一元。天盤則時時不同，所謂天主動也。如乙丑時則以休門加天盤坤為值使，以值符天蓬星甲子戊加離九為值符，諸照此例。",
+        "source_type": "classical_text", "verification_status": "verified", "school_tag": "source_text_only",
+    },
+}
 THEME_PLANS = {
     "2026-08-26": {"topic": "九月人際節奏", "hook": "9 月人際節奏｜哪一種互動最值得你先回覆？", "totems": {"A": "紙飛機圖騰", "B": "耳機圖騰", "C": "咖啡杯圖騰", "D": "空椅圖騰", "E": "窗框圖騰", "F": "書頁圖騰"}},
-    "2026-08-27": {"topic": "時間留給誰", "hook": "有些邀約不是現在不想去，只是你還沒決定要把時間留給誰。"},
+    "2026-08-27": {"topic": TYPE4_QIMEN_SSOT["2026-08-27"]["topic"], "hook": TYPE4_QIMEN_SSOT["2026-08-27"]["hook"], "ssot": TYPE4_QIMEN_SSOT["2026-08-27"]},
     "2026-08-29": {"topic": "重新安排界線、步調與承諾", "hook": "大眾奇門占卜｜接下來一個月，你最需要重新安排的是界線、步調，還是承諾？", "scene": "接下來一個月，先重整甚麼？", "totems": {"A": "門檻圖騰", "B": "時鐘圖騰", "C": "繩結圖騰"}},
     "2026-08-31": {"topic": "重新安排界線、步調與承諾", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要重新安排的是界線、步調，還是承諾？", "totems": {"A": "門檻圖騰", "B": "時鐘圖騰", "C": "繩結圖騰"}},
     "2026-09-02": {"topic": "把疲憊留在事情之外", "hook": "有些疲憊不是事情太多，是每一件事都還留在你心裡。"},
@@ -49,7 +72,7 @@ THEME_PLANS = {
     "2026-09-05": {"topic": "說清楚需求、界線與期待", "hook": "大眾奇門占卜｜接下來一個月，你最需要說清楚的是需求、界線，還是期待？", "scene": "接下來一個月，先說清甚麼？", "totems": {"A": "話框圖騰", "B": "尺線圖騰", "C": "信封圖騰"}},
     "2026-09-07": {"topic": "說清楚需求、界線與期待", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要說清楚的是需求、界線，還是期待？", "totems": {"A": "話框圖騰", "B": "尺線圖騰", "C": "信封圖騰"}},
     "2026-09-09": {"topic": "九月生活留白", "hook": "9 月生活留白｜哪一個畫面最提醒你先留點空間？", "totems": {"A": "雨傘圖騰", "B": "窗戶圖騰", "C": "杯子圖騰", "D": "空椅圖騰", "E": "地圖圖騰", "F": "雲朵圖騰"}},
-    "2026-09-10": {"topic": "把自己排回生活裡", "hook": "你想把生活過得更有餘裕，卻總是先把自己排到最後。"},
+    "2026-09-10": {"topic": TYPE4_QIMEN_SSOT["2026-09-10"]["topic"], "hook": TYPE4_QIMEN_SSOT["2026-09-10"]["hook"], "ssot": TYPE4_QIMEN_SSOT["2026-09-10"]},
     "2026-09-12": {"topic": "練習拒絕、交付與停下來", "hook": "大眾奇門占卜｜接下來一個月，你最需要練習的是拒絕、交付，還是停下來？", "scene": "接下來一個月，先練習甚麼？", "totems": {"A": "門把圖騰", "B": "紙箱圖騰", "C": "月亮圖騰"}},
     "2026-09-14": {"topic": "練習拒絕、交付與停下來", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要練習的是拒絕、交付，還是停下來？", "totems": {"A": "門把圖騰", "B": "紙箱圖騰", "C": "月亮圖騰"}},
     "2026-09-16": {"topic": "做得夠好與留有空間", "hook": "你一直想把事情做到最好，卻很少問自己：這樣下去，還有沒有空間呼吸？"},
@@ -57,7 +80,7 @@ THEME_PLANS = {
     "2026-09-19": {"topic": "辨認合作訊號", "hook": "大眾奇門占卜｜接下來一個月，你最需要辨認的是哪一種合作訊號？", "scene": "接下來一個月，先辨認甚麼？", "totems": {"A": "拼圖圖騰", "B": "門票圖騰", "C": "指南針圖騰"}},
     "2026-09-21": {"topic": "辨認合作訊號", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要辨認的是哪一種合作訊號？", "totems": {"A": "拼圖圖騰", "B": "門票圖騰", "C": "指南針圖騰"}},
     "2026-09-23": {"topic": "九月收尾整理", "hook": "9 月收尾整理｜哪一個角落最值得你先清出位置？", "totems": {"A": "抽屜圖騰", "B": "桌燈圖騰", "C": "鑰匙圖騰", "D": "書籤圖騰", "E": "空盒圖騰", "F": "盆栽圖騰"}},
-    "2026-09-24": {"topic": "辨認不再適合的停留", "hook": "有些地方讓你一直待著，不一定是因為舒服，只是還沒想好怎麼離開。"},
+    "2026-09-24": {"topic": TYPE4_QIMEN_SSOT["2026-09-24"]["topic"], "hook": TYPE4_QIMEN_SSOT["2026-09-24"]["hook"], "ssot": TYPE4_QIMEN_SSOT["2026-09-24"]},
     "2026-09-26": {"topic": "年底前練習開口、取捨與放慢", "hook": "大眾奇門占卜｜年底前，你最需要練習的是開口、取捨，還是放慢？", "scene": "接下來，先練習甚麼？", "totems": {"A": "麥克風圖騰", "B": "岔路圖騰", "C": "沙發圖騰"}},
 }
 TYPE3_SSOT_TERMS = {date: plan["hook"].split("｜", 1)[0].replace("30 秒帶你看懂", "") for date, plan in THEME_PLANS.items() if "ssot" in plan}
@@ -66,8 +89,8 @@ STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
 GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
 SENTENCE_QUALITY_TITLE = "#### 7.6 使用者文章風格與自然中文（v3.4，全局唯一文風規範）"
 STANDARD_SHA256 = "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0"
-GUIDE_SHA256 = "27b40a46030defae0896f99a328687ab01ef0d97db0e9f00f670e47c8ac598c4"
-PLAYBOOK_SHA256 = "ef5de5923f392e412e3dd40218efc21d2b52c6f3f185e67bd1b1fe0a89c35522"
+GUIDE_SHA256 = "a221471d624be4dee444fe7a097d91b986ec120031c63198f2d50ac3e77d9355"
+PLAYBOOK_SHA256 = "5b83c42cb8b1e6ae522a1ca1d77f723c9b5bb2febb0ec20a5677f16b44459928"
 DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
@@ -305,7 +328,10 @@ def slots_for(block: str, kind: str) -> list[dict]:
             raise ValueError("Type 3 body incomplete")
         return [{"id": "explain", "text": lines[1], "minimum_cjk": 50}]
     if kind == "型式四":
-        lines = [line.strip() for line in body.splitlines() if line.strip()]
+        lines = [
+            line.strip() for line in body.splitlines()
+            if line.strip() and not line.startswith(("【原文層】", "【象義層】", "【創作層】"))
+        ]
         if len(lines) not in {3, 6}:
             raise ValueError(f"Type 4 needs three logical fields, got {len(lines)} prose lines")
         labels = ("scene", "check", "action") if len(lines) == 3 else ("scene_1", "scene_2", "check_1", "check_2", "action_1", "action_2")
@@ -567,6 +593,8 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], theme:
 「不是……而是……」只能用於前後在同一判準下真正形成對照的情況。不得寫「不是沒有機會，而是你沒問清楚」一類假對比；改成完整推進，例如「你可能很在意這段關係還有沒有機會。現在不必急著替它下結論；先弄清楚自己想知道甚麼，再決定要不要開口。」提問、行動或盤象不得被寫成保證外部結果的原因。
 
 避免心理諮商腔、命定論、假深刻、客服腔、翻譯腔、短句連發、金句公式、靈性名詞堆砌與中國用語。不要寫「你不是不夠好，你只是……」「真正的問題是」「本質上」「宇宙正在替你安排」「一切都會變好」「你很敏銳」「你並不孤單」。不要以「能量、頻率、課題、療癒、顯化」取代主語、動詞或因果。使用自然、完整的臺灣繁體中文；不以畫面、感官、量化細節、對比句或排比替內容加戲。
+
+型式四是奇門遁甲小知識：只用 payload 既有欄位寫白話說明，保留正文內受保護的【原文層】、【象義層】與【創作層】逐字內容；不得生成、改寫或刪除來源行，也不得把古籍原文延伸為個人斷語、吉凶保證或行動指示。
 
 型式一與型式五上集的短解答，只用抽象生活語言承接對應盤象，不塞入完整術語清單。只有 five_layer=true 才使用五層格式並換行：
 **選項 X：一句明確但非命定的主軸結論**
@@ -868,6 +896,11 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
                 ssot = plan.get("ssot", {})
                 if not ssot or ssot["data_file"] not in block or ssot["source_locator"] not in block:
                     issues.append(f"{date} 型式三 SSOT 引文未套用題材計畫。")
+            if kind == "型式四":
+                ssot = plan.get("ssot", {})
+                required = ("data_file", "system_line_id", "source_locator", "original_quote", "source_type", "verification_status")
+                if not ssot or any(ssot[key] not in block for key in required):
+                    issues.append(f"{date} 型式四奇門 SSOT 引文未套用題材計畫。")
     return issues
 
 
@@ -945,6 +978,7 @@ def write_rule_map() -> None:
                 "2026-09-03": TYPE3_SSOT["2026-09-03"],
                 "2026-09-17": TYPE3_SSOT["2026-09-17"],
             },
+            "type4": TYPE4_QIMEN_SSOT,
         },
         "sentence_quality": {
             "version": "3.4",
@@ -963,7 +997,8 @@ def write_rule_map() -> None:
             "型式一": {"dynamic_options": "A–F", "option_format": "30–50 字動態盤象短解答"},
             "型式五上集": {"dynamic_options": "A–C", "option_format": "問題聚焦 15 字內、貼士 50 字內、30–50 字短解答"},
             "型式五下集": {"pairing": "承接上集同題、同圖騰、同五元組", "option_format": "五層完整解讀，每卡 220–300 字；使用狀態留白，不新增感官錨定"},
-            "型式三四": {"data_boundary": "涉及命理資料必須先查 SSOT；不得套用動態盤象。"},
+            "型式三": {"data_boundary": "涉及紫微命理資料必須先查 SSOT；不得套用動態盤象。"},
+            "型式四": {"content_type": "奇門遁甲小知識", "data_boundary": "固定附原文層、象義層、創作層；概念必須可反向定位至已驗證 SSOT，不作個人論斷。"},
         },
         "acceptance": [
             "22 篇未發布腳本的每個註冊可變欄位在重寫前後均有不同 SHA-256。",
@@ -972,6 +1007,7 @@ def write_rule_map() -> None:
             "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
             "型式一／五短解答維持 30–50 字；型式五問題聚焦維持 15 字內；貼士維持 50 字內；型式五下集完整解讀維持 220–300 字。",
             "所有可變文案均遵循 v3.4 的狀態→接住→轉向→留白、直接臺灣中文與抽象投射邊界；沒有假共感、過度量化或微觀感官場景，並通過 AI 腔、成分、搭配、用詞、語序、前後一致與邏輯關係的逐句複核。",
+            "型式四固定為奇門遁甲小知識；每篇含原文層、象義層與創作層，並可反向定位至已驗證 SSOT。",
             "五大型式文案排版輸出標準規範的區段 SHA-256 維持 16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0。",
         ],
     }

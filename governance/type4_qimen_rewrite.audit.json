@@ -1,0 +1,56 @@
+{
+  "audit_version": "1.0",
+  "scope": "Reclassify unpublished Type 4 scripts as Qi Men Dun Jia micro-knowledge posts without changing fixed templates, published posts, dynamic panxiang, or canonical locks.",
+  "source_repository": "https://github.com/serenawct098-ai/ziwei_qimen",
+  "source_commit": "ac8f093f76a6dbcf459eca0075a33828aa47ef7e",
+  "source_verification": {
+    "method": "Direct GitHub raw-content retrieval followed by exact-string matching against local source copies.",
+    "verified": true,
+    "items": [
+      {
+        "date": "2026-08-27",
+        "topic": "奇門為什麼重視時間",
+        "data_file": "data/QMDJ_XiaJuan_Consolidated.json",
+        "system_line_id": "QMDJ_Juan30_L011",
+        "source_locator": "entries[line_id=QMDJ_Juan30_L011]；《奇門遁甲秘笈大全》下卷·卷30，段落11",
+        "source_type": "classical_text",
+        "verification_status": "verified",
+        "school_tag": "source_text_only"
+      },
+      {
+        "date": "2026-09-10",
+        "topic": "奇門八門：門各有本位",
+        "data_file": "data/QMDJ_ShangJuan_Consolidated.json",
+        "system_line_id": "QMDJ_Auto_01345",
+        "source_locator": "entries[line_id=QMDJ_Auto_01345]；《奇門遁甲秘笈大全》上卷·卷13，段落35",
+        "source_type": "classical_text",
+        "verification_status": "verified",
+        "school_tag": "source_text_only"
+      },
+      {
+        "date": "2026-09-24",
+        "topic": "值符與值使：一個看星，一個看門",
+        "data_file": "data/QMDJ_XiaJuan_Consolidated.json",
+        "system_line_id": "QMDJ_Juan30_L011",
+        "source_locator": "entries[line_id=QMDJ_Juan30_L011]；《奇門遁甲秘笈大全》下卷·卷30，段落11",
+        "source_type": "classical_text",
+        "verification_status": "verified",
+        "school_tag": "source_text_only"
+      }
+    ]
+  },
+  "protected_scope": {
+    "published_posts_changed": 0,
+    "canonical_locks_changed": 0,
+    "dynamic_panxiang_rules_changed": 0,
+    "fixed_template_hash": "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0",
+    "fixed_template_mutation": false
+  },
+  "validation": {
+    "governance_audit": "passed; 22 unpublished scripts checked; 0 issues",
+    "unit_tests": "passed; 10 tests",
+    "global_style_sync": "passed",
+    "original_quote_exact_match": "passed; 2 distinct classical excerpts"
+  },
+  "delivery_status": "local changes only; remote push requires explicit confirmation"
+}

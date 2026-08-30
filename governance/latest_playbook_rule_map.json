@@ -1,6 +1,6 @@
 {
   "playbook_source": "lunas_astral_code_master_playbook.md",
-  "playbook_sha256": "ef5de5923f392e412e3dd40218efc21d2b52c6f3f185e67bd1b1fe0a89c35522",
+  "playbook_sha256": "5b83c42cb8b1e6ae522a1ca1d77f723c9b5bb2febb0ec20a5677f16b44459928",
   "fixed_template_policy": "Only [ ] or ［］ variables may change. Fixed wording, punctuation, CTA, cards, media, seconds, colors, visual structure and order are immutable.",
   "dynamic_panxiang": {
     "source": "governance/dynamic_panxiang_rules.json",
@@ -40,6 +40,41 @@
         "palaces": [
           "遷移宮"
         ]
+      }
+    },
+    "type4": {
+      "2026-08-27": {
+        "topic": "奇門為什麼重視時間",
+        "hook": "奇門不是只看方位，也看你問的是哪個時刻。",
+        "data_file": "data/QMDJ_XiaJuan_Consolidated.json",
+        "system_line_id": "QMDJ_Juan30_L011",
+        "source_locator": "entries[line_id=QMDJ_Juan30_L011]；《奇門遁甲秘笈大全》下卷·卷30，段落11",
+        "original_quote": "此地盤一定不易者也。所謂地主靜也，五日換一元。天盤則時時不同，所謂天主動也。如乙丑時則以休門加天盤坤為值使，以值符天蓬星甲子戊加離九為值符，諸照此例。",
+        "source_type": "classical_text",
+        "verification_status": "verified",
+        "school_tag": "source_text_only"
+      },
+      "2026-09-10": {
+        "topic": "奇門八門：門各有本位",
+        "hook": "奇門的八門，不是八種個性。它們各有本來的位置。",
+        "data_file": "data/QMDJ_ShangJuan_Consolidated.json",
+        "system_line_id": "QMDJ_Auto_01345",
+        "source_locator": "entries[line_id=QMDJ_Auto_01345]；《奇門遁甲秘笈大全》上卷·卷13，段落35",
+        "original_quote": "休，坎宅門路。生，艮宅門路。傷，震宅門路。杜，巽宅門路。景，離宅門路。死，坤宅門路。驚，兌宅門路。開，乾宅門路。",
+        "source_type": "classical_text",
+        "verification_status": "verified",
+        "school_tag": "source_text_only"
+      },
+      "2026-09-24": {
+        "topic": "值符與值使：一個看星，一個看門",
+        "hook": "看到值符、值使先不用怕，它們不是同一件事。",
+        "data_file": "data/QMDJ_XiaJuan_Consolidated.json",
+        "system_line_id": "QMDJ_Juan30_L011",
+        "source_locator": "entries[line_id=QMDJ_Juan30_L011]；《奇門遁甲秘笈大全》下卷·卷30，段落11",
+        "original_quote": "此地盤一定不易者也。所謂地主靜也，五日換一元。天盤則時時不同，所謂天主動也。如乙丑時則以休門加天盤坤為值使，以值符天蓬星甲子戊加離九為值符，諸照此例。",
+        "source_type": "classical_text",
+        "verification_status": "verified",
+        "school_tag": "source_text_only"
       }
     }
   },
@@ -112,8 +147,12 @@
       "pairing": "承接上集同題、同圖騰、同五元組",
       "option_format": "五層完整解讀，每卡 220–300 字；使用狀態留白，不新增感官錨定"
     },
-    "型式三四": {
-      "data_boundary": "涉及命理資料必須先查 SSOT；不得套用動態盤象。"
+    "型式三": {
+      "data_boundary": "涉及紫微命理資料必須先查 SSOT；不得套用動態盤象。"
+    },
+    "型式四": {
+      "content_type": "奇門遁甲小知識",
+      "data_boundary": "固定附原文層、象義層、創作層；概念必須可反向定位至已驗證 SSOT，不作個人論斷。"
     }
   },
   "acceptance": [
@@ -123,6 +162,7 @@
     "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
     "型式一／五短解答維持 30–50 字；型式五問題聚焦維持 15 字內；貼士維持 50 字內；型式五下集完整解讀維持 220–300 字。",
     "所有可變文案均遵循 v3.4 的狀態→接住→轉向→留白、直接臺灣中文與抽象投射邊界；沒有假共感、過度量化或微觀感官場景，並通過 AI 腔、成分、搭配、用詞、語序、前後一致與邏輯關係的逐句複核。",
+    "型式四固定為奇門遁甲小知識；每篇含原文層、象義層與創作層，並可反向定位至已驗證 SSOT。",
     "五大型式文案排版輸出標準規範的區段 SHA-256 維持 16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0。"
   ]
 }
