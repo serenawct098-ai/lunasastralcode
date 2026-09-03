@@ -90,9 +90,9 @@ PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profi
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
 GUIDE_TITLE = "## 小說式描寫文風（v4.2｜唯一全局文風規範，奇門專用）"
 STYLE_MIGRATION_START = "2026-09-01"
-STANDARD_SHA256 = "35088559c9c13948284cafbaf8533a14998af2bc71b20725bef59688e9d1eac9"
+STANDARD_SHA256 = "3a91f1d6f23a820fd5e465bda645c80f625d208cefd864c6a79ba9a1d067aa48"
 GUIDE_SHA256 = "2e8e8b909ceabd7bd4674207c3e296c6e6adef8ca1785dbf440f5d5bcb25754e"
-PLAYBOOK_SHA256 = "d1b85b1f382b1422e2a8e785926a6d8e1aa92dafa6471cd0b233d2f9b2dfa6c3"
+PLAYBOOK_SHA256 = "915536646086dd1cffd4743e04633acd3f6b72c37c6c8e4129ad8d0feb3b1ad4"
 DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
 SERIAL_THEME_SHA256 = "b62693974c0a0ff07721c4947c2a56b4a1996be2880b21051813d29f920c3b30"
 CTA = {
@@ -1066,7 +1066,7 @@ def write_rule_map() -> None:
             "型式一／五短解答以約 50 字（20–60 字）為準；型式五問題聚焦維持 15 字內；貼士維持 50 字內；2026-09-01 起型式五下集完整解讀每卡至少 300 字。",
             "所有可變文案均遵循 v4.2 玄學小說式描寫：承接前後主題、以一至兩個準確細節推進；型式一／五盤象先行且不可移植至其他占卜工具；型式三／四先依 SSOT；均通過網文敘事、好寫作、直接中文、句法與邏輯複核。",
             "型式四固定為奇門遁甲小知識；每篇含原文層、象義層與創作層，並可反向定位至已驗證 SSOT。",
-            "五大型式文案排版輸出標準規範的區段 SHA-256 維持 35088559c9c13948284cafbaf8533a14998af2bc71b20725bef59688e9d1eac9。",
+            "五大型式文案排版輸出標準規範的區段 SHA-256 維持 3a91f1d6f23a820fd5e465bda645c80f625d208cefd864c6a79ba9a1d067aa48。",
         ],
     }
     RULE_MAP_FILE.write_text(json.dumps(rule_map, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

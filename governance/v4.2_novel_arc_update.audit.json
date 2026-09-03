@@ -37,5 +37,12 @@
     "git_diff_check": true,
     "fixed_template_mutation": false
   },
+  "template_history_cleanup": {
+    "scope": "五大型式文案排版輸出標準規範",
+    "removed_legacy_markers": ["文風軌道 A", "文風軌道 B", "巴納姆公式", "冷讀公式", "漸進模糊投射", "先抑後揚轉折"],
+    "replacement": "玄學小說式描寫：盤象或 SSOT 先行，小說式鏡頭、白話降維、必要細節、低門檻行動與留白。",
+    "standard_sha256": "3a91f1d6f23a820fd5e465bda645c80f625d208cefd864c6a79ba9a1d067aa48",
+    "verified": true
+  },
   "known_limit": "小說式描寫僅適用於註冊的可變文案；命理原文、術語、五元組與固定視覺規格不會因文風調整而改寫。"
 }
