@@ -1,0 +1,60 @@
+{
+  "audit_id": "luna-v4.1-playbook-and-september-rewrite-2026-09-03",
+  "scope": {
+    "playbook": "lunas_astral_code_master_playbook.md",
+    "scripts_from": "2026-09-01",
+    "protected_content": [
+      "固定模板",
+      "CTA",
+      "卡數",
+      "色碼",
+      "動態盤象五元組",
+      "SSOT 資料與原文層"
+    ]
+  },
+  "playbook": {
+    "version": "4.1",
+    "sha256": "5fec3ae0b3df8abac82fdfbe3ea38257c3d8ee62831a678d387f4d6d5846f931",
+    "fixed_template_sha256": "35088559c9c13948284cafbaf8533a14998af2bc71b20725bef59688e9d1eac9",
+    "rule_library_sha256": "4da9dc706da397cdf389644cc63ff1999879b120c1845d3ad6b78e3d03598d45"
+  },
+  "resolved_conflicts": [
+    {
+      "old_rule": "v3.4 的單一『狀態 → 接住 → 轉向 → 留白』與禁止場景規則",
+      "new_rule": "v4.1 雙軌：型式一／五為盤象先行的奇門專用軌道 A；型式二／三／四為允許必要場景的軌道 B",
+      "resolution": "移除舊版全局防場景攔截；保留外部結果保證、命定論、跨占卜體系與未受支持權威詞攔截。"
+    },
+    {
+      "old_rule": "型式五完整解讀以 220–300 個中文字計算",
+      "new_rule": "v4.1 要求每張至少 300 字",
+      "resolution": "改以非空白總字元計算，生成目標設定為 380–450 字元；避免標點、盤象與固定五層標記被錯誤排除。"
+    },
+    {
+      "old_rule": "短解答硬限 30–50 個中文字",
+      "new_rule": "新 playbook 指定約 50 字",
+      "resolution": "調整為 20–60 個中文字；避免為湊字數犧牲自然語氣。"
+    }
+  ],
+  "writing_route": [
+    "good-writing-tw：單一重點、刪冗與節奏",
+    "chinese-webnovel-studio：去模板感、去翻譯腔與句型去重",
+    "direct-chinese-writing：直接、精準的臺灣中文"
+  ],
+  "rewrite": {
+    "posts": 15,
+    "changed_slots": 57,
+    "evidence": "15 篇、57 個可變欄位均產生前後雜湊且已通過治理稽核；逐欄雜湊明細因不影響回退或驗收而未保留。",
+    "forms": ["型式一", "型式二", "型式三", "型式四", "型式五上集", "型式五下集"]
+  },
+  "verification": {
+    "governance_audit": {"posts_checked": 22, "pass": true, "issues": []},
+    "contract_tests": {"passed": 10},
+    "global_style_sync": "passed",
+    "json_parse": "passed",
+    "git_diff_check": "passed",
+    "fixed_template_mutation": false
+  },
+  "residual_notes": [
+    "舊 v3.4 字樣只存在於歷史稽核紀錄與回歸測試的負向斷言，不參與現行寫作路由。"
+  ]
+}

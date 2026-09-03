@@ -86,11 +86,11 @@ THEME_PLANS = {
 TYPE3_SSOT_TERMS = {date: plan["hook"].split("｜", 1)[0].replace("30 秒帶你看懂", "") for date, plan in THEME_PLANS.items() if "ssot" in plan}
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
-GUIDE_TITLE = "## IG 爆款奇門遁甲大眾占卜：文案寫作指南與規則庫"
-SENTENCE_QUALITY_TITLE = "#### 7.6 使用者文章風格與自然中文（v3.4，全局唯一文風規範）"
-STANDARD_SHA256 = "16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0"
-GUIDE_SHA256 = "a221471d624be4dee444fe7a097d91b986ec120031c63198f2d50ac3e77d9355"
-PLAYBOOK_SHA256 = "5b83c42cb8b1e6ae522a1ca1d77f723c9b5bb2febb0ec20a5677f16b44459928"
+GUIDE_TITLE = "## 文風雙軌制（v4.1｜唯一全局文風規範，奇門專用）"
+STYLE_MIGRATION_START = "2026-09-01"
+STANDARD_SHA256 = "35088559c9c13948284cafbaf8533a14998af2bc71b20725bef59688e9d1eac9"
+GUIDE_SHA256 = "4da9dc706da397cdf389644cc63ff1999879b120c1845d3ad6b78e3d03598d45"
+PLAYBOOK_SHA256 = "5fec3ae0b3df8abac82fdfbe3ea38257c3d8ee62831a678d387f4d6d5846f931"
 DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
@@ -115,8 +115,6 @@ TYPOGRAPHIC_BLOCKED = ("不子是", "占住")
 DANGLING_CONNECTIVES = ("而且", "並且", "以及", "或者", "或", "但是", "所以", "因此", "從而")
 RELATIONAL_PAIRS = (("不但", ("而且", "也")), ("不僅", ("也", "還")))
 OUTCOME_GUARANTEE_PATTERN = r"你(?:注定|必然|一定會|百分之百)|保證(?:你|會|得到)|只要[^。！？\n]{0,30}就會"
-FAKE_EMPATHY_REFRAME_PATTERN = r"你不是[^。！？\n]{1,24}[，,]?\s*(?:只是|而是)[^。！？\n]{1,32}"
-MICRO_SCENE_PATTERN = r"(?=[^。！？\n]*(?:深夜|房間|床上|咖啡|天花板|螢幕|手機|窗外|光線|燈光|雨聲))(?=[^。！？\n]*(?:坐著|躺著|站著|看著|拿著|滑著|盯著|發呆))"
 UNSUPPORTED_AUTHORITY_TERMS = ("心理諮商", "療癒技術", "臨床診斷", "投資保證")
 AI_STYLE_TELLS = ("真正的問題是", "本質上", "防護機制", "靜默力量", "底層邏輯", "賦能", "生命路徑", "能量消耗", "共振", "典範轉移", "改寫一切")
 
@@ -168,16 +166,23 @@ def sentence_quality_issues(text: str) -> list[str]:
 
 
 def semantic_boundary_issues(text: str) -> list[str]:
-    """Reject unsupported result promises or professional authority without changing protected facts."""
+    """Reject result promises and unsupported authority; v4.1 allows track-B scenes when useful."""
     issues = []
     if re.search(OUTCOME_GUARANTEE_PATTERN, text):
         issues.append("含外部結果承諾")
-    if re.search(FAKE_EMPATHY_REFRAME_PATTERN, text):
-        issues.append("含假共感原因改寫")
-    if re.search(MICRO_SCENE_PATTERN, text):
-        issues.append("含微觀感官場景")
     issues.extend(f"含不支援的專業權威詞：{term}" for term in UNSUPPORTED_AUTHORITY_TERMS if term in text)
     issues.extend(f"含常見 AI 腔：{term}" for term in AI_STYLE_TELLS if term in text)
+    return issues
+
+
+def track_a_issues(text: str, combo: dict) -> list[str]:
+    """Require Qimen-bound narration for Track A; reject generic portable divination prose."""
+    issues = []
+    forbidden = ("塔羅", "牌義", "牌陣", "星座", "宮位", "九型人格")
+    issues.extend(f"援引非奇門占卜體系：{term}" for term in forbidden if term in text)
+    required_terms = (combo.get("star", ""), combo.get("door", ""), combo.get("spirit", ""), combo.get("qi", ""), combo.get("hour", "") + "時", combo.get("direction", ""), combo.get("auspice", ""))
+    if not any(term and term in text for term in required_terms):
+        issues.append("軌道 A 未綁定已登錄奇門五元組，敘事可移植至其他占卜工具")
     return issues
 
 
@@ -278,7 +283,7 @@ def answer_slots(block: str, labels: str) -> list[dict]:
         match = re.search(rf"(?ms)^{label}：(.*?)(?=\n\n[{'|'.join(labels)}]：|\Z)", region)
         if not match:
             raise ValueError(f"Missing pinned answer {label}")
-        slots.append({"id": f"answer_{label}", "text": match.group(1).strip(), "minimum_cjk": 30, "maximum_cjk": 50, "short_dynamic": True})
+        slots.append({"id": f"answer_{label}", "text": match.group(1).strip(), "minimum_cjk": 20, "maximum_cjk": 60, "short_dynamic": True})
     return slots
 
 
@@ -291,7 +296,7 @@ def lower_cards(block: str) -> list[dict]:
         )
         if not match:
             raise ValueError(f"Missing latest-template lower card {label}")
-        slots.append({"id": f"card_{label}", "text": match.group(1).strip(), "minimum_cjk": 220, "maximum_cjk": 300})
+        slots.append({"id": f"card_{label}", "text": match.group(1).strip(), "minimum_chars": 300})
     return slots
 
 
@@ -335,7 +340,7 @@ def slots_for(block: str, kind: str) -> list[dict]:
         if len(lines) not in {3, 6}:
             raise ValueError(f"Type 4 needs three logical fields, got {len(lines)} prose lines")
         labels = ("scene", "check", "action") if len(lines) == 3 else ("scene_1", "scene_2", "check_1", "check_2", "action_1", "action_2")
-        return [hook_slot(block)] + [{"id": name, "text": value, "minimum_cjk": 0} for name, value in zip(labels, lines)]
+        return [{"id": name, "text": value, "minimum_cjk": 0} for name, value in zip(labels, lines)]
     if kind == "型式五上集":
         scene = re.search(r"(?ms)^心裡默念：(.*?)\n\n憑第一眼直覺", body)
         tip = re.search(r"(?ms)^🔮 C\. .*?\n\n(.*?)\n下一期帶你解鎖更多新的占卜提示～", body)
@@ -517,7 +522,7 @@ def split_long_sentence(line: str) -> str:
 
 def repair_three_field_boundaries(block: str, kind: str) -> str:
     """Repair only malformed variable prose whose sentence-level line breaks split a fixed three-field body."""
-    if kind not in {"型式二", "型式三", "型式四"}:
+    if kind not in {"型式二", "型式三"}:
         return block
     body = section(block, "正文：\n", "\n\nHashtags：")
     lines = [line.strip() for line in body.splitlines() if line.strip()]
@@ -567,12 +572,18 @@ def normalize_dynamic_option_heading(slots: list[dict], rewrites: dict[str, str]
 def request_rewrite(date: str, kind: str, header: str, slots: list[dict], theme: dict | None = None, retry: bool = False, feedback: str = "") -> dict[str, str]:
     payload_slots = []
     for slot in slots:
-        item = {key: slot[key] for key in ("id", "text", "minimum_cjk")}
+        item = {key: slot[key] for key in ("id", "text")}
+        if slot.get("minimum_cjk") is not None:
+            item["minimum_cjk"] = slot["minimum_cjk"]
+        if slot.get("minimum_chars") is not None:
+            item["minimum_chars"] = slot["minimum_chars"]
         if slot.get("maximum_cjk") is not None:
             item["maximum_cjk"] = slot["maximum_cjk"]
+        if slot.get("combo"):
+            item["combo"] = slot["combo"]
         if slot.get("must_include"):
             item["must_include"] = slot["must_include"]
-            item["combo"] = slot["combo"]
+        if slot.get("five_layer") or slot.get("short_dynamic"):
             item["five_layer"] = bool(slot.get("five_layer"))
             item["short_dynamic"] = bool(slot.get("short_dynamic"))
         if slot.get("upper_answer"):
@@ -580,33 +591,27 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], theme:
         if slot.get("hook_context"):
             item["hook_context"] = slot["hook_context"]
         payload_slots.append(item)
-    system = """你是繁體中文（臺灣）IG 奇門文案主筆。只能重寫 payload 內的可變欄位。Hook 與圖騰會由題材矩陣同步，請依 target_theme 的主題重寫其餘可變文案；未列入 payload 的 Hashtags、固定 CTA、卡片標題、視覺模板、日期、色碼與固定文字不得輸出或改動。
+    system = """你是繁體中文（臺灣）IG 奇門文案主筆。只能重寫 payload 內的可變欄位；未列入 payload 的 Hashtags、固定 CTA、卡片標題、圖騰、視覺模板、日期、色碼、卡數、盤象、SSOT 術語與固定文字不得輸出或改動。
 
-必須依 v3.4 文風重寫，四步鏈為「狀態 → 接住 → 轉向 → 留白」：先說一個可投射的狀態，再直接接住，必要時輕輕轉向，最後留白。這是取捨工具，不是每段必填公式；短文可只寫狀態加一句接住。用親近、直接、帶一點鼓勵的臺灣中文，不扮演高人，不做心理諮商，也不替讀者找原因。鼓勵要直接，例如「不用怕沒人懂，你可以的！」；不得寫「你不是……只是……」這類先替讀者判因、再翻轉的假共感。
+先做三個隱性編輯步驟：第一，依 good-writing-tw 先確定每段唯一重點，刪掉空泛升華、同義重複與無用修辭；第二，依 chinese-webnovel-studio 的去模板感原則，避免整齊排比、翻譯腔、假深刻與句型連續重複，讓句長與停頓自然；第三，依 direct-chinese-writing 使用直接、精準、臺灣讀者一眼懂的中文。保留原主題、事實、盤象、卡片用途與讀者可採取的行動。
 
-先保護所有日期、數字、固定 CTA、圖騰、星、門、神、奇儀、方位、時辰、吉凶、公式、SSOT 術語、五層標題與既有欄位結構。塔羅的牌名、牌義、牌陣、宇宙授權或命定結論不得寫入，也不得自動映射成奇門術語；只可遷移文章的句法、節奏、情感推進與自然表達。
+v4.1 文風雙軌，不可混用。型式一、型式五上集、型式五下集是軌道 A：奇門大眾占卜敘事。必須先依 payload 的五元組做盤象白話降維，再寫生活狀態、轉折和低門檻行動；不得把一般心理測驗、塔羅牌義、牌陣、星座或其他占卜術語移植進來。盤象先行：若刪除星、門、神、奇儀、方位、時辰、吉凶後，內容仍可原樣套用任意占卜工具，表示寫得太泛，必須改到與該五元組有明確關連。
 
-回到簡單、直白、日常的臺灣中文，優先使用「想、等、問、停、看、分清、放回、決定」等動詞。一句只承接一個狀態或方向；句長自然錯落，不把每句修成同一個節拍，也不用短句連發造勢。剝離官樣話、行業黑話、翻譯腔、假深刻與常見 AI 口頭禪；不要寫「真正的問題是」「本質上」「防護機制」「靜默力量」「底層邏輯」「賦能」「生命路徑」「能量消耗」「共振」。少用華麗或空洞形容詞。
+型式二、型式三、型式四是軌道 B：玄學小說敘事風。可以使用一個與主題真正有關的生活場景、物件、動作或內心轉折，讓讀者看見狀態如何推進；不必硬塞場景，也不能捏造精確日期、次數、金額、職業、對話紀錄或未提供的事實。型式三／四只可依 payload 既有的 SSOT 術語與來源寫白話說明；【原文層】、【象義層】、【創作層】逐字受保護，不得產生、刪除或改寫。不得把古籍內容延伸成個人斷語、醫療建議、法律建議、財務建議或結果保證。
 
-文案只寫關係、選擇、等待、界線、方向、心意與猶豫等可投射狀態。**不演場景，不補數字。** 不得捏造職業、地點、訊息往返、對話記錄、精準動作、身體反應、感官畫面、日期、次數、件數、步數、分鐘、具體事件或讀者未提供的經歷。可用「你可能」「也許」「有些事」留白，但每段最多一至兩次。抽象不等於含混：每句都要有可理解的主語、動詞、對象和因果。
+所有軌道共同遵守：不用「你不是……只是……」這類假共感，不扮演心理師，不替讀者編原因；不寫命定論、療效或外部結果保證。可寫具體的選擇、猶豫、界線、等待與行動，但不要堆「真正的問題是」「本質上」「防護機制」「靜默力量」「底層邏輯」「賦能」「生命路徑」「能量消耗」「共振」等 AI 腔。少用抽象靈性名詞；直接寫誰在面對甚麼、可以怎樣做。每句維持合理主語、動詞、對象與因果。
 
-「不是……而是……」只能用於前後在同一判準下真正形成對照的情況。不得寫「不是沒有機會，而是你沒問清楚」一類假對比；改成完整推進，例如「你可能很在意這段關係還有沒有機會。現在不必急著替它下結論；先弄清楚自己想知道甚麼，再決定要不要開口。」提問、行動或盤象不得被寫成保證外部結果的原因。
-
-避免心理諮商腔、命定論、假深刻、客服腔、翻譯腔、短句連發、金句公式、靈性名詞堆砌與中國用語。不要寫「你不是不夠好，你只是……」「真正的問題是」「本質上」「宇宙正在替你安排」「一切都會變好」「你很敏銳」「你並不孤單」。不要以「能量、頻率、課題、療癒、顯化」取代主語、動詞或因果。使用自然、完整的臺灣繁體中文；不以畫面、感官、量化細節、對比句或排比替內容加戲。
-
-型式四是奇門遁甲小知識：只用 payload 既有欄位寫白話說明，保留正文內受保護的【原文層】、【象義層】與【創作層】逐字內容；不得生成、改寫或刪除來源行，也不得把古籍原文延伸為個人斷語、吉凶保證或行動指示。
-
-型式一與型式五上集的短解答，只用抽象生活語言承接對應盤象，不塞入完整術語清單。只有 five_layer=true 才使用五層格式並換行：
-**選項 X：一句明確但非命定的主軸結論**
+five_layer=true 時，保留原有五層格式與換行：
+**選項 X：逐字沿用 upper_answer 的主軸結論**
 【盤象：星｜門｜神｜奇儀】
-‧ 表面現象：概括、可投射的狀態。
-‧ 盤象真相：先寫盤象術語，再以「白話來說，」開頭做自然的日常轉譯。
+‧ 表面現象：由盤象推導的具體狀態。
+‧ 盤象真相：先寫盤象術語，再以「白話來說，」自然轉譯。
 【時空與感官錨定】
-‧ 只使用已給定方向、時辰與吉凶；不加其他時間、數字或具體畫面。
+‧ 只使用 payload 已給定的方向、時辰與吉凶；可用與主題相關的輕量場景，不得另加未授權時間、數字或事件。
 【奇門行為改運】
-‧ 一至兩項低風險、讀者可決定的行動；不承諾對方反應或外部結果。
+‧ 提出一至兩項低風險、讀者可自行決定的行動；不承諾他人反應或外部結果。
 
-型式一與型式五上集短解答需 30–50 個中文字；型式五上集問題聚焦保留既有 Hook 的時間窗且 15 字內；貼士 50 字內。型式五下集每張完整解讀為 220–300 個中文字，每個模組至多兩句，內容以狀態、白話與一個低風險提醒為主，不能為湊字數增加情節。若有 upper_answer，下集第一行必須逐字沿用該答案的主軸。型式二、三、四維持原有欄位數；型式三／四不得改 SSOT 資料、公式、術語或來源。所有句子都要檢查成分、搭配、用詞、語序、前後一致和因果；不確定時保留原意，不自行補造結論。"""
+型式一與型式五上集短解答以約 50 個中文字為準，可落在 20–60 字；型式五上集問題聚焦保留既有 Hook 的時間窗且 15 字內；貼士 50 字內。型式五下集每張完整解讀以 380–450 個非空白字元為生成目標（硬下限 300 字元）；輸出前逐張自行計算，未達 380 字元時，只能補入與該盤象、方位、時辰或低風險行動直接相關的解讀，不得用空話湊字。若有 upper_answer，下集第一行必須逐字沿用其主軸。型式二、三、四維持原有欄位數及正文與視覺卡同步。所有句子要複核成分、搭配、用詞、語序、前後一致與因果；不確定時保留原意，不自行補造結論。"""
     user = {
         "date": date,
         "form": kind,
@@ -644,8 +649,11 @@ def five_layer_issues(date: str, text: str, label: str, combo: dict, lower: bool
     required = (f"**選項 {label}：", "【盤象：", "‧ 表面現象：", "‧ 盤象真相：", "【時空與感官錨定】", "【奇門行為改運】")
     issues = [f"{date} {label} 缺少五層模組：{value}" for value in required if value not in text]
     issues.extend(f"{date} {label} 缺少動態盤象值：{term}" for term in combo_terms(combo) if term not in text)
-    if cjk_count(text) < 220:
-        issues.append(f"{date} {label} 文字長度不足。")
+    minimum = 300 if date >= STYLE_MIGRATION_START else 220
+    count = len(re.sub(r"\s", "", text)) if date >= STYLE_MIGRATION_START else cjk_count(text)
+    if count < minimum:
+        unit = "非空白字元" if date >= STYLE_MIGRATION_START else "中文字"
+        issues.append(f"{date} {label} 文字長度不足 {minimum} {unit}。")
     if "白話來說" not in text and "簡單說" not in text:
         issues.append(f"{date} {label} 缺少術語白話轉譯。")
     if "你" not in text:
@@ -660,6 +668,7 @@ def five_layer_issues(date: str, text: str, label: str, combo: dict, lower: bool
         issues.append(f"{date} {label} 時空／體感錨定超過兩項。")
     if re.search(PRECISE_ANCHOR_PATTERN, text):
         issues.append(f"{date} {label} 使用精準風格錨定。")
+    issues.extend(f"{date} {label} 軌道 A 問題：{issue}" for issue in track_a_issues(text, combo))
     issues.extend(f"{date} {label} 句法品質問題：{issue}" for issue in sentence_quality_issues(text))
     issues.extend(f"{date} {label} 語意邊界問題：{issue}" for issue in semantic_boundary_issues(text))
     return issues
@@ -667,8 +676,8 @@ def five_layer_issues(date: str, text: str, label: str, combo: dict, lower: bool
 
 def short_dynamic_issues(date: str, text: str, label: str, combo: dict) -> list[str]:
     issues = []
-    if not 30 <= cjk_count(text) <= 50:
-        issues.append(f"{date} {label} 短解答未落在 30–50 字。")
+    if not 20 <= cjk_count(text) <= 60:
+        issues.append(f"{date} {label} 短解答未落在 20–60 字（約 50 字）。")
     issues.extend(f"{date} {label} 句法品質問題：{issue}" for issue in sentence_quality_issues(text))
     issues.extend(f"{date} {label} 語意邊界問題：{issue}" for issue in semantic_boundary_issues(text))
     return issues
@@ -682,8 +691,10 @@ def validate_rewrites(slots: list[dict], rewrites: dict[str, str]) -> None:
         value = rewrites[slot["id"]].strip()
         if not value or value == slot["text"]:
             raise ValueError(f"未實質重寫欄位：{slot['id']}")
-        if slot["minimum_cjk"] and cjk_count(value) < slot["minimum_cjk"]:
-            raise ValueError(f"欄位字數不足：{slot['id']}（{cjk_count(value)} 字，內容：{value[:160]!r}）")
+        if slot.get("minimum_cjk") and cjk_count(value) < slot["minimum_cjk"]:
+            raise ValueError(f"欄位字數不足：{slot['id']}（{cjk_count(value)} 個中文字，內容：{value[:160]!r}）")
+        if slot.get("minimum_chars") and len(re.sub(r"\s", "", value)) < slot["minimum_chars"]:
+            raise ValueError(f"欄位字數不足：{slot['id']}（{len(re.sub(r'\s', '', value))} 個非空白字元，內容：{value[:160]!r}）")
         if slot.get("maximum_cjk") is not None and cjk_count(value) > slot["maximum_cjk"]:
             raise ValueError(f"欄位超過字數上限：{slot['id']}（{cjk_count(value)} 字，內容：{value[:160]!r}）")
         if slot.get("short_window") and not re.search(r"近|接下來|未來|本週|近期", value):
@@ -713,10 +724,11 @@ def apply_theme_metadata(block: str, date: str, kind: str) -> str:
         return block
     changed = block
     old_hook = hook_slot(block)["text"]
-    changed = changed.replace(old_hook, plan["hook"])
-    if "｜" in old_hook and "｜" in plan["hook"]:
-        old_question, new_question = old_hook.rsplit("：", 1)[-1].split("｜", 1)[-1], plan["hook"].rsplit("：", 1)[-1].split("｜", 1)[-1]
-        changed = changed.replace(old_question, new_question)
+    if kind != "型式二":
+        changed = changed.replace(old_hook, plan["hook"])
+        if "｜" in old_hook and "｜" in plan["hook"]:
+            old_question, new_question = old_hook.rsplit("：", 1)[-1].split("｜", 1)[-1], plan["hook"].rsplit("：", 1)[-1].split("｜", 1)[-1]
+            changed = changed.replace(old_question, new_question)
     totems = plan.get("totems", {})
     if kind in {"型式一", "型式五上集"}:
         for label, totem in totems.items():
@@ -789,8 +801,16 @@ def current_contract_issues() -> list[str]:
         issues.append("固定模板合約雜湊不符。")
     if sha(text[guide:]) != GUIDE_SHA256:
         issues.append("規則庫合約雜湊不符。")
-    if SENTENCE_QUALITY_TITLE not in text[guide:] or "病句檢查是底線" not in text[guide:]:
-        issues.append("找不到全局唯一的 v3.4 文章風格與病句規範。")
+    required_v41 = (
+        "文風雙軌制（v4.1｜唯一全局文風規範，奇門專用）",
+        "軌道 A：奇門大眾占卜巴納姆／冷讀敘事風",
+        "軌道 B：玄學小說敘事風",
+        "盤象先行",
+        "不得援引塔羅牌義、牌陣、星座宮位",
+    )
+    missing = [marker for marker in required_v41 if marker not in text[guide:]]
+    if missing:
+        issues.append("v4.1 文風雙軌規範缺少：" + "、".join(missing))
     if not RULES_FILE.is_file() or sha(RULES_FILE.read_text(encoding="utf-8")) != DYNAMIC_RULES_SHA256:
         issues.append("動態盤象規則檔缺失或來源雜湊不符。")
     return issues
@@ -883,7 +903,7 @@ def block_issues(date: str, kind: str, block: str, assignments: dict[str, dict[s
             issues.append(f"{date} 缺少新題材計畫。")
         else:
             try:
-                if hook_slot(block)["text"] != plan["hook"]:
+                if kind != "型式二" and hook_slot(block)["text"] != plan["hook"]:
                     issues.append(f"{date} Hook 未套用題材計畫。")
             except ValueError as exc:
                 issues.append(f"{date} Hook 驗證失敗：{exc}")
@@ -980,23 +1000,31 @@ def write_rule_map() -> None:
             },
             "type4": TYPE4_QIMEN_SSOT,
         },
-        "sentence_quality": {
-            "version": "3.4",
-            "scope": "僅 Hook、正文、置頂解答、完整解讀與視覺卡中的可變文案；固定模板、CTA、版面與命理真值不適用。",
-            "style_source": "使用者上載的占卜／療癒型社群貼文截圖及其質性分析",
-            "style_application": ["第二人稱直接說話", "狀態→接住→轉向→留白", "自然句長與直接動詞", "簡單直白的臺灣中文", "術語後接白話轉譯", "禁止假共感與過度場景化"],
-            "abstraction_boundary": "保留關係、選擇、等待、界線等可投射狀態；不得捏造精準情景、人物行為、感官畫面、數量、日期、次數、件數或未提供的經歷；不加深夜、房間、咖啡、光線、聲音、身體反應、分鐘、步數、次數或鏡頭畫面；不得替第三人下定論、把解讀寫成事實或保證外部結果。",
-            "ai_style_exclusions": list(AI_STYLE_TELLS) + ["官樣話", "行業黑話", "翻譯腔", "空洞形容詞", "金句公式", "短句連發", "假共感原因改寫", "微觀感官場景", "過度量化"],
-            "categories": ["成分殘缺", "搭配不當", "用詞不當", "語序混亂", "前後矛盾", "邏輯混亂"],
-            "review_order": ["受保護內容", "原版文風與抽象邊界", "成分與標點", "搭配與用詞", "語序與指涉", "前後一致", "因果與推論"],
-            "automatic_gate": "只攔截高信心格式與句法風險；文風、語意、搭配、假對比與邏輯由模型逐句複核。",
-            "minimum_edit": "重寫不得改變事實、日期、數字、否定詞、已驗證命理資料或固定文字；中低信心語意選擇不得自動寫回。",
+        "writing_tracks": {
+            "version": "4.1",
+            "scope": "只適用 Hook、正文、置頂解答、完整解讀與視覺卡中註冊的可變文案；固定模板、CTA、盤象、SSOT 與視覺規格不適用。",
+            "skill_routing": ["good-writing-tw：刪冗、單一重點與節奏", "chinese-webnovel-studio：去模板感、去翻譯腔與句型去重", "direct-chinese-writing：直接、精準的臺灣中文"],
+            "track_a": {
+                "forms": ["型式一", "型式五"],
+                "name": "奇門大眾占卜巴納姆／冷讀敘事風",
+                "sequence": ["盤象先行", "白話降維", "生活狀態延伸", "低門檻行動"],
+                "anti_portability_gate": "不可套用塔羅、星座或其他占卜工具；每段必須能回查已登錄奇門五元組。"
+            },
+            "track_b": {
+                "forms": ["型式二", "型式三", "型式四"],
+                "name": "玄學小說敘事風",
+                "scene_allowed": True,
+                "rule": "允許與主題有關的生活場景、物件、動作與內心轉折；不得捏造精確日期、次數、金額、職業、對話紀錄或未提供事實。"
+            },
+            "common_boundary": "禁止醫療、法律、財務專業建議、命定論、療效或外部結果保證；不得以假共感替讀者編造人生原因。",
+            "sentence_categories": ["成分殘缺", "搭配不當", "用詞不當", "語序混亂", "前後矛盾", "邏輯混亂"],
+            "review_order": ["受保護內容", "軌道判定", "盤象或 SSOT 可追溯性", "單一重點與語域", "句法與標點", "搭配用詞", "前後一致與因果"],
             "fixed_template_exclusion": "五大型式文案排版輸出標準規範的固定模板及其固定字句、CTA、卡數、順序、媒介、秒數、色碼與視覺結構不得修改。"
         },
         "forms": {
-            "型式一": {"dynamic_options": "A–F", "option_format": "30–50 字動態盤象短解答"},
-            "型式五上集": {"dynamic_options": "A–C", "option_format": "問題聚焦 15 字內、貼士 50 字內、30–50 字短解答"},
-            "型式五下集": {"pairing": "承接上集同題、同圖騰、同五元組", "option_format": "五層完整解讀，每卡 220–300 字；使用狀態留白，不新增感官錨定"},
+            "型式一": {"dynamic_options": "A–F", "option_format": "約 50 字（20–60 字）動態盤象短解答"},
+            "型式五上集": {"dynamic_options": "A–C", "option_format": "問題聚焦 15 字內、貼士 50 字內、約 50 字（20–60 字）短解答"},
+            "型式五下集": {"pairing": "承接上集同題、同圖騰、同五元組", "option_format": "五層完整解讀；2026-09-01 起每卡至少 300 字，先盤象白話降維再延伸奇門敘事"},
             "型式三": {"data_boundary": "涉及紫微命理資料必須先查 SSOT；不得套用動態盤象。"},
             "型式四": {"content_type": "奇門遁甲小知識", "data_boundary": "固定附原文層、象義層、創作層；概念必須可反向定位至已驗證 SSOT，不作個人論斷。"},
         },
@@ -1005,10 +1033,10 @@ def write_rule_map() -> None:
             "五大型式固定模板、CTA、Hashtags、日期、型式、媒介、卡數、色碼與已發布內容不變。",
             "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
             "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
-            "型式一／五短解答維持 30–50 字；型式五問題聚焦維持 15 字內；貼士維持 50 字內；型式五下集完整解讀維持 220–300 字。",
-            "所有可變文案均遵循 v3.4 的狀態→接住→轉向→留白、直接臺灣中文與抽象投射邊界；沒有假共感、過度量化或微觀感官場景，並通過 AI 腔、成分、搭配、用詞、語序、前後一致與邏輯關係的逐句複核。",
+            "型式一／五短解答以約 50 字（20–60 字）為準；型式五問題聚焦維持 15 字內；貼士維持 50 字內；2026-09-01 起型式五下集完整解讀每卡至少 300 字。",
+            "所有可變文案均遵循 v4.1 雙軌：軌道 A 盤象先行且不可移植至其他占卜工具；軌道 B 可使用必要場景敘事；均通過好寫作、去模板感、直接中文、句法與邏輯複核。",
             "型式四固定為奇門遁甲小知識；每篇含原文層、象義層與創作層，並可反向定位至已驗證 SSOT。",
-            "五大型式文案排版輸出標準規範的區段 SHA-256 維持 16524110c8ce487a0ce2337331341ee12b86db17c5208528ade37ca84aa94bd0。",
+            "五大型式文案排版輸出標準規範的區段 SHA-256 維持 35088559c9c13948284cafbaf8533a14998af2bc71b20725bef59688e9d1eac9。",
         ],
     }
     RULE_MAP_FILE.write_text(json.dumps(rule_map, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -1036,8 +1064,7 @@ def migrate_registry(args) -> int:
 
 def sync(args) -> int:
     if args.dry_run:
-        print(json.dumps({"playbook_contract": {"playbook": PLAYBOOK_SHA256, "standard": STANDARD_SHA256, "guide": GUIDE_SHA256},         "sentence_quality": "狀態、接住、轉向、留白與句法底線（可變文案專用）",
- "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": len(list(unpublished_blocks()))}, ensure_ascii=False))
+        print(json.dumps({"playbook_contract": {"playbook": PLAYBOOK_SHA256, "standard": STANDARD_SHA256, "guide": GUIDE_SHA256}, "writing_tracks": "v4.1 奇門專用雙軌：盤象先行／玄學小說敘事（可變文案專用）", "dynamic_rules_sha256": DYNAMIC_RULES_SHA256, "posts": len(list(unpublished_blocks()))}, ensure_ascii=False))
         return 0
     write_rule_map()
     print(json.dumps({"synced": True, "changed_files": [str(RULE_MAP_FILE.relative_to(ROOT))], "fixed_template_mutation": False}, ensure_ascii=False))
