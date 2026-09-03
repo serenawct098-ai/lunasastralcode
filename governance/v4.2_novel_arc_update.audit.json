@@ -1,0 +1,41 @@
+{
+  "version": "4.2",
+  "scope": {
+    "unpublished_posts": 23,
+    "date_range": "2026-08-20 to 2026-09-28",
+    "added_pair": {
+      "upper": "2026-09-26",
+      "lower": "2026-09-28"
+    },
+    "writing_mode": "玄學小說式描寫",
+    "theme_map": "governance/script_theme_arc_v42.json"
+  },
+  "writing_route": [
+    "chinese-webnovel-studio",
+    "good-writing-tw",
+    "direct-chinese-writing"
+  ],
+  "protected_content": [
+    "五大型式固定模板結構",
+    "CTA",
+    "卡數",
+    "色碼",
+    "動態盤象五元組",
+    "型式三與型式四 SSOT"
+  ],
+  "validation": {
+    "governance_audit": {
+      "posts_checked": 23,
+      "pass": true
+    },
+    "regression_tests": {
+      "count": 12,
+      "pass": true
+    },
+    "global_style_sync": true,
+    "theme_map_json": true,
+    "git_diff_check": true,
+    "fixed_template_mutation": false
+  },
+  "known_limit": "小說式描寫僅適用於註冊的可變文案；命理原文、術語、五元組與固定視覺規格不會因文風調整而改寫。"
+}

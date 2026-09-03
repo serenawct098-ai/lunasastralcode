@@ -31,9 +31,9 @@ FILES = (
     ROOT / "scripts/60day_scripts_W4-W9_20260817-20260925.md",
     ROOT / "scripts/60day_scripts_W7-W9_20260905-20260926.md",
 )
-MODEL = "gpt-5-mini"
+MODEL = "gpt-5"
 PUBLISHED = {"2026-08-17", "2026-08-18"}
-THEME_START = "2026-08-25"
+THEME_START = "2026-08-20"
 TYPE3_SSOT = {
     "2026-08-20": {"data_file": "data/ZWQS_Juan2_Consolidated.json", "source_locator": "ZWQS_Juan2_AnSihua_L002", "intent": "sihua", "palaces": []},
     "2026-09-03": {"data_file": "engines/diagnosis_router_module_v1.json", "source_locator": "routing_rules[4].palace_priority[0] = 福德宮", "intent": "inner_spirit_resilience", "palaces": ["福德宮"]},
@@ -62,36 +62,39 @@ TYPE4_QIMEN_SSOT = {
         "source_type": "classical_text", "verification_status": "verified", "school_tag": "source_text_only",
     },
 }
-THEME_PLANS = {
-    "2026-08-26": {"topic": "九月人際節奏", "hook": "9 月人際節奏｜哪一種互動最值得你先回覆？", "totems": {"A": "紙飛機圖騰", "B": "耳機圖騰", "C": "咖啡杯圖騰", "D": "空椅圖騰", "E": "窗框圖騰", "F": "書頁圖騰"}},
-    "2026-08-27": {"topic": TYPE4_QIMEN_SSOT["2026-08-27"]["topic"], "hook": TYPE4_QIMEN_SSOT["2026-08-27"]["hook"], "ssot": TYPE4_QIMEN_SSOT["2026-08-27"]},
-    "2026-08-29": {"topic": "重新安排界線、步調與承諾", "hook": "大眾奇門占卜｜接下來一個月，你最需要重新安排的是界線、步調，還是承諾？", "scene": "接下來一個月，先重整甚麼？", "totems": {"A": "門檻圖騰", "B": "時鐘圖騰", "C": "繩結圖騰"}},
-    "2026-08-31": {"topic": "重新安排界線、步調與承諾", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要重新安排的是界線、步調，還是承諾？", "totems": {"A": "門檻圖騰", "B": "時鐘圖騰", "C": "繩結圖騰"}},
-    "2026-09-02": {"topic": "把疲憊留在事情之外", "hook": "有些疲憊不是事情太多，是每一件事都還留在你心裡。"},
-    "2026-09-03": {"topic": "福德宮與心裡的聲音", "hook": "30 秒帶你看懂福德宮｜先把心裡的聲音分開看", "ssot": TYPE3_SSOT["2026-09-03"]},
-    "2026-09-05": {"topic": "說清楚需求、界線與期待", "hook": "大眾奇門占卜｜接下來一個月，你最需要說清楚的是需求、界線，還是期待？", "scene": "接下來一個月，先說清甚麼？", "totems": {"A": "話框圖騰", "B": "尺線圖騰", "C": "信封圖騰"}},
-    "2026-09-07": {"topic": "說清楚需求、界線與期待", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要說清楚的是需求、界線，還是期待？", "totems": {"A": "話框圖騰", "B": "尺線圖騰", "C": "信封圖騰"}},
-    "2026-09-09": {"topic": "九月生活留白", "hook": "9 月生活留白｜哪一個畫面最提醒你先留點空間？", "totems": {"A": "雨傘圖騰", "B": "窗戶圖騰", "C": "杯子圖騰", "D": "空椅圖騰", "E": "地圖圖騰", "F": "雲朵圖騰"}},
-    "2026-09-10": {"topic": TYPE4_QIMEN_SSOT["2026-09-10"]["topic"], "hook": TYPE4_QIMEN_SSOT["2026-09-10"]["hook"], "ssot": TYPE4_QIMEN_SSOT["2026-09-10"]},
-    "2026-09-12": {"topic": "練習拒絕、交付與停下來", "hook": "大眾奇門占卜｜接下來一個月，你最需要練習的是拒絕、交付，還是停下來？", "scene": "接下來一個月，先練習甚麼？", "totems": {"A": "門把圖騰", "B": "紙箱圖騰", "C": "月亮圖騰"}},
-    "2026-09-14": {"topic": "練習拒絕、交付與停下來", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要練習的是拒絕、交付，還是停下來？", "totems": {"A": "門把圖騰", "B": "紙箱圖騰", "C": "月亮圖騰"}},
-    "2026-09-16": {"topic": "做得夠好與留有空間", "hook": "你一直想把事情做到最好，卻很少問自己：這樣下去，還有沒有空間呼吸？"},
-    "2026-09-17": {"topic": "遷移宮與外在節奏", "hook": "30 秒帶你看懂遷移宮｜從你走出去的方式，看外在節奏", "ssot": TYPE3_SSOT["2026-09-17"]},
-    "2026-09-19": {"topic": "辨認合作訊號", "hook": "大眾奇門占卜｜接下來一個月，你最需要辨認的是哪一種合作訊號？", "scene": "接下來一個月，先辨認甚麼？", "totems": {"A": "拼圖圖騰", "B": "門票圖騰", "C": "指南針圖騰"}},
-    "2026-09-21": {"topic": "辨認合作訊號", "hook": "大眾奇門占卜｜完整解讀公佈：接下來一個月，你最需要辨認的是哪一種合作訊號？", "totems": {"A": "拼圖圖騰", "B": "門票圖騰", "C": "指南針圖騰"}},
-    "2026-09-23": {"topic": "九月收尾整理", "hook": "9 月收尾整理｜哪一個角落最值得你先清出位置？", "totems": {"A": "抽屜圖騰", "B": "桌燈圖騰", "C": "鑰匙圖騰", "D": "書籤圖騰", "E": "空盒圖騰", "F": "盆栽圖騰"}},
-    "2026-09-24": {"topic": TYPE4_QIMEN_SSOT["2026-09-24"]["topic"], "hook": TYPE4_QIMEN_SSOT["2026-09-24"]["hook"], "ssot": TYPE4_QIMEN_SSOT["2026-09-24"]},
-    "2026-09-26": {"topic": "年底前練習開口、取捨與放慢", "hook": "大眾奇門占卜｜年底前，你最需要練習的是開口、取捨，還是放慢？", "scene": "接下來，先練習甚麼？", "totems": {"A": "麥克風圖騰", "B": "岔路圖騰", "C": "沙發圖騰"}},
-}
-TYPE3_SSOT_TERMS = {date: plan["hook"].split("｜", 1)[0].replace("30 秒帶你看懂", "") for date, plan in THEME_PLANS.items() if "ssot" in plan}
+SERIAL_THEME_FILE = ROOT / "governance/script_theme_arc_v42.json"
+
+
+def load_theme_plans() -> dict[str, dict]:
+    payload = json.loads(SERIAL_THEME_FILE.read_text(encoding="utf-8"))
+    if payload.get("version") != "4.2":
+        raise ValueError("主題地圖版本必須為 v4.2。")
+    plans = {}
+    for date, raw in payload["posts"].items():
+        plan = {key: value for key, value in raw.items() if key not in {"act", "function", "ssot"}}
+        plan["arc_act"] = raw["act"]
+        plan["function"] = raw["function"]
+        plan["bridge_from"] = raw["bridge_from"]
+        plan["bridge_to"] = raw["bridge_to"]
+        if raw.get("ssot") == "type3":
+            plan["ssot"] = TYPE3_SSOT[date]
+        elif raw.get("ssot") == "type4":
+            plan["ssot"] = TYPE4_QIMEN_SSOT[date]
+        plans[date] = plan
+    return plans
+
+
+THEME_PLANS = load_theme_plans()
+TYPE3_SSOT_TERMS = {"2026-08-20": "四化標記", "2026-09-03": "福德宮", "2026-09-17": "遷移宮"}
 PENDING = "【待記錄】發布後48小時：reach / 非追蹤者觸及 / profile visits / website clicks / DM / saves / shares"
 STANDARD_START = "## 【五大型式文案排版輸出標準規範】"
-GUIDE_TITLE = "## 文風雙軌制（v4.1｜唯一全局文風規範，奇門專用）"
+GUIDE_TITLE = "## 小說式描寫文風（v4.2｜唯一全局文風規範，奇門專用）"
 STYLE_MIGRATION_START = "2026-09-01"
 STANDARD_SHA256 = "35088559c9c13948284cafbaf8533a14998af2bc71b20725bef59688e9d1eac9"
-GUIDE_SHA256 = "4da9dc706da397cdf389644cc63ff1999879b120c1845d3ad6b78e3d03598d45"
-PLAYBOOK_SHA256 = "5fec3ae0b3df8abac82fdfbe3ea38257c3d8ee62831a678d387f4d6d5846f931"
+GUIDE_SHA256 = "2e8e8b909ceabd7bd4674207c3e296c6e6adef8ca1785dbf440f5d5bcb25754e"
+PLAYBOOK_SHA256 = "d1b85b1f382b1422e2a8e785926a6d8e1aa92dafa6471cd0b233d2f9b2dfa6c3"
 DYNAMIC_RULES_SHA256 = "0c2c78bfbce6054423698de3905bd3b2efbfa5400f542f15728391da1c5956a5"
+SERIAL_THEME_SHA256 = "b62693974c0a0ff07721c4947c2a56b4a1996be2880b21051813d29f920c3b30"
 CTA = {
     "型式一": "下方留言 A / B / C / D / E / F 👇🏻\n【解答將於 24 小時後置頂留言區】",
     "型式二": "點擊「追蹤」隨時陪伴在你身邊～",
@@ -347,7 +350,7 @@ def slots_for(block: str, kind: str) -> list[dict]:
         if not scene or not tip:
             raise ValueError("Type 5 upper scene or tip missing")
         slots = [
-            {"id": "scene", "text": scene.group(1).strip(), "minimum_cjk": 1, "maximum_cjk": 15, "short_window": True, "hook_context": hook_slot(block)["text"]},
+            {"id": "scene", "text": scene.group(1).strip(), "minimum_cjk": 1, "maximum_cjk": 25, "short_window": True, "hook_context": hook_slot(block)["text"]},
             {"id": "tip", "text": tip.group(1).strip(), "minimum_cjk": 1, "maximum_cjk": 50},
         ]
         slots.extend(answer_slots(block, "ABC"))
@@ -593,13 +596,15 @@ def request_rewrite(date: str, kind: str, header: str, slots: list[dict], theme:
         payload_slots.append(item)
     system = """你是繁體中文（臺灣）IG 奇門文案主筆。只能重寫 payload 內的可變欄位；未列入 payload 的 Hashtags、固定 CTA、卡片標題、圖騰、視覺模板、日期、色碼、卡數、盤象、SSOT 術語與固定文字不得輸出或改動。
 
-先做三個隱性編輯步驟：第一，依 good-writing-tw 先確定每段唯一重點，刪掉空泛升華、同義重複與無用修辭；第二，依 chinese-webnovel-studio 的去模板感原則，避免整齊排比、翻譯腔、假深刻與句型連續重複，讓句長與停頓自然；第三，依 direct-chinese-writing 使用直接、精準、臺灣讀者一眼懂的中文。保留原主題、事實、盤象、卡片用途與讀者可採取的行動。
+先做三個隱性編輯步驟：第一，依 chinese-webnovel-studio 先讀 payload 的 topic、bridge_from 與 bridge_to，決定一個由前篇帶來、又能留給下篇的微型情境；只用一至兩個準確細節（物件、動作、停頓或對話前的空白），讓狀態自己說話。第二，依 good-writing-tw 刪掉空泛升華、同義重複與無用修辭，調整長短句與停頓，但不可把文字磨成節拍器。第三，依 direct-chinese-writing 使用直接、精準、臺灣讀者一眼懂的中文。保留原主題、事實、盤象、卡片用途與讀者可採取的行動。
 
-v4.1 文風雙軌，不可混用。型式一、型式五上集、型式五下集是軌道 A：奇門大眾占卜敘事。必須先依 payload 的五元組做盤象白話降維，再寫生活狀態、轉折和低門檻行動；不得把一般心理測驗、塔羅牌義、牌陣、星座或其他占卜術語移植進來。盤象先行：若刪除星、門、神、奇儀、方位、時辰、吉凶後，內容仍可原樣套用任意占卜工具，表示寫得太泛，必須改到與該五元組有明確關連。
+v4.2 小說式描寫。型式一、二、三、四、五都使用玄學小說式描寫：依 payload 的 topic、bridge_from 與 bridge_to，先寫一個能投射的微型情境，再讓命理白話、知識或行動自然推進。每篇只用一至兩個準確細節（物件、動作、停頓或對話前的空白），讓狀態自己說話；不要替讀者編造真實經歷、精確日期、次數、金額、職業或對話紀錄，也不要堆砌感官畫面。
 
-型式二、型式三、型式四是軌道 B：玄學小說敘事風。可以使用一個與主題真正有關的生活場景、物件、動作或內心轉折，讓讀者看見狀態如何推進；不必硬塞場景，也不能捏造精確日期、次數、金額、職業、對話紀錄或未提供的事實。型式三／四只可依 payload 既有的 SSOT 術語與來源寫白話說明；【原文層】、【象義層】、【創作層】逐字受保護，不得產生、刪除或改寫。不得把古籍內容延伸成個人斷語、醫療建議、法律建議、財務建議或結果保證。
+型式一、型式五上集、型式五下集仍須盤象先行：先依 payload 的五元組寫星、門、神、奇儀、方位、時辰與吉凶的白話，再把微型情境扣回盤象，最後給一個讀者能自行決定的低風險下一步。不得把一般心理測驗、塔羅牌義、牌陣、星座或其他占卜術語移植進來。型式五上下集必須同題、同圖騰、同五元組；下集第一行仍逐字保留 upper_answer 的主軸。
 
-所有軌道共同遵守：不用「你不是……只是……」這類假共感，不扮演心理師，不替讀者編原因；不寫命定論、療效或外部結果保證。可寫具體的選擇、猶豫、界線、等待與行動，但不要堆「真正的問題是」「本質上」「防護機制」「靜默力量」「底層邏輯」「賦能」「生命路徑」「能量消耗」「共振」等 AI 腔。少用抽象靈性名詞；直接寫誰在面對甚麼、可以怎樣做。每句維持合理主語、動詞、對象與因果。
+型式二、型式三、型式四同樣使用小說式片段，但型式三／四只可依 payload 已有 SSOT 術語與來源寫白話說明。型式四的【原文層】、【象義層】、【創作層】逐字受保護，不得產生、刪除或改寫。不得把古籍內容延伸成個人斷語、醫療建議、法律建議、財務建議或結果保證。
+
+依序使用三個寫作 skill：先用 chinese-webnovel-studio 決定承接、情境與留白；再用 good-writing-tw 刪冗、調整節奏，不把句子磨成同一拍；最後用 direct-chinese-writing 改為直接、自然、臺灣讀者易懂的中文。所有型式都不用「你不是……只是……」這類假共感，不扮演心理師，不替讀者編原因；不寫命定論、療效或外部結果保證。不要堆「真正的問題是」「本質上」「防護機制」「靜默力量」「底層邏輯」「賦能」「生命路徑」「能量消耗」「共振」等 AI 腔。每句維持合理主語、動詞、對象與因果。
 
 five_layer=true 時，保留原有五層格式與換行：
 **選項 X：逐字沿用 upper_answer 的主軸結論**
@@ -801,18 +806,23 @@ def current_contract_issues() -> list[str]:
         issues.append("固定模板合約雜湊不符。")
     if sha(text[guide:]) != GUIDE_SHA256:
         issues.append("規則庫合約雜湊不符。")
-    required_v41 = (
-        "文風雙軌制（v4.1｜唯一全局文風規範，奇門專用）",
-        "軌道 A：奇門大眾占卜巴納姆／冷讀敘事風",
-        "軌道 B：玄學小說敘事風",
-        "盤象先行",
+    required_v42 = (
+        "小說式描寫文風（v4.2｜唯一全局文風規範，奇門專用）",
+        "型式一、二、三、四、五都使用**玄學小說式描寫**",
+        "一至兩個可感知細節",
+        "盤象先行，不可調換",
         "不得援引塔羅牌義、牌陣、星座宮位",
+        "`chinese-webnovel-studio`",
+        "`good-writing-tw`",
+        "`direct-chinese-writing`",
     )
-    missing = [marker for marker in required_v41 if marker not in text[guide:]]
+    missing = [marker for marker in required_v42 if marker not in text[guide:]]
     if missing:
-        issues.append("v4.1 文風雙軌規範缺少：" + "、".join(missing))
+        issues.append("v4.2 小說式描寫規範缺少：" + "、".join(missing))
     if not RULES_FILE.is_file() or sha(RULES_FILE.read_text(encoding="utf-8")) != DYNAMIC_RULES_SHA256:
         issues.append("動態盤象規則檔缺失或來源雜湊不符。")
+    if not SERIAL_THEME_FILE.is_file() or sha(SERIAL_THEME_FILE.read_text(encoding="utf-8")) != SERIAL_THEME_SHA256:
+        issues.append("v4.2 主題地圖缺失或來源雜湊不符。")
     return issues
 
 
@@ -944,6 +954,25 @@ def cross_post_issues(posts: list[tuple[Path, str, str, str]], assignments: dict
     return issues
 
 
+def serial_arc_issues(posts: list[tuple[Path, str, str, str]]) -> list[str]:
+    issues = []
+    ordered = [date for _, date, _, _ in posts]
+    if len(ordered) != 23:
+        return [f"v4.2 主題地圖預期 23 篇，實際為 {len(ordered)}。"]
+    for index, date in enumerate(ordered):
+        plan = THEME_PLANS.get(date)
+        if not plan:
+            issues.append(f"{date} 缺少 v4.2 主題地圖。")
+            continue
+        if not plan.get("bridge_from") or not plan.get("bridge_to"):
+            issues.append(f"{date} 缺少主題承接或後續鉤子。")
+        if index and plan.get("bridge_from") == "無":
+            issues.append(f"{date} 不可在主題中段斷開承接。")
+    if pair_map(posts).get("2026-09-28") != "2026-09-26":
+        issues.append("2026-09-28 未承接 2026-09-26 型式五上集。")
+    return issues
+
+
 def audit() -> int:
     issues = current_contract_issues()
     posts = list(unpublished_blocks())
@@ -957,9 +986,9 @@ def audit() -> int:
                 if any(stored_combo.get(field) != derived[field] for field in fields):
                     issues.append(f"{stored_date} {stored_label} 五元組或顯示欄位未與 v2.0 規則一致。")
     except Exception as exc:
-        print(json.dumps({"posts_checked": 22, "pass": False, "issues": issues + [str(exc)]}, ensure_ascii=False, indent=2))
+        print(json.dumps({"posts_checked": 23, "pass": False, "issues": issues + [str(exc)]}, ensure_ascii=False, indent=2))
         return 1
-    if len(posts) != 22:
+    if len(posts) != 23:
         issues.append(f"未發布腳本數量錯誤：{len(posts)}。")
     primary_keys = []
     for _, date, header, block in posts:
@@ -972,6 +1001,7 @@ def audit() -> int:
     if len(primary_keys) != 36:
         issues.append(f"動態盤象主選項數量錯誤：{len(primary_keys)}，預期 36。")
     issues.extend(cross_post_issues(posts, assignments))
+    issues.extend(serial_arc_issues(posts))
     print(json.dumps({"posts_checked": len(posts), "pass": not issues, "issues": issues}, ensure_ascii=False, indent=2))
     return 0 if not issues else 1
 
@@ -1000,25 +1030,25 @@ def write_rule_map() -> None:
             },
             "type4": TYPE4_QIMEN_SSOT,
         },
+        "serial_theme_map": {
+            "source": "governance/script_theme_arc_v42.json",
+            "source_sha256": SERIAL_THEME_SHA256,
+            "posts": 23,
+            "arc": ["看見", "清出空位", "把話說到門口", "在決定前停一拍", "留一盞燈給下一步"],
+            "pairing": "每組型式五上／下集同題、同圖騰、同五元組；2026-09-28 承接 2026-09-26。"
+        },
         "writing_tracks": {
-            "version": "4.1",
+            "version": "4.2",
             "scope": "只適用 Hook、正文、置頂解答、完整解讀與視覺卡中註冊的可變文案；固定模板、CTA、盤象、SSOT 與視覺規格不適用。",
-            "skill_routing": ["good-writing-tw：刪冗、單一重點與節奏", "chinese-webnovel-studio：去模板感、去翻譯腔與句型去重", "direct-chinese-writing：直接、精準的臺灣中文"],
-            "track_a": {
-                "forms": ["型式一", "型式五"],
-                "name": "奇門大眾占卜巴納姆／冷讀敘事風",
-                "sequence": ["盤象先行", "白話降維", "生活狀態延伸", "低門檻行動"],
-                "anti_portability_gate": "不可套用塔羅、星座或其他占卜工具；每段必須能回查已登錄奇門五元組。"
-            },
-            "track_b": {
-                "forms": ["型式二", "型式三", "型式四"],
-                "name": "玄學小說敘事風",
-                "scene_allowed": True,
-                "rule": "允許與主題有關的生活場景、物件、動作與內心轉折；不得捏造精確日期、次數、金額、職業、對話紀錄或未提供事實。"
-            },
+            "style": "玄學小說式描寫：狀態／鏡頭→動作或停頓→命理白話或知識→可掌握的下一步→留白。",
+            "skill_routing": ["chinese-webnovel-studio：承接、微型情境與留白", "good-writing-tw：刪冗與自然節奏", "direct-chinese-writing：直接、精準的臺灣中文"],
+            "all_forms": ["型式一", "型式二", "型式三", "型式四", "型式五上集", "型式五下集"],
+            "qimen_gate": "型式一／五盤象先行；情境必須緊扣已登錄五元組，不可移植塔羅、星座或其他占卜工具。",
+            "ssot_gate": "型式三／四先依 SSOT；型式四固定保存原文層、象義層、創作層。",
+            "narrative_gate": "每篇承接前一篇的問題、物件或狀態，並為下一篇留下可回答的問題；每篇僅一至兩個準確細節，不虛構未提供的個人事實。",
             "common_boundary": "禁止醫療、法律、財務專業建議、命定論、療效或外部結果保證；不得以假共感替讀者編造人生原因。",
             "sentence_categories": ["成分殘缺", "搭配不當", "用詞不當", "語序混亂", "前後矛盾", "邏輯混亂"],
-            "review_order": ["受保護內容", "軌道判定", "盤象或 SSOT 可追溯性", "單一重點與語域", "句法與標點", "搭配用詞", "前後一致與因果"],
+            "review_order": ["受保護內容", "主題承接", "盤象或 SSOT 可追溯性", "小說式微型情境", "單一重點與語域", "句法與標點", "搭配用詞", "前後一致與因果"],
             "fixed_template_exclusion": "五大型式文案排版輸出標準規範的固定模板及其固定字句、CTA、卡數、順序、媒介、秒數、色碼與視覺結構不得修改。"
         },
         "forms": {
@@ -1029,12 +1059,12 @@ def write_rule_map() -> None:
             "型式四": {"content_type": "奇門遁甲小知識", "data_boundary": "固定附原文層、象義層、創作層；概念必須可反向定位至已驗證 SSOT，不作個人論斷。"},
         },
         "acceptance": [
-            "22 篇未發布腳本的每個註冊可變欄位在重寫前後均有不同 SHA-256。",
+            "23 篇未發布腳本的每個註冊可變欄位在重寫前後均有不同 SHA-256。",
             "五大型式固定模板、CTA、Hashtags、日期、型式、媒介、卡數、色碼與已發布內容不變。",
             "型式一／五各選項盤象與視覺、正文、置頂解答、上下集完全一致。",
             "治理稽核、發布節奏、卡片視覺與 Git 格式檢查全部通過。",
             "型式一／五短解答以約 50 字（20–60 字）為準；型式五問題聚焦維持 15 字內；貼士維持 50 字內；2026-09-01 起型式五下集完整解讀每卡至少 300 字。",
-            "所有可變文案均遵循 v4.1 雙軌：軌道 A 盤象先行且不可移植至其他占卜工具；軌道 B 可使用必要場景敘事；均通過好寫作、去模板感、直接中文、句法與邏輯複核。",
+            "所有可變文案均遵循 v4.2 玄學小說式描寫：承接前後主題、以一至兩個準確細節推進；型式一／五盤象先行且不可移植至其他占卜工具；型式三／四先依 SSOT；均通過網文敘事、好寫作、直接中文、句法與邏輯複核。",
             "型式四固定為奇門遁甲小知識；每篇含原文層、象義層與創作層，並可反向定位至已驗證 SSOT。",
             "五大型式文案排版輸出標準規範的區段 SHA-256 維持 35088559c9c13948284cafbaf8533a14998af2bc71b20725bef59688e9d1eac9。",
         ],
@@ -1082,8 +1112,8 @@ def rewrite(args) -> int:
         return 0
     write_rule_map()
     posts = list(unpublished_blocks())
-    if len(posts) != 22:
-        raise ValueError(f"Expected 22 unpublished posts, got {len(posts)}")
+    if len(posts) != 23:
+        raise ValueError(f"Expected 23 unpublished posts, got {len(posts)}")
     rules, registry = load_rules(), load_json(REGISTRY_FILE)
     assignments = dynamic_assignments(posts, registry, rules, persist=False)
     blocks_by_date = {date: block for _, date, _, block in posts}
