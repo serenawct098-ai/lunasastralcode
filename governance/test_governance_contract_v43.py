@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cross-file contract checks for the v4.2 Qimen-novelistic Playbook."""
+"""Cross-file contract checks for the v4.3 Qimen-novelistic Playbook."""
 from __future__ import annotations
 
 import importlib.util
@@ -15,14 +15,24 @@ GOVERNANCE = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(GOVERNANCE)
 
 
-class GovernanceContractV42Test(unittest.TestCase):
-    def test_rule_map_locks_v42_novelistic_voice_and_independent_five_tuple(self) -> None:
+class GovernanceContractV43Test(unittest.TestCase):
+    def test_active_playbook_removes_type_two_and_september_sixteenth_uses_type_one(self) -> None:
+        playbook = (ROOT / "lunas_astral_code_master_playbook.md").read_text(encoding="utf-8")
+        posts = list(GOVERNANCE.unpublished_blocks())
+        _, date, header, block = next(item for item in posts if item[1] == "2026-09-16")
+
+        self.assertNotIn("### 型式二", playbook)
+        self.assertEqual(date, "2026-09-16")
+        self.assertEqual(GOVERNANCE.form(header), "型式一")
+        self.assertEqual([slot["id"] for slot in GOVERNANCE.answer_slots(block, "ABCDEF")], [f"answer_{label}" for label in "ABCDEF"])
+
+    def test_rule_map_locks_v43_novelistic_voice_and_independent_five_tuple(self) -> None:
         rule_map = json.loads((ROOT / "governance/latest_playbook_rule_map.json").read_text(encoding="utf-8"))
         registry = json.loads((ROOT / "governance/panxiang_dedup_registry.json").read_text(encoding="utf-8"))
 
         self.assertEqual(rule_map["playbook_sha256"], GOVERNANCE.PLAYBOOK_SHA256)
-        self.assertEqual(rule_map["writing_tracks"]["version"], "4.2")
-        self.assertEqual(rule_map["writing_tracks"]["all_forms"], ["型式一", "型式二", "型式三", "型式四", "型式五上集", "型式五下集"])
+        self.assertEqual(rule_map["writing_tracks"]["version"], "4.3")
+        self.assertEqual(rule_map["writing_tracks"]["all_forms"], ["型式一", "型式三", "型式四", "型式五上集", "型式五下集"])
         self.assertIn("狀態／鏡頭", rule_map["writing_tracks"]["style"])
         self.assertIn("盤象先行", rule_map["writing_tracks"]["qimen_gate"])
         self.assertIn("不可移植塔羅", rule_map["writing_tracks"]["qimen_gate"])
@@ -35,14 +45,14 @@ class GovernanceContractV42Test(unittest.TestCase):
         self.assertEqual(rule_map["serial_theme_map"]["posts"], 23)
         self.assertIn("2026-09-28", rule_map["serial_theme_map"]["pairing"])
 
-    def test_playbook_contract_is_v42_and_preserves_fixed_template_boundary(self) -> None:
+    def test_playbook_contract_is_v43_and_preserves_fixed_template_boundary(self) -> None:
         rules = GOVERNANCE.load_rules()
         playbook = (ROOT / "lunas_astral_code_master_playbook.md").read_text(encoding="utf-8")
         combo = GOVERNANCE.derive_combo(rules, "天心星", "開門", "白虎", "乙", "子")
 
         self.assertEqual(GOVERNANCE.current_contract_issues(), [])
-        self.assertIn("## 小說式描寫文風（v4.2｜唯一全局文風規範，奇門專用）", playbook)
-        active_rules = playbook.split("## 小說式描寫文風（v4.2｜唯一全局文風規範，奇門專用）", 1)[1].split("## 文案規則版本紀錄", 1)[0]
+        self.assertIn("## 小說式描寫文風（v4.3｜唯一全局文風規範，奇門專用）", playbook)
+        active_rules = playbook.split("## 小說式描寫文風（v4.3｜唯一全局文風規範，奇門專用）", 1)[1]
         self.assertIn("盤象先行", active_rules)
         self.assertIn("不得援引塔羅牌義、牌陣、星座宮位", active_rules)
         self.assertIn("固定模板、CTA 原文、卡數、版面、色碼", active_rules)
@@ -58,8 +68,8 @@ class GovernanceContractV42Test(unittest.TestCase):
         self.assertEqual(len(affected), 23)
         self.assertEqual(set(GOVERNANCE.THEME_PLANS), {date for date, _, _ in affected})
 
-        theme_map = json.loads((ROOT / "governance/script_theme_arc_v42.json").read_text(encoding="utf-8"))
-        self.assertEqual(theme_map["version"], "4.2")
+        theme_map = json.loads((ROOT / "governance/script_theme_arc_v43.json").read_text(encoding="utf-8"))
+        self.assertEqual(theme_map["version"], "4.3")
         self.assertEqual(len(theme_map["posts"]), 23)
         self.assertEqual([act["act"] for act in theme_map["arc"]], [1, 2, 3, 4, 5])
 
@@ -102,7 +112,7 @@ class GovernanceContractV42Test(unittest.TestCase):
             slots = GOVERNANCE.slots_for(repaired, "型式四")
             self.assertEqual([slot["id"] for slot in slots], ["scene", "check", "action"], date)
 
-    def test_lower_cards_have_one_option_heading_and_v42_minimum_length(self) -> None:
+    def test_lower_cards_have_one_option_heading_and_v43_minimum_length(self) -> None:
         for _, date, header, block in GOVERNANCE.unpublished_blocks():
             if GOVERNANCE.form(header) != "型式五下集":
                 continue
@@ -114,10 +124,10 @@ class GovernanceContractV42Test(unittest.TestCase):
         self.assertTrue(all(slot["minimum_chars"] == 300 for slot in GOVERNANCE.lower_cards(block)))
         self.assertTrue(all(slot.get("maximum_cjk") is None for slot in GOVERNANCE.lower_cards(block)))
 
-    def test_rewrite_prompt_uses_v42_novelistic_voice_and_keeps_common_safety_boundary(self) -> None:
+    def test_rewrite_prompt_uses_v43_novelistic_voice_and_keeps_common_safety_boundary(self) -> None:
         source = MODULE_PATH.read_text(encoding="utf-8")
         self.assertIn('MODEL = "gpt-5"', source)
-        self.assertIn("v4.2 小說式描寫", source)
+        self.assertIn("v4.3 小說式描寫", source)
         self.assertIn("微型情境", source)
         self.assertIn("盤象先行", source)
         self.assertIn("不得把一般心理測驗、塔羅牌義、牌陣、星座", source)
@@ -128,9 +138,9 @@ class GovernanceContractV42Test(unittest.TestCase):
 
     def test_active_playbook_uses_novelistic_voice_for_all_forms(self) -> None:
         playbook = (ROOT / "lunas_astral_code_master_playbook.md").read_text(encoding="utf-8")
-        self.assertIn("## 小說式描寫文風（v4.2", playbook)
-        active_rules = playbook.split("## 小說式描寫文風（v4.2｜唯一全局文風規範，奇門專用）", 1)[1].split("## 文案規則版本紀錄", 1)[0]
-        self.assertIn("型式一、二、三、四、五", active_rules)
+        self.assertIn("## 小說式描寫文風（v4.3", playbook)
+        active_rules = playbook.split("## 小說式描寫文風（v4.3｜唯一全局文風規範，奇門專用）", 1)[1]
+        self.assertIn("型式一、三、四、五", active_rules)
         self.assertIn("盤象先行", active_rules)
         self.assertIn("一至兩個可感知細節", active_rules)
         self.assertNotIn("巴納姆／冷讀", active_rules)
@@ -142,7 +152,7 @@ class GovernanceContractV42Test(unittest.TestCase):
         self.assertTrue(GOVERNANCE.track_a_issues(portable, combo))
         self.assertEqual(GOVERNANCE.track_a_issues(anchored, combo), [])
 
-    def test_upper_scene_allows_v42_short_novelistic_question(self) -> None:
+    def test_upper_scene_allows_v43_short_novelistic_question(self) -> None:
         _, _, header, block = next(item for item in GOVERNANCE.unpublished_blocks() if item[1] == "2026-08-22")
         scene = next(slot for slot in GOVERNANCE.slots_for(block, GOVERNANCE.form(header)) if slot["id"] == "scene")
         self.assertEqual(scene["maximum_cjk"], 25)

@@ -2046,6 +2046,86 @@
         "key": "天蓬星|杜門|玄武|乙|亥",
         "sampling_model": "independent_v2"
       }
+    },
+    "2026-09-16": {
+      "A": {
+        "star": "天心星",
+        "door": "開門",
+        "spirit": "值符",
+        "qi": "乙",
+        "hour": "午",
+        "sampling_model": "independent_v2",
+        "door_palace": "乾六宮",
+        "direction": "西北",
+        "score": 5,
+        "auspice": "大吉",
+        "key": "天心星|開門|值符|乙|午"
+      },
+      "B": {
+        "star": "天任星",
+        "door": "休門",
+        "spirit": "太陰",
+        "qi": "己",
+        "hour": "酉",
+        "sampling_model": "independent_v2",
+        "door_palace": "坎一宮",
+        "direction": "北",
+        "score": 2,
+        "auspice": "中吉",
+        "key": "天任星|休門|太陰|己|酉"
+      },
+      "C": {
+        "star": "天輔星",
+        "door": "生門",
+        "spirit": "六合",
+        "qi": "丙",
+        "hour": "辰",
+        "sampling_model": "independent_v2",
+        "door_palace": "艮八宮",
+        "direction": "東北",
+        "score": 4,
+        "auspice": "大吉",
+        "key": "天輔星|生門|六合|丙|辰"
+      },
+      "D": {
+        "star": "天禽星",
+        "door": "景門",
+        "spirit": "九地",
+        "qi": "壬",
+        "hour": "寅",
+        "sampling_model": "independent_v2",
+        "door_palace": "離九宮",
+        "direction": "南",
+        "score": 1,
+        "auspice": "中吉",
+        "key": "天禽星|景門|九地|壬|寅"
+      },
+      "E": {
+        "star": "天冲星",
+        "door": "傷門",
+        "spirit": "九天",
+        "qi": "丁",
+        "hour": "申",
+        "sampling_model": "independent_v2",
+        "door_palace": "震三宮",
+        "direction": "東",
+        "score": 2,
+        "auspice": "中吉",
+        "key": "天冲星|傷門|九天|丁|申"
+      },
+      "F": {
+        "star": "天芮星",
+        "door": "杜門",
+        "spirit": "玄武",
+        "qi": "癸",
+        "hour": "亥",
+        "sampling_model": "independent_v2",
+        "door_palace": "巽四宮",
+        "direction": "東南",
+        "score": -2,
+        "auspice": "中凶",
+        "key": "天芮星|杜門|玄武|癸|亥"
+      }
     }
   },
   "schema_version": "2.0",
